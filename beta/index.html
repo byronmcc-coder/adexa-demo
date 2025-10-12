@@ -684,6 +684,16 @@
       addDataLabels('#tblDrafts', ['Ref','Type','Consignee','Updated']);
       addDataLabels('#tblAlerts', ['When','Severity','Message']);
       addDataLabels('#tblGrants', ['Program','Jurisdiction','Closes','Support','']);
+function addDataLabels(selector, labels){
+  const table = document.querySelector(selector);
+  if (!table) return;
+  const rows = table.querySelectorAll('tbody tr');
+  rows.forEach(row => {
+    row.querySelectorAll('td').forEach((td, i) => {
+      td.setAttribute('data-th', labels[i] || '');
+    });
+  });
+}
 
       // Smoke tests
       console.assert(document.getElementById('tblDrafts'), '[Test] Permits table present');
