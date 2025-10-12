@@ -423,6 +423,22 @@
         refreshThemeLabel();
       });
 
+      // Wiring + subtle review‑panel easter egg
+      // Append ?panel=1 or ?panel=hartas|law|opie|satchell to the URL to enable panel mode
+      const qs = new URLSearchParams(location.search);
+      const panelKey = (qs.get('panel')||'').toLowerCase();
+      if (panelKey) {
+        const subtitleEl = document.querySelector('.subtitle');
+        const nameMap = { hartas:'Mr Mike Hartas', law:'Dr Margaret Law', opie:'Mr Matt Opie', satchell:'Mr Jeremy Satchell' };
+        const label = nameMap[panelKey] || 'Review Panel';
+        if (subtitleEl) subtitleEl.textContent = `Welcome, ${label}`;
+        const chip = document.createElement('span');
+        chip.className = 'chip';
+        chip.innerHTML = '<span class="dot"></span><span>Panel mode</span>';
+        const actions = document.querySelector('.top-actions');
+        actions && actions.prepend(chip);
+      }
+
       // Wiring
       document.querySelectorAll('[data-target]').forEach(b => b.addEventListener('click', () => show(b.dataset.target, true)));
       document.querySelectorAll('[data-back]').forEach(b => b.addEventListener('click', () => show('home', true)));
@@ -432,8 +448,10 @@
       // --- Demo data population ---
       // Permits
       const drafts = [
-        {ref:'ADEXA-0012', type:'DTC', ent:'Flight One Academy', upd:'12 Oct'},
-        {ref:'ADEXA-0045', type:'Customs', ent:'RAAF STT', upd:'05 Oct'}
+        {ref:'ADEXA-0251', type:'DTC', ent:'PMB Defence – Submarine Battery Systems', upd:'11 Oct'},
+        {ref:'ADEXA-0252', type:'Export', ent:'Defence Trailblazer – Tech Acceleration', upd:'10 Oct'},
+        {ref:'ADEXA-0253', type:'Customs', ent:'BAE Systems – VetNet Program', upd:'08 Oct'},
+        {ref:'ADEXA-0254', type:'DTC', ent:'Defence SA – SME Readiness', upd:'06 Oct'}
       ];
       const tb = document.querySelector('#tblDrafts tbody');
       if (tb) tb.innerHTML = drafts.map(d=>`<tr><td>${d.ref}</td><td>${d.type}</td><td>${d.ent}</td><td>${d.upd}</td></tr>`).join('');
@@ -449,18 +467,22 @@
       // Monitoring
       const al = document.querySelector('#tblAlerts tbody');
       if (al) al.innerHTML = [
-        {when:'Today', sev:'Medium', msg:'Checklist incomplete on #AUS‑241223'},
-        {when:'Yesterday', sev:'Low', msg:'Upcoming training expiry: 2 users'},
+        {when:'Today', sev:'Medium', msg:'Supplier uplift review with BAE (VetNet) scheduled'},
+        {when:'Yesterday', sev:'Low', msg:'Trailblazer cohort brief uploaded by Dr M. Law'},
+        {when:'This week', sev:'Info', msg:'Defence SA pathways update from M. Opie'},
       ].map(a=>`<tr><td>${a.when}</td><td>${a.sev}</td><td>${a.msg}</td></tr>`).join('');
 
       // Funding
       const gbody = document.querySelector('#tblGrants tbody');
       function loadGrants(){
         const data = [
-          {p:'Export Market Dev. Grants (EMDG)', j:'Federal', c:'Rolling', s:'Matched funding'},
-          {p:'Defence Industry Grant – Capability', j:'Federal', c:'Q2', s:'$250k cap'},
-          {p:'SA Export Accelerator (SAEA)', j:'SA', c:'Q1', s:'Tiered support'}
+          {p:'Defence SA – Supplier Readiness (Pilot)', j:'SA', c:'EOI: Q4', s:'SME uplift & pathways'},
+          {p:'Defence Trailblazer – Tech Acceleration', j:'National', c:'Cohort: Nov', s:'R&D to TRL uplift'},
+          {p:'BAE Systems – VetNet Supplier Uplift', j:'Industry', c:'Rolling', s:'Capability & quals'},
+          {p:'PMB – Advanced Battery Systems Collab', j:'Industry', c:'Invite', s:'Prototype & testbeds'}
         ];
+        if (gbody) gbody.innerHTML = data.map(x=>`<tr><td>${x.p}</td><td>${x.j}</td><td>${x.c}</td><td>${x.s}</td><td><button class="button secondary">Save</button></td></tr>`).join('');
+      }
         if (gbody) gbody.innerHTML = data.map(x=>`<tr><td>${x.p}</td><td>${x.j}</td><td>${x.c}</td><td>${x.s}</td><td><button class="button secondary">Save</button></td></tr>`).join('');
       }
       loadGrants();
@@ -469,7 +491,14 @@
       // Intel
       const intelList = document.getElementById('intelList');
       const btnScan = document.getElementById('btnScan');
-      function loadIntel(){ if(intelList) intelList.innerHTML = ['Rising demand for training simulators','Offset opportunities with OEM partner','Lower barrier for MRO services in APAC'].map(x=>`<li>${x}</li>`).join(''); }
+      function loadIntel(){
+        if(intelList) intelList.innerHTML = [
+          'PMB Defence: opportunities in submarine energy systems (UK/SE)',
+          'Trailblazer: acceleration streams aligned to maritime autonomy',
+          'Defence SA: export pathways for SMEs into global primes',
+          'BAE Australia: supplier pre-qualification windows (industry days)'
+        ].map(x=>`<li>${x}</li>`).join('');
+      }</li>`).join(''); }
       loadIntel(); if(btnScan) btnScan.addEventListener('click', loadIntel);
 
       const btnNDA = document.getElementById('btnNDA'); if(btnNDA) btnNDA.addEventListener('click',()=>alert('NDA generated (demo).'));
