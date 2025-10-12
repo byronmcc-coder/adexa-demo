@@ -105,7 +105,7 @@
     @media (max-width: 780px) { .grid.cols-3, .grid.cols-4 { grid-template-columns: repeat(2, minmax(0,1fr)); } }
     @media (max-width: 560px) { .grid.cols-2, .grid.cols-3, .grid.cols-4 { grid-template-columns: 1fr; } .item { grid-template-columns: 32px 1fr 18px; gap: 12px; } .ico svg { width: 22px; height: 22px; } .chev svg { width: 18px; height: 18px; } }
 
-    .card { background: var(--card-soft); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+    .card { background: var(--card-soft); border: 1px solid var(--border); border-radius: 12px; padding: 16px; min-width: 0; overflow: hidden; }
     .card h3 { margin: 0 0 8px 0; font-size: 1.05rem; color: var(--text); }
     .muted { color: var(--muted); }
 
@@ -119,9 +119,14 @@
 
     .row { display: flex; gap: 10px; align-items: center; }
 
-    .table { width: 100%; border-collapse: collapse; }
-    .table th, .table td { padding: 10px 8px; text-align: left; border-bottom: 1px solid var(--border); }
+    /* Base table rules (desktop) */
+    .table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+    .table th, .table td { padding: 10px 8px; text-align: left; border-bottom: 1px solid var(--border); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .table th { color: var(--muted); font-weight: 600; }
+    /* Tidy desktop widths for drafts table */
+    #tblDrafts th:nth-child(1), #tblDrafts td:nth-child(1) { width: 110px; }
+    #tblDrafts th:nth-child(2), #tblDrafts td:nth-child(2) { width: 86px; }
+    #tblDrafts th:nth-child(4), #tblDrafts td:nth-child(4) { width: 92px; white-space: nowrap; }
 
     .toolbar { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; }
     .input, .select, .button { background: #001e1e; color: var(--text); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; font: inherit; }
@@ -134,32 +139,40 @@
     summary { cursor: pointer; font-weight: 600; color: var(--text); }
 
     .note { font-size: .92rem; color: var(--muted); }
-    
-    /* ensure grid items can shrink */
-    .card { min-width: 0; overflow: hidden; }
 
-      /* make tables behave responsively */
-      .table { table-layout: fixed; width: 100%; }
-      .table th, .table td { 
-        overflow: hidden; 
-        text-overflow: ellipsis; 
-        white-space: nowrap;     /* desktop: ellipsis */
+    /* Phone: convert tables into cards */
+    @media (max-width: 560px) {
+      .table.responsive { table-layout: auto; width: 100%; }
+      .table.responsive thead { display: none; }
+      .table.responsive tbody tr {
+        display: block;
+        background: var(--card-soft);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 10px 12px;
+        margin: 10px 0;
       }
-      
-      /* allow wrapping on small screens (keeps mobile nice) */
-      @media (max-width: 780px) {
-        .table th, .table td { white-space: normal; word-break: break-word; }
+      .table.responsive td {
+        display: flex;
+        gap: 10px;
+        align-items: baseline;
+        padding: 6px 0;
+        border: 0;
+        white-space: normal;        /* allow wrapping */
+        word-break: break-word;     /* wrap long names */
       }
+      .table.responsive td::before {
+        content: attr(data-th);
+        flex: 0 0 110px;
+        color: var(--muted);
+        font-weight: 600;
+      }
+    }
 
     /* Progress Ring */
-    .ring {
-      width: 140px; height: 140px; margin: 0 auto 10px auto; position: relative;
-    }
+    .ring { width: 140px; height: 140px; margin: 0 auto 10px auto; position: relative; }
     .ring svg { display: block; width: 100%; height: 100%; }
-    .ring .value {
-      position: absolute; inset: 0; display:flex; align-items:center; justify-content:center;
-      font-weight: 800; font-size: 1.6rem;
-    }
+    .ring .value { position: absolute; inset: 0; display:flex; align-items:center; justify-content:center; font-weight: 800; font-size: 1.6rem; }
   </style>
 </head>
 <body>
@@ -238,7 +251,7 @@
 
           <div class="card">
             <h3>My drafts</h3>
-            <table class="table" id="tblDrafts">
+            <table class="table responsive" id="tblDrafts">
               <thead><tr><th>Ref</th><th>Type</th><th>Consignee</th><th>Updated</th></tr></thead>
               <tbody></tbody>
             </table>
@@ -284,7 +297,7 @@
 
           <div class="card">
             <h3>Alerts</h3>
-            <table class="table" id="tblAlerts">
+            <table class="table responsive" id="tblAlerts">
               <thead><tr><th>When</th><th>Severity</th><th>Message</th></tr></thead>
               <tbody></tbody>
             </table>
@@ -303,7 +316,7 @@
             <select class="select" id="stage"><option>Any stage</option><option>Idea</option><option>Prototype</option><option>Export ready</option></select>
             <button class="button" id="btnFind">Find</button>
           </div>
-          <table class="table" id="tblGrants">
+          <table class="table responsive" id="tblGrants">
             <thead><tr><th>Program</th><th>Jurisdiction</th><th>Closes</th><th>Support</th><th></th></tr></thead>
             <tbody></tbody>
           </table>
@@ -386,35 +399,7 @@
         </div>
       </section>
 
-      <section id="view-made-in-aus" class="page" aria-hidden="true">
-        <div class="page-head"><button class="btn" data-back>← Back</button><h2 class="page-title">MadeInAus Brand</h2></div>
-        <p class="lead">Use the mark with confidence. Get the checklist, assets and event pathway.</p>
-
-        <div class="grid cols-2">
-          <div class="card">
-            <h3>Eligibility checklist</h3>
-            <ul class="muted" style="line-height:1.9; padding-left:18px;">
-              <li><input type="checkbox" /> Meets Australian content threshold</li>
-              <li><input type="checkbox" /> Compliance with export controls</li>
-              <li><input type="checkbox" /> Marketing use approved</li>
-              <li><input type="checkbox" /> Catalogue entry prepared</li>
-            </ul>
-            <button class="button secondary">Validate eligibility</button>
-          </div>
-
-          <div class="card">
-            <h3>Assets &amp; events</h3>
-            <p class="muted">Download logos, guidelines and view Team Defence Australia events.</p>
-            <div class="row" style="gap:8px; flex-wrap:wrap;">
-              <button class="button">Download logo pack</button>
-              <button class="button secondary">Brand guidelines</button>
-              <button class="button secondary">Upcoming events</button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- EXPORT READINESS CHECKLIST (new) -->
+      <!-- EXPORT READINESS CHECKLIST -->
       <section id="view-readiness" class="page" aria-hidden="true">
         <div class="page-head">
           <button class="btn" data-back>← Back</button>
@@ -428,12 +413,7 @@
         <div class="grid cols-2" style="margin-top:20px;">
           <!-- Business Foundations -->
           <div class="card">
-            <h3>
-              <span class="ico" aria-hidden="true">
-                <svg width="20" height="20" viewBox="0 0 24 24"><path d="M3 3h18v6H3zM3 9h18v12H3zM7 13h6"/></svg>
-              </span>
-              Business Foundations
-            </h3>
+            <h3>Business Foundations</h3>
             <ul class="muted" style="line-height:1.9; padding-left:18px;">
               <li><input type="checkbox" class="chk"> Strategic plan includes export growth targets</li>
               <li><input type="checkbox" class="chk"> Export policy reviewed and approved by leadership</li>
@@ -444,12 +424,7 @@
 
           <!-- Compliance & Licensing -->
           <div class="card">
-            <h3>
-              <span class="ico" aria-hidden="true">
-                <svg width="20" height="20" viewBox="0 0 24 24"><path d="M12 2l7 4v6c0 5-3 9-7 10-4-1-7-5-7-10V6l7-4z"/><path d="M9 12l2 2 4-4"/></svg>
-              </span>
-              Compliance & Licensing
-            </h3>
+            <h3>Compliance & Licensing</h3>
             <ul class="muted" style="line-height:1.9; padding-left:18px;">
               <li><input type="checkbox" class="chk"> Defence Export Controls (DEC) registration complete</li>
               <li><input type="checkbox" class="chk"> DTC/ITAR processes embedded in business systems</li>
@@ -460,12 +435,7 @@
 
           <!-- Supply Chain & Capability -->
           <div class="card">
-            <h3>
-              <span class="ico" aria-hidden="true">
-                <svg width="20" height="20" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/><circle cx="8" cy="7" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="16" cy="17" r="2"/></svg>
-              </span>
-              Supply Chain & Capability
-            </h3>
+            <h3>Supply Chain & Capability</h3>
             <ul class="muted" style="line-height:1.9; padding-left:18px;">
               <li><input type="checkbox" class="chk"> Capability statement reviewed within last 12 months</li>
               <li><input type="checkbox" class="chk"> Supplier quality certifications (ISO9001, AS9100)</li>
@@ -476,12 +446,7 @@
 
           <!-- Market Access & Promotion -->
           <div class="card">
-            <h3>
-              <span class="ico" aria-hidden="true">
-                <svg width="20" height="20" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 18 0A9 9 0 0 0 3 12Z"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg>
-              </span>
-              Market Access & Promotion
-            </h3>
+            <h3>Market Access & Promotion</h3>
             <ul class="muted" style="line-height:1.9; padding-left:18px;">
               <li><input type="checkbox" class="chk"> Target markets identified and prioritised</li>
               <li><input type="checkbox" class="chk"> ‘Made in Australia’ brand assets integrated</li>
@@ -518,7 +483,7 @@
         'market-intel': 'view-market-intel',
         'ip-tech': 'view-ip-tech',
         'made-in-aus': 'view-made-in-aus',
-        readiness: 'view-readiness' // NEW
+        readiness: 'view-readiness'
       };
       const labels = {
         home: 'Home',
@@ -530,7 +495,6 @@
         'made-in-aus': 'MadeInAus Brand',
         readiness: 'Export Readiness'
       };
-
       const crumb = document.getElementById('crumb');
 
       function getEl(id) { const el = document.getElementById(id); if(!el) console.warn('[ADEXA] Missing #'+id); return el; }
@@ -598,10 +562,10 @@
       // --- Demo data population ---
       // Permits
       const drafts = [
-        {ref:'ADEXA-0251', type:'DTC', ent:'PMB Defence – Submarine Battery Systems', upd:'11 Oct'},
-        {ref:'ADEXA-0252', type:'Export', ent:'Defence Trailblazer – Tech Acceleration', upd:'10 Oct'},
-        {ref:'ADEXA-0253', type:'Customs', ent:'BAE Systems – VetNet Program', upd:'08 Oct'},
-        {ref:'ADEXA-0254', type:'DTC', ent:'Defence SA – SME Readiness', upd:'06 Oct'}
+        {ref:'ADEXA-0251', type:'DTC',    ent:'PMB Defence – Submarine Battery Systems', upd:'11 Oct'},
+        {ref:'ADEXA-0252', type:'Export', ent:'Defence Trailblazer – Tech Acceleration',   upd:'10 Oct'},
+        {ref:'ADEXA-0253', type:'Customs',ent:'BAE Systems – VetNet Program',              upd:'08 Oct'},
+        {ref:'ADEXA-0254', type:'DTC',    ent:'Defence SA – SME Readiness',                upd:'06 Oct'}
       ];
       const tb = document.querySelector('#tblDrafts tbody');
       if (tb) tb.innerHTML = drafts.map(d=>`<tr><td>${d.ref}</td><td>${d.type}</td><td>${d.ent}</td><td>${d.upd}</td></tr>`).join('');
@@ -621,9 +585,9 @@
       // Monitoring
       const al = document.querySelector('#tblAlerts tbody');
       if (al) al.innerHTML = [
-        {when:'Today', sev:'Medium', msg:'Supplier uplift review with BAE (VetNet) scheduled'},
-        {when:'Yesterday', sev:'Low', msg:'Trailblazer cohort brief uploaded by Dr M. Law'},
-        {when:'This week', sev:'Info', msg:'Defence SA pathways update from M. Opie'},
+        {when:'Today',      sev:'Medium', msg:'Supplier uplift review with BAE (VetNet) scheduled'},
+        {when:'Yesterday',  sev:'Low',    msg:'Trailblazer cohort brief uploaded by Dr M. Law'},
+        {when:'This week',  sev:'Info',   msg:'Defence SA pathways update from M. Opie'},
       ].map(a=>`<tr><td>${a.when}</td><td>${a.sev}</td><td>${a.msg}</td></tr>`).join('');
 
       // Funding
@@ -665,7 +629,7 @@
       if (btnImprove) btnImprove.addEventListener('click', () => show('readiness', true));
 
       // Progress ring helpers
-      const CIRCUM = 2 * Math.PI * 52; // r=52 -> ~327
+      const CIRCUM = 2 * Math.PI * 52; // ~327
       function setRing(el, pct){
         const clamp = Math.max(0, Math.min(100, pct));
         const offset = CIRCUM * (1 - clamp/100);
@@ -680,11 +644,11 @@
         const done = Array.from(checks).filter(c => c.checked).length;
         const percent = Math.round((done / total) * 100);
 
-        const score = document.getElementById('score');     // KPI ring on Market Intel
-        const ring1 = document.getElementById('ringProg');  // Market Intel ring
-        const score2 = document.getElementById('score2');   // Big ring on Readiness
-        const ring2 = document.getElementById('ringProg2'); // Readiness ring
-        const note = document.getElementById('scoreNote');
+        const score  = document.getElementById('score');     // KPI ring on Market Intel
+        const ring1  = document.getElementById('ringProg');  // Market Intel ring
+        const score2 = document.getElementById('score2');    // Big ring on Readiness
+        const ring2  = document.getElementById('ringProg2'); // Readiness ring
+        const note   = document.getElementById('scoreNote');
 
         if (score)  score.textContent = String(percent);
         if (score2) score2.textContent = String(percent);
@@ -700,10 +664,22 @@
       setRing(document.getElementById('ringProg2'), initScore);
       const score2Init = document.getElementById('score2'); if (score2Init) score2Init.textContent = String(initScore);
 
+      // ----- Mobile table labels (inject data-th for card rows) -----
+      function addDataLabels(tableSelector, headers) {
+        document.querySelectorAll(`${tableSelector} tbody tr`).forEach(tr => {
+          headers.forEach((h, i) => {
+            if (tr.children[i]) tr.children[i].setAttribute('data-th', h);
+          });
+        });
+      }
+      addDataLabels('#tblDrafts', ['Ref','Type','Consignee','Updated']);
+      addDataLabels('#tblAlerts', ['When','Severity','Message']);
+      addDataLabels('#tblGrants', ['Program','Jurisdiction','Closes','Support','']);
+
       // Smoke tests
       console.assert(document.getElementById('tblDrafts'), '[Test] Permits table present');
-      console.assert(document.getElementById('tblGrants'), '[Test] Funding table present');
-      console.assert(document.getElementById('intelList'), '[Test] Intel list present');
+      console.assert(document.getElementById('tblGrants'),  '[Test] Funding table present');
+      console.assert(document.getElementById('intelList'),  '[Test] Intel list present');
     })();
   </script>
 </body>
