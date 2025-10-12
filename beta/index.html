@@ -455,7 +455,11 @@
       ];
       const tb = document.querySelector('#tblDrafts tbody');
       if (tb) tb.innerHTML = drafts.map(d=>`<tr><td>${d.ref}</td><td>${d.type}</td><td>${d.ent}</td><td>${d.upd}</td></tr>`).join('');
-      const events = ['DTC ADEXA-0012 submitted','Customs ADEXA-0045 awaiting docs'];
+      const events = [
+  'DTC ADEXA-0251 submitted (PMB – Submarine Batteries)',
+  'Customs ADEXA-0253 awaiting docs (BAE – VetNet)',
+  'Trailblazer acceleration brief added to ADEXA-0252'
+];
       const ev = document.getElementById('events');
       if (ev) ev.innerHTML = events.map(e=>`<li>${e}</li>`).join('');
       const kOpen = document.getElementById('kOpen'); if(kOpen) kOpen.textContent = String(drafts.length);
@@ -472,34 +476,39 @@
         {when:'This week', sev:'Info', msg:'Defence SA pathways update from M. Opie'},
       ].map(a=>`<tr><td>${a.when}</td><td>${a.sev}</td><td>${a.msg}</td></tr>`).join('');
 
-      // Funding
-      const gbody = document.querySelector('#tblGrants tbody');
-      function loadGrants(){
-        const data = [
-          {p:'Defence SA – Supplier Readiness (Pilot)', j:'SA', c:'EOI: Q4', s:'SME uplift & pathways'},
-          {p:'Defence Trailblazer – Tech Acceleration', j:'National', c:'Cohort: Nov', s:'R&D to TRL uplift'},
-          {p:'BAE Systems – VetNet Supplier Uplift', j:'Industry', c:'Rolling', s:'Capability & quals'},
-          {p:'PMB – Advanced Battery Systems Collab', j:'Industry', c:'Invite', s:'Prototype & testbeds'}
-        ];
-        if (gbody) gbody.innerHTML = data.map(x=>`<tr><td>${x.p}</td><td>${x.j}</td><td>${x.c}</td><td>${x.s}</td><td><button class="button secondary">Save</button></td></tr>`).join('');
-      }
-        if (gbody) gbody.innerHTML = data.map(x=>`<tr><td>${x.p}</td><td>${x.j}</td><td>${x.c}</td><td>${x.s}</td><td><button class="button secondary">Save</button></td></tr>`).join('');
-      }
-      loadGrants();
-      const btnFind = document.getElementById('btnFind'); if(btnFind) btnFind.addEventListener('click', loadGrants);
+// Funding
+const gbody = document.querySelector('#tblGrants tbody');
+function loadGrants(){
+  const data = [
+    {p:'Defence SA – Supplier Readiness (Pilot)', j:'SA',       c:'EOI: Q4', s:'SME uplift & pathways'},
+    {p:'Defence Trailblazer – Tech Acceleration', j:'National', c:'Cohort: Nov', s:'R&D to TRL uplift'},
+    {p:'BAE Systems – VetNet Supplier Uplift',    j:'Industry', c:'Rolling', s:'Capability & quals'},
+    {p:'PMB – Advanced Battery Systems Collab',   j:'Industry', c:'Invite',  s:'Prototype & testbeds'}
+  ];
+  if (gbody) gbody.innerHTML = data.map(x =>
+    `<tr><td>${x.p}</td><td>${x.j}</td><td>${x.c}</td><td>${x.s}</td><td><button class="button secondary">Save</button></td></tr>`
+  ).join('');
+}
+loadGrants();
+const btnFind = document.getElementById('btnFind'); if (btnFind) btnFind.addEventListener('click', loadGrants);
+
 
       // Intel
-      const intelList = document.getElementById('intelList');
-      const btnScan = document.getElementById('btnScan');
-      function loadIntel(){
-        if(intelList) intelList.innerHTML = [
-          'PMB Defence: opportunities in submarine energy systems (UK/SE)',
-          'Trailblazer: acceleration streams aligned to maritime autonomy',
-          'Defence SA: export pathways for SMEs into global primes',
-          'BAE Australia: supplier pre-qualification windows (industry days)'
-        ].map(x=>`<li>${x}</li>`).join('');
-      }</li>`).join(''); }
-      loadIntel(); if(btnScan) btnScan.addEventListener('click', loadIntel);
+const intelList = document.getElementById('intelList');
+const btnScan = document.getElementById('btnScan');
+function loadIntel(){
+  if (intelList) {
+    intelList.innerHTML = [
+      'PMB Defence: opportunities in submarine energy systems (UK/SE)',
+      'Trailblazer: acceleration streams aligned to maritime autonomy',
+      'Defence SA: export pathways for SMEs into global primes',
+      'BAE Australia: supplier pre-qualification windows (industry days)'
+    ].map(x => `<li>${x}</li>`).join('');
+  }
+}
+loadIntel();
+if (btnScan) btnScan.addEventListener('click', loadIntel);
+
 
       const btnNDA = document.getElementById('btnNDA'); if(btnNDA) btnNDA.addEventListener('click',()=>alert('NDA generated (demo).'));
 
