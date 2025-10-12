@@ -31,16 +31,42 @@
     }
 
     /* Light theme variables */
-    :root[data-theme="light"] {
-      --bg: #f6faf8;
-      --card: #ffffff;
-      --card-hover: #f4f8f6;
-      --card-soft: #ffffff;
-      --border: #d7e5df;
-      --text: #13221c;
-      --muted: #4e6a60;
-      --shadow: 0 6px 18px rgba(0,0,0,.06), 0 1px 3px rgba(0,0,0,.06);
-    }
+:root[data-theme="light"] {
+  --bg: #f7f9fc;
+  --card: #ffffff;
+  --card-hover: #f5f8fc;
+  --card-soft: #ffffff;
+  --border: #e6eef5;
+  --text: #0b1f2a;      /* near-black */
+  --muted: #5b6b7a;     /* grey-blue */
+  --accent: #0a62c2;    /* professional blue */
+  --shadow: 0 8px 24px rgba(10, 35, 66, .06), 0 1px 3px rgba(10, 35, 66, .06);
+}
+
+/* Light theme component tweaks (buttons/inputs looked off) */
+:root[data-theme="light"] .title { color: #0b1f2a; }
+:root[data-theme="light"] .chip {
+  background: #fff; color: #0b1f2a; border-color: #d6e2ee;
+}
+:root[data-theme="light"] .input,
+:root[data-theme="light"] .select {
+  background: #ffffff; color: #0b1f2a; border-color: #d6e2ee;
+}
+:root[data-theme="light"] .button {
+  background: linear-gradient(180deg, #0a62c2, #084c97);
+  color: #ffffff;
+  border-color: #0a62c2;
+}
+:root[data-theme="light"] .button.secondary {
+  background: #eef4fb;
+  color: #0b1f2a;
+  border-color: #c9d9ea;
+}
+:root[data-theme="light"] details {
+  background: #f7fbff;
+  border-color: #d6e2ee;
+}
+
 
     * { box-sizing: border-box; }
 
@@ -408,20 +434,40 @@
         if (pushHash) { const h = routeKey==='home'?'#/':`#/${routeKey}`; history.pushState({r:routeKey},'',h); }
       }
 
-      // Theme toggle
-      const themeBtn = document.getElementById('themeToggle');
-      const themeLabel = document.getElementById('themeLabel');
-      const saved = localStorage.getItem('adexa-theme');
-      if(saved) document.documentElement.setAttribute('data-theme', saved);
-      function refreshThemeLabel(){ const t = document.documentElement.getAttribute('data-theme') === 'light' ? 'Light' : 'Dark'; if(themeLabel) themeLabel.textContent = t; if(themeBtn) themeBtn.setAttribute('aria-pressed', String(t==='Light')); }
-      refreshThemeLabel();
-      if (themeBtn) themeBtn.addEventListener('click', () => {
-        const cur = document.documentElement.getAttribute('data-theme');
-        const next = cur === 'light' ? null : 'light';
-        if(next){ document.documentElement.setAttribute('data-theme', next); localStorage.setItem('adexa-theme', next); }
-        else { document.documentElement.removeAttribute('data-theme'); localStorage.removeItem('adexa-theme'); }
-        refreshThemeLabel();
-      });
+      // Theme toggle (Dark is default; label shows TARGET mode)
+const themeBtn = document.getElementById('themeToggle');
+const themeLabel = document.getElementById('themeLabel');
+
+function currentTheme() {
+  return document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+}
+function applyTheme(next) {
+  if (next === 'light') {
+    document.documentElement.setAttribute('data-theme', 'light');
+    localStorage.setItem('adexa-theme', 'light');
+  } else {
+    document.documentElement.removeAttribute('data-theme'); // defaults to dark
+    localStorage.removeItem('adexa-theme');
+  }
+  refreshThemeLabel();
+}
+function refreshThemeLabel() {
+  const cur = currentTheme();
+  const target = cur === 'light' ? 'Dark' : 'Light';
+  if (themeLabel) themeLabel.textContent = target;          // show what clicking will do
+  if (themeBtn) themeBtn.setAttribute('aria-pressed', String(cur === 'dark'));
+}
+
+// init from storage (only stores 'light'; absence = dark)
+const saved = localStorage.getItem('adexa-theme');
+if (saved === 'light') document.documentElement.setAttribute('data-theme', 'light');
+refreshThemeLabel();
+
+if (themeBtn) themeBtn.addEventListener('click', () => {
+  const next = currentTheme() === 'light' ? 'dark' : 'light';
+  applyTheme(next);
+});
+
 
       // Wiring + subtle review‑panel easter egg
       // Append ?panel=1 or ?panel=hartas|law|opie|satchell to the URL to enable panel mode
