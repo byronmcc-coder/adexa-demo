@@ -1,1 +1,261 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ADEXA Prototype</title>
+  <meta name="color-scheme" content="dark light" />
+  <!-- Tiny inline favicon (brand dot) -->
+  <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="%23004B40"/><circle cx="16" cy="16" r="6" fill="%23E87024"/></svg>' />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+
+    :root {
+      /* Brand from logo */
+      --adexa-green: #004B40;
+      --adexa-orange: #E87024;
+      --adexa-cream: #FAF7ED;
+      --adexa-dark: #002F2F;
+
+      /* Default (dark) theme tokens */
+      --bg: var(--adexa-dark);
+      --card: #013a3a;
+      --card-hover: #014646;
+      --card-soft: #002a2a;
+      --border: #026060;
+      --text: #f0f5f2;
+      --muted: #b3c7c7;
+      --accent: var(--adexa-orange);
+      --radius: 14px;
+      --shadow: 0 4px 18px rgba(0,0,0,.35), 0 1px 4px rgba(0,0,0,.2);
+    }
+
+    /* Light theme variables */
+    :root[data-theme="light"] {
+      --bg: #f6faf8;
+      --card: #ffffff;
+      --card-hover: #f4f8f6;
+      --card-soft: #ffffff;
+      --border: #d7e5df;
+      --text: #13221c;
+      --muted: #4e6a60;
+      --shadow: 0 6px 18px rgba(0,0,0,.06), 0 1px 3px rgba(0,0,0,.06);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: 'Roboto', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      background: linear-gradient(180deg, var(--bg), color-mix(in oklab, var(--bg), #000 4%));
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      min-height: 100dvh;
+    }
+
+    .app { max-width: 1100px; margin: 0 auto; padding: clamp(16px, 2.6vw, 28px); display: grid; grid-template-rows: auto 1fr; gap: 18px; }
+
+    /* --- Header / topbar --- */
+    header.topbar { display: flex; align-items: center; gap: clamp(10px,1.6vw,16px); }
+    .logo { width: clamp(56px, 7vw, 84px); height: auto; flex: 0 0 auto; border-radius: 10px; }
+    .brand-block { display: flex; flex-direction: column; gap: 2px; }
+    .title { font-weight: 800; font-size: clamp(18px, 2.2vw, 22px); color: var(--adexa-green); letter-spacing: 0.3px; }
+    .subtitle { color: var(--muted); font-size: clamp(12px, 1.7vw, 14px); }
+    .top-actions { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+
+    .chip { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--border); background: var(--card); color: var(--text); border-radius: 999px; padding: 8px 12px; box-shadow: var(--shadow); }
+    .chip .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+
+    .btn { border: 1px solid var(--border); background: linear-gradient(180deg, var(--card), var(--card-soft)); color: var(--text); padding: 10px 12px; border-radius: 12px; cursor: pointer; font: inherit; display: inline-flex; align-items: center; gap: 8px; transition: transform .08s ease, background .2s ease, border-color .2s ease; }
+    .btn:hover { background: var(--card-hover); border-color: color-mix(in oklab, var(--border), var(--accent) 30%); }
+    .btn:active { transform: translateY(1px); }
+
+    main.card { background: var(--card); border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow); padding: clamp(14px, 2.2vw, 22px); }
+
+    /* --- Menu list --- */
+    nav.menu { display: grid; gap: 14px; }
+    .item { --pad: clamp(12px, 2.2vw, 18px); display: grid; grid-template-columns: 40px 1fr auto; align-items: center; background: linear-gradient(180deg, var(--card), var(--card-soft)); border: 1px solid var(--border); border-radius: var(--radius); padding: var(--pad); cursor: pointer; transition: transform .12s ease, background-color .2s ease, border-color .2s ease; text-align: left; }
+    .item:hover { background: var(--card-hover); border-color: color-mix(in oklab, var(--border), var(--accent) 30%); transform: translateY(-1px); }
+    .item:active { transform: translateY(0); }
+    .ico svg, .chev svg { width: 24px; height: 24px; stroke: var(--muted); }
+    .label { font-weight: 700; font-size: 1.06rem; color: var(--text); letter-spacing: .2px; }
+
+    /* --- Pages --- */
+    section.page { display: none; opacity: 0; transform: translateY(6px); transition: opacity .22s ease, transform .22s ease; }
+    section.page[aria-hidden="false"] { display: block; opacity: 1; transform: translateY(0); }
+
+    .page-head { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+    .back { composes: btn; }
+    .page-title { flex: 1; text-align: center; font-size: clamp(20px, 3vw, 28px); font-weight: 900; letter-spacing: .2px; color: var(--text); }
+    .lead { font-size: 1.06rem; line-height: 1.7; color: var(--muted); }
+
+    /* --- Components --- */
+    .grid { display: grid; gap: 16px; }
+    .grid.cols-2 { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .grid.cols-3 { grid-template-columns: repeat(3, minmax(0,1fr)); }
+    .grid.cols-4 { grid-template-columns: repeat(4, minmax(0,1fr)); }
+    @media (max-width: 980px) { .grid.cols-4 { grid-template-columns: repeat(3, minmax(0,1fr)); } }
+    @media (max-width: 780px) { .grid.cols-3, .grid.cols-4 { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+    @media (max-width: 560px) { .grid.cols-2, .grid.cols-3, .grid.cols-4 { grid-template-columns: 1fr; } .item { grid-template-columns: 32px 1fr 18px; gap: 12px; } .ico svg { width: 22px; height: 22px; } .chev svg { width: 18px; height: 18px; } }
+
+    .subcard { background: var(--card-soft); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+    .subcard h3 { margin: 0 0 8px 0; font-size: 1.05rem; color: var(--text); }
+    .muted { color: var(--muted); }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <!-- Replace with your Base64 logo if preferred -->
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..." alt="ADEXA Logo" class="logo">
+      <div class="brand-block">
+        <div class="title">ADEXA</div>
+        <div class="subtitle">Australian Defence Export Accelerator</div>
+      </div>
+      <div class="top-actions">
+        <span class="chip" title="Current section">
+          <span class="dot"></span>
+          <span id="crumb">Home</span>
+        </span>
+        <button class="btn" id="themeToggle" aria-pressed="false" aria-label="Toggle theme">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 3a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V4a1 1 0 0 1 1-1Zm6.36 2.05a1 1 0 0 1 0 1.41l-1.41 1.41a1 1 0 1 1-1.41-1.41l1.41-1.41a1 1 0 0 1 1.41 0ZM21 13a1 1 0 1 1 0-2h2a1 1 0 1 1 0 2h-2ZM4 13a1 1 0 1 1 0-2H2a1 1 0 1 1 0 2h2Zm1.05-7.95a1 1 0 0 1 1.41 0l1.41 1.41A1 1 0 1 1 6.46 7.9L5.05 6.49a1 1 0 0 1 0-1.41ZM12 17a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1Zm7.95-1.05a1 1 0 0 1 0 1.41l-1.41 1.41a1 1 0 0 1-1.41-1.41l1.41-1.41a1 1 0 0 1 1.41 0ZM6.87 18.88a1 1 0 0 1-1.41 0l-1.41-1.41a1 1 0 1 1 1.41-1.41l1.41 1.41a1 1 0 0 1 0 1.41Z"/></svg>
+          <span id="themeLabel">Dark</span>
+        </button>
+      </div>
+    </header>
+
+    <main id="views" class="card" role="region" aria-live="polite">
+      <!-- HOME -->
+      <section id="view-home" class="page" aria-hidden="false">
+        <nav class="menu" aria-label="Main menu">
+          <button class="item" data-target="permits">
+            <span class="ico"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg></span>
+            <span class="label">Permits</span>
+            <span class="chev"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></span>
+          </button>
+          <button class="item" data-target="monitoring">
+            <span class="ico"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg></span>
+            <span class="label">Monitoring</span>
+            <span class="chev"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></span>
+          </button>
+          <button class="item" data-target="funding">
+            <span class="ico"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>
+            <span class="label">Funding</span>
+            <span class="chev"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></span>
+          </button>
+          <button class="item" data-target="market-intel">
+            <span class="ico"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>
+            <span class="label">Market Intel</span>
+            <span class="chev"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></span>
+          </button>
+          <button class="item" data-target="ip-tech">
+            <span class="ico"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/><path d="M2 12h3"/><path d="M19 12h3"/><path d="M12 2v3"/><path d="M12 19v3"/></svg></span>
+            <span class="label">IP & Tech Transfer</span>
+            <span class="chev"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></span>
+          </button>
+          <button class="item" data-target="made-in-aus">
+            <span class="ico"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></span>
+            <span class="label">MadeInAus Brand</span>
+            <span class="chev"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></span>
+          </button>
+        </nav>
+      </section>
+
+      <!-- SUB‑PAGES (IDs must match routes below) -->
+      <section id="view-permits" class="page" aria-hidden="true">
+        <div class="page-head"><button class="btn back" data-back>← Back</button><h2 class="page-title">Permits</h2></div>
+        <p class="lead">Manage export permits end‑to‑end. Create, validate, submit and track—all in one place.</p>
+        <div class="grid cols-3">
+          <div class="subcard"><h3>Start new application</h3><p class="muted">Templates auto‑fill company details, goods and consignee data.</p></div>
+          <div class="subcard"><h3>My drafts</h3><p class="muted">Recent drafts appear here.</p></div>
+          <div class="subcard"><h3>Status</h3><p class="muted">KPIs and latest events.</p></div>
+        </div>
+      </section>
+
+      <section id="view-monitoring" class="page" aria-hidden="true">
+        <div class="page-head"><button class="btn back" data-back>← Back</button><h2 class="page-title">Monitoring</h2></div>
+        <p class="lead">Compliance monitoring and reporting with configurable checklists and alerts.</p>
+      </section>
+
+      <section id="view-funding" class="page" aria-hidden="true">
+        <div class="page-head"><button class="btn back" data-back>← Back</button><h2 class="page-title">Funding</h2></div>
+        <p class="lead">Discover federal/state grants, EFA finance, and partner programs. Save and compare.</p>
+      </section>
+
+      <section id="view-market-intel" class="page" aria-hidden="true">
+        <div class="page-head"><button class="btn back" data-back>← Back</button><h2 class="page-title">Market Intel</h2></div>
+        <p class="lead">Signals, demand and Navigators. Target the right market with the right product.</p>
+      </section>
+
+      <section id="view-ip-tech" class="page" aria-hidden="true">
+        <div class="page-head"><button class="btn back" data-back>← Back</button><h2 class="page-title">IP &amp; Tech Transfer</h2></div>
+        <p class="lead">Micro‑credentials, NDA generator and T2 controls to protect sovereign IP.</p>
+      </section>
+
+      <section id="view-made-in-aus" class="page" aria-hidden="true">
+        <div class="page-head"><button class="btn back" data-back>← Back</button><h2 class="page-title">MadeInAus Brand</h2></div>
+        <p class="lead">Use the mark with confidence. Get the checklist, assets and event pathway.</p>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // Router + theme toggle + breadcrumb updates
+    (function () {
+      const routes = {
+        home: 'view-home',
+        permits: 'view-permits',
+        monitoring: 'view-monitoring',
+        funding: 'view-funding',
+        'market-intel': 'view-market-intel',
+        'ip-tech': 'view-ip-tech',
+        'made-in-aus': 'view-made-in-aus'
+      };
+
+      const labels = {
+        home: 'Home',
+        permits: 'Permits',
+        monitoring: 'Monitoring',
+        funding: 'Funding',
+        'market-intel': 'Market Intel',
+        'ip-tech': 'IP & Tech Transfer',
+        'made-in-aus': 'MadeInAus Brand'
+      };
+
+      const crumb = document.getElementById('crumb');
+
+      function getEl(id){ const el = document.getElementById(id); if(!el) console.warn('[ADEXA] Missing #'+id); return el; }
+      function hideAll(){ Object.values(routes).forEach(id => { const el = getEl(id); if(el) el.setAttribute('aria-hidden','true'); }); }
+      function show(routeKey, pushHash=false){
+        const id = routes[routeKey] || routes.home; const el = getEl(id); if(!el) return;
+        hideAll(); el.setAttribute('aria-hidden','false');
+        crumb && (crumb.textContent = labels[routeKey] || 'Home');
+        if(pushHash){ const h = routeKey==='home'?'#/':`#/${routeKey}`; history.pushState({r:routeKey},'',h); }
+      }
+
+      // Theme toggle
+      const themeBtn = document.getElementById('themeToggle');
+      const themeLabel = document.getElementById('themeLabel');
+      const saved = localStorage.getItem('adexa-theme');
+      if(saved) document.documentElement.setAttribute('data-theme', saved);
+      function refreshThemeLabel(){ const t = document.documentElement.getAttribute('data-theme') === 'light' ? 'Light' : 'Dark'; themeLabel.textContent = t; themeBtn.setAttribute('aria-pressed', t==='Light'); }
+      refreshThemeLabel();
+      themeBtn.addEventListener('click', () => {
+        const cur = document.documentElement.getAttribute('data-theme');
+        const next = cur === 'light' ? null : 'light';
+        if(next){ document.documentElement.setAttribute('data-theme', next); localStorage.setItem('adexa-theme', next); }
+        else { document.documentElement.removeAttribute('data-theme'); localStorage.removeItem('adexa-theme'); }
+        refreshThemeLabel();
+      });
+
+      // Wiring
+      document.querySelectorAll('[data-target]').forEach(b => b.addEventListener('click', () => show(b.dataset.target, true)));
+      document.querySelectorAll('[data-back]').forEach(b => b.addEventListener('click', () => show('home', true)));
+      window.addEventListener('popstate', e => { const r = (e.state && e.state.r) || location.hash.replace('#/','') || 'home'; show(r,false); });
+      show(location.hash.replace('#/','') || 'home', false);
+    })();
+  </script>
+</body>
+</html>
 
