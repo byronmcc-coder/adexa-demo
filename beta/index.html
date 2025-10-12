@@ -545,13 +545,34 @@ const btnScan = document.getElementById('btnScan');
 function loadIntel(){
   if (intelList) {
     intelList.innerHTML = [
-      'PMB Defence: opportunities in submarine energy systems (UK/SE)',
-      'Trailblazer: acceleration streams aligned to maritime autonomy',
-      'Defence SA: export pathways for SMEs into global primes',
-      'BAE Australia: supplier pre-qualification windows (industry days)'
+      // Undersea drone / autonomous systems
+      'Autonomous undersea vehicle production (e.g. Ghost Shark contracts)',  
+      'Counter-drone / EW & RF systems (DroneShield expansion in Adelaide) :contentReference[oaicite:0]{index=0}',
+      
+      // Submarine / AUKUS supply chain
+      'Submarine component manufacture (machining, additive metal parts) :contentReference[oaicite:1]{index=1}',
+      'Naval systems / control electronics & sensors under AUKUS strategy :contentReference[oaicite:2]{index=2}',
+      'Defence Industry grants for nuclear-submarine suppliers :contentReference[oaicite:3]{index=3}',
+      
+      // Aeronautics / drones
+      '“Loyal wingman” UCAV / drone production (e.g. MQ-28 programs) :contentReference[oaicite:4]{index=4}',
+      'Drone / UAV sensor, payload & logistics systems for export markets',
+      
+      // Missiles / munitions
+      'LRASM / PRISM missile system components (guidance, seekers, launchers)',
+      
+      // Space / satellite support
+      'Space systems: smallsat manufacturing, component exports, data links',
+      
+      // Cyber / AI / autonomy
+      'On-platform autonomy & AI for unmanned systems / ISR missions',
+      
+      // Cross-domain systems / dual use
+      'Infrastructure & sustainment contracts (repairs, certification, spares supply)',
     ].map(x => `<li>${x}</li>`).join('');
   }
 }
+
 loadIntel();
 if (btnScan) btnScan.addEventListener('click', loadIntel);
 
