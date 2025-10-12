@@ -134,6 +134,22 @@
     summary { cursor: pointer; font-weight: 600; color: var(--text); }
 
     .note { font-size: .92rem; color: var(--muted); }
+    
+    /* ensure grid items can shrink */
+    .card { min-width: 0; overflow: hidden; }
+
+      /* make tables behave responsively */
+      .table { table-layout: fixed; width: 100%; }
+      .table th, .table td { 
+        overflow: hidden; 
+        text-overflow: ellipsis; 
+        white-space: nowrap;     /* desktop: ellipsis */
+      }
+      
+      /* allow wrapping on small screens (keeps mobile nice) */
+      @media (max-width: 780px) {
+        .table th, .table td { white-space: normal; word-break: break-word; }
+      }
 
     /* Progress Ring */
     .ring {
