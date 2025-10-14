@@ -86,26 +86,42 @@
     .brand-block { display: flex; flex-direction: column; gap: 2px; }
     .title { font-weight: 900; font-size: clamp(20px, 2.6vw, 26px); color: var(--adexa-cream); letter-spacing: 0.3px; }
     .subtitle { color: var(--muted); font-size: clamp(12px, 1.7vw, 14px); }
-    .top-actions { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+    .top-actions {
+      margin-left: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+    }
+    .top-controls { display: flex; align-items: center; justify-content: flex-end; gap: 10px; }
     .version-pill {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 6px 12px;
+      padding: 4px 12px;
       border-radius: 999px;
-      border: 1px solid var(--border);
-      background: var(--card);
-      color: var(--muted);
-      font-size: 0.72rem;
-      font-weight: 600;
-      letter-spacing: .2px;
-      box-shadow: var(--shadow);
+      border: 1px solid color-mix(in oklab, var(--accent), #000 28%);
+      background: linear-gradient(180deg, color-mix(in oklab, var(--accent), #fff 18%), color-mix(in oklab, var(--accent), #000 22%));
+      color: #1e251f;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: .18px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, .28);
       white-space: nowrap;
     }
     .version-pill[data-branch="beta"] {
-      background: color-mix(in oklab, var(--card), #3a1f00 35%);
-      border-color: color-mix(in oklab, var(--border), var(--accent) 35%);
-      color: color-mix(in oklab, var(--text), var(--accent) 40%);
+      background: linear-gradient(180deg, color-mix(in oklab, var(--accent), #4a2200 25%), color-mix(in oklab, var(--accent), #000 45%));
+      border-color: color-mix(in oklab, var(--accent), #000 38%);
+      color: #fff7ed;
+      box-shadow: 0 6px 18px rgba(74, 28, 0, .45);
+    }
+
+    @media (max-width: 720px) {
+      header.topbar { flex-wrap: wrap; align-items: flex-start; }
+      .brand-block { flex: 1 0 180px; }
+      .top-actions { order: 3; width: 100%; align-items: flex-end; }
+      .top-controls { flex-wrap: wrap; gap: 6px; width: 100%; }
+      .version-pill { font-size: 0.64rem; padding: 3px 9px; }
     }
 
     /* // --- Small UI Tokens --- */
@@ -435,11 +451,13 @@
       </div>
       <div class="top-actions">
         <span class="version-pill" id="appVersion" aria-live="polite">Version</span>
-        <span class="chip" title="Current section"><span class="dot"></span><span id="crumb">Home</span></span>
-        <button class="btn" id="themeToggle" aria-pressed="false" aria-label="Toggle theme">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 3a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V4a1 1 0 0 1 1-1Zm6.36 2.05a1 1 0 0 1 0 1.41l-1.41 1.41a1 1 0 1 1-1.41-1.41l1.41-1.41a1 1 0 0 1 1.41 0ZM21 13a1 1 0 1 1 0-2h2a1 1 0 1 1 0 2h-2ZM4 13a1 1 0 1 1 0-2H2a1 1 0 1 1 0 2h2Zm1.05-7.95a1 1 0 0 1 1.41 0l1.41 1.41A1 1 0 1 1 6.46 7.9L5.05 6.49a1 1 0 0 1 0-1.41ZM12 17a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1Zm7.95-1.05a1 1 0 0 1 0 1.41l-1.41 1.41a1 1 0 0 1-1.41-1.41l1.41-1.41a1 1 0 0 1 1.41 0ZM6.87 18.88a1 1 0 0 1-1.41 0l-1.41-1.41a1 1 0 1 1 1.41-1.41l1.41 1.41a1 1 0 0 1 0 1.41Z"/></svg>
-          <span id="themeLabel">Light</span>
-        </button>
+        <div class="top-controls">
+          <span class="chip" title="Current section"><span class="dot"></span><span id="crumb">Home</span></span>
+          <button class="btn" id="themeToggle" aria-pressed="false" aria-label="Toggle theme">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 3a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V4a1 1 0 0 1 1-1Zm6.36 2.05a1 1 0 0 1 0 1.41l-1.41 1.41a1 1 0 1 1-1.41-1.41l1.41-1.41a1 1 0 0 1 1.41 0ZM21 13a1 1 0 1 1 0-2h2a1 1 0 1 1 0 2h-2ZM4 13a1 1 0 1 1 0-2H2a1 1 0 1 1 0 2h2Zm1.05-7.95a1 1 0 0 1 1.41 0l1.41 1.41A1 1 0 1 1 6.46 7.9L5.05 6.49a1 1 0 0 1 0-1.41ZM12 17a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1Zm7.95-1.05a1 1 0 0 1 0 1.41l-1.41 1.41a1 1 0 0 1-1.41-1.41l1.41-1.41a1 1 0 0 1 1.41 0ZM6.87 18.88a1 1 0 0 1-1.41 0l-1.41-1.41a1 1 0 1 1 1.41-1.41l1.41 1.41a1 1 0 0 1 0 1.41Z"/></svg>
+            <span id="themeLabel">Light</span>
+          </button>
+        </div>
       </div>
     </header>
 
