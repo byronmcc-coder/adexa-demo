@@ -220,21 +220,30 @@
       
       .grant-desc {
         color: var(--muted);
+        line-height: 1.55;
       }
-      
+
       .grant-meta {
         display: flex;
-        gap: 8px;
+        justify-content: space-between;
         align-items: center;
+        gap: 12px;
         flex-wrap: wrap;
       }
-      
+
       .grant-tag {
-        padding: 3px 8px;
-        border: 1px solid var(--border);
+        background: rgba(0, 56, 48, .6);
         border-radius: 999px;
+        padding: 6px 10px;
         font-size: .82rem;
-        color: var(--muted);
+        letter-spacing: .3px;
+      }
+
+      .grant-summary {
+        margin-top: 10px;
+        font-size: .92rem;
+        display: flex;
+        justify-content: flex-end;
       }
       
       /* 2-cols on medium screens */
@@ -621,8 +630,9 @@
           <span id="chipIndicator" aria-hidden="true"></span>
         </div>
         
-        <!-- // --- Grant tiles (max 5 shown) --- -->
+        <!-- // --- Grant tiles (max 6 shown / 3 on mobile) --- -->
         <div id="grantTiles" class="grid cols-1"></div>
+        <div id="grantSummary" class="grant-summary muted"></div>
 
         <!-- // --- Funding FAQ --- -->
         <h3 class="section-title">Frequently Asked Questions</h3>
@@ -1042,6 +1052,8 @@
       const tilesWrap = document.getElementById('grantTiles');
       const chipRow   = document.getElementById('grantFilters');
       const chipIndicator = document.getElementById('chipIndicator');
+      const grantSummary = document.getElementById('grantSummary');
+      const grantLimitMq = window.matchMedia('(max-width: 600px)');
       
       // slide the highlight behind the active chip
       function moveChipIndicator(btn){
@@ -1052,23 +1064,42 @@
         chipIndicator.style.width = `${bRect.width}px`;
       }
       
-      // render tiles (limit 5)
+      function grantLimit(){
+        return grantLimitMq.matches ? 3 : 6;
+      }
+
+      // render tiles (responsive limit)
       let grantFilter = 'All';
       function renderGrantTiles() {
         if (!tilesWrap) return;
-        const data = grantsData.filter(g => grantFilter === 'All' || g.tag === grantFilter)
-                               .slice(0, 5);
-        tilesWrap.innerHTML = data.map(g => `
-          <div class="grant-card">
-            <div class="grant-title">${g.title}</div>
-            <div class="grant-value">${g.value}</div>
-            <div class="grant-desc">${g.desc}</div>
-            <div class="grant-meta">
-              <span class="grant-tag">${g.tag}</span>
-              <a class="button secondary" href="${g.url}" target="_blank" rel="noopener">View &amp; Apply</a>
+        const filtered = grantsData.filter(g => grantFilter === 'All' || g.tag === grantFilter);
+        const limit = grantLimit();
+        const visible = filtered.slice(0, limit);
+
+        if (!visible.length) {
+          tilesWrap.innerHTML = '<p class="muted">No grants match this filter.</p>';
+        } else {
+          tilesWrap.innerHTML = visible.map(g => `
+            <div class="grant-card">
+              <div class="grant-title">${g.title}</div>
+              <div class="grant-value">${g.value}</div>
+              <div class="grant-desc">${g.desc}</div>
+              <div class="grant-meta">
+                <span class="grant-tag">${g.tag}</span>
+                <a class="button secondary" href="${g.url}" target="_blank" rel="noopener">View &amp; Apply</a>
+              </div>
             </div>
-          </div>
-        `).join('');
+          `).join('');
+        }
+
+        if (grantSummary) {
+          if (!filtered.length) {
+            grantSummary.textContent = 'No grants match this filter.';
+          } else {
+            const showing = Math.min(limit, filtered.length);
+            grantSummary.textContent = `Showing ${showing} of ${filtered.length} grants`;
+          }
+        }
       }
       
       // chip wiring
@@ -1094,7 +1125,14 @@
       window.addEventListener('resize', () => {
         const active = chipRow?.querySelector('.chip.active');
         if (active) moveChipIndicator(active);
+        renderGrantTiles();
       });
+
+      if (typeof grantLimitMq.addEventListener === 'function') {
+        grantLimitMq.addEventListener('change', renderGrantTiles);
+      } else if (typeof grantLimitMq.addListener === 'function') {
+        grantLimitMq.addListener(renderGrantTiles);
+      }
 
       // // --- Wiring: Menu + Back + History ---
       document.querySelectorAll('[data-target]').forEach(b => b.addEventListener('click', () => show(b.dataset.target, true)));
