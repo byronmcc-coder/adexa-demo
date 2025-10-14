@@ -137,6 +137,9 @@
 
     /* // --- FAQ Styling and Animations (accordion, single-open) --- */
     .faq-list { grid-template-columns: 1fr; }
+    .faq-list {
+        margin-top: 24px; /* or 32px if you want more space */
+      }
     
     .faq-list details {
       background: var(--card-soft);
@@ -231,6 +234,60 @@
       to   { opacity: 1; transform: translateY(0); }
     }
 
+    /* Progress bars */
+      .progress {
+        height: 10px;
+        border-radius: 999px;
+        background: color-mix(in oklab, var(--card), #000 10%);
+        border: 1px solid var(--border);
+        overflow: hidden;
+        position: relative;
+      }
+      .progress .bar {
+        height: 100%;
+        width: 0%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, #21c16b, #39a96b);
+        transition: width .35s ease;
+      }
+      
+      /* Deadline list */
+      .deadline-card h3 { margin-bottom: 6px; }
+      .deadline-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      .deadline-item {
+        display: grid;
+        grid-template-columns: 140px 1fr auto;
+        gap: 12px;
+        align-items: center;
+        padding: 10px 0;
+        border-top: 1px dashed var(--border);
+      }
+      .deadline-item:first-child { border-top: 0; }
+      .deadline-date { font-weight: 800; color: var(--text); white-space: nowrap; }
+      .deadline-desc { color: var(--muted); }
+      .deadline-tag {
+        padding: 4px 10px;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        background: var(--card-soft);
+        font-weight: 600;
+        font-size: .85rem;
+      }
+      
+      /* Status chips (green / amber / red) */
+      .chip-ok    { background: #0f3a1b; color: #caffda; border-color: #1f7a3b; }
+      .chip-warn  { background: #3a2d00; color: #ffe0a8; border-color: #6e5200; }
+      .chip-bad   { background: #3f0d0d; color: #ffd1d1; border-color: #7a1f1f; }
+      
+      @media (max-width: 720px) {
+        .deadline-item { grid-template-columns: 1fr; }
+        .deadline-tag { justify-self: start; }
+      }
+
     /* // --- Progress Ring --- */
     .ring { width: 140px; height: 140px; margin: 0 auto 10px auto; position: relative; }
     .ring svg { display: block; width: 100%; height: 100%; }
@@ -275,7 +332,7 @@
           <!-- Monitoring -->
           <button class="item" data-target="monitoring">
             <span class="ico"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg></span>
-            <span class="label">Monitoring</span>
+            <span class="label">Compliance Monitoring</span>
             <span class="chev"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></span>
           </button>
           <!-- Funding -->
@@ -342,36 +399,68 @@
       </section>
 
 
-      <!-- // === MONITORING =============================================== -->
+      <!-- // === COMPLIANCE MONITORING ===================================== -->
       <section id="view-monitoring" class="page" aria-hidden="true">
-        <div class="page-head"><button class="btn" data-back>← Back</button><h2 class="page-title">Monitoring</h2></div>
-        <p class="lead">Compliance monitoring and reporting with configurable checklists and alerts.</p>
-
-        <div class="grid cols-4">
-          <div class="card"><h3>KPI: Reporting on time</h3><div class="kpi"><span class="value" id="kOnTime">98</span><span class="unit">%</span></div><p class="muted">Past 90 days</p></div>
-          <div class="card"><h3>KPI: Violations</h3><div class="kpi"><span class="value" id="kViol">0</span><span class="unit">open</span></div><p class="muted">All severities</p></div>
-          <div class="card"><h3>KPI: Training</h3><div class="kpi"><span class="value" id="kCert">87</span><span class="unit">% certified</span></div><p class="muted">IP/T2 micro-credentials</p></div>
-          <div class="card"><h3>KPI: Reviews due</h3><div class="kpi"><span class="value" id="kDue">3</span><span class="unit">this week</span></div></div>
+        <div class="page-head">
+          <button class="btn" data-back>← Back</button>
+          <h2 class="page-title">Compliance Monitoring</h2>
         </div>
-
+        <p class="lead">
+          Track obligations and manage reporting through a unified dashboard. Automate workflows and receive sector-specific checklists to maintain compliance with Australian and international regulations.
+        </p>
+      
+        <!-- Deadlines up top -->
+        <div class="card deadline-card" style="margin-top:10px;">
+          <h3>Upcoming Deadlines</h3>
+          <ul class="deadline-list" id="deadlineList"></ul>
+        </div>
+      
+        <!-- KPI / status cards -->
+        <div class="grid cols-3" style="margin-top:16px;">
+          <div class="card">
+            <h3>Overall Compliance</h3>
+            <div class="progress" aria-label="Overall compliance progress">
+              <div class="bar" id="progOverall" style="width:0%"></div>
+            </div>
+            <p class="note"><strong id="txtOverall">0%</strong> Complete</p>
+          </div>
+      
+          <div class="card">
+            <h3>ITAR Reporting</h3>
+            <div class="progress" aria-label="ITAR reporting progress">
+              <div class="bar" id="progITAR" style="width:0%"></div>
+            </div>
+            <p class="note" id="txtITAR">Status</p>
+          </div>
+      
+          <div class="card">
+            <h3>DSGL Register</h3>
+            <div class="progress" aria-label="DSGL register completeness">
+              <div class="bar" id="progDSGL" style="width:0%"></div>
+            </div>
+            <p class="note" id="txtDSGL">Status</p>
+          </div>
+        </div>
+      
+        <!-- Checklist + Alerts -->
         <div class="grid cols-2" style="margin-top:16px;">
-          <!-- // Shipment checklist -->
           <div class="card">
             <h3>Checklist: Shipment compliance</h3>
             <div class="toolbar">
               <label class="muted" for="selShipment">Shipment</label>
-              <select id="selShipment" class="select"><option>#AUS-241101</option><option>#AUS-241223</option></select>
+              <select id="selShipment" class="select">
+                <option>#AUS-241101</option><option>#AUS-241223</option>
+              </select>
               <button class="button secondary" id="btnExportPDF">Export PDF</button>
             </div>
-            <ul class="muted" id="listChecklist" style="line-height:1.9; padding-left: 18px;">
+            <ul class="muted" id="listChecklist" style="line-height:1.9; padding-left:18px;">
               <li><input type="checkbox" /> Permit valid for part numbers</li>
               <li><input type="checkbox" /> End-use statement attached</li>
               <li><input type="checkbox" /> Screening: Denied/Restricted parties</li>
               <li><input type="checkbox" /> Record retained (7 years)</li>
             </ul>
           </div>
-
-          <!-- // Alerts table -->
+      
           <div class="card">
             <h3>Alerts</h3>
             <table class="table" id="tblAlerts">
@@ -380,21 +469,26 @@
             </table>
           </div>
         </div>
-
-        <!-- // --- Monitoring FAQ --- -->
-      <h3 class="section-title">Frequently Asked Questions</h3>
-      <hr class="section-rule" />
-      <div class="grid cols-1 faq-list">
-        <details>
-          <summary>What evidence should I retain?</summary>
-          <p class="muted">Keep permits, consignee/end-use statements, shipment docs, and communications for at least seven years or your contractual requirement.</p>
-        </details>
-        <details>
-          <summary>How are denied party screens logged?</summary>
-          <p class="muted">Screens are captured with timestamp, list version, and user ID; export a PDF from the checklist card for audit.</p>
-        </details>
-      </div>
+      
+        <!-- FAQ -->
+        <h3 class="section-title">Frequently Asked Questions</h3>
+        <hr class="section-rule" />
+        <div class="grid cols-1 faq-list" data-faq-scope="monitoring">
+          <details>
+            <summary>What evidence should I retain?</summary>
+            <p>Keep permits, consignee/end-use statements, shipment docs, and communications for at least seven years or your contractual requirement.</p>
+          </details>
+          <details>
+            <summary>How are denied party screens logged?</summary>
+            <p>Screens are captured with timestamp, list version, and user ID; export a PDF from the checklist card for audit.</p>
+          </details>
+          <details>
+            <summary>What triggers an ‘Action Required’ alert?</summary>
+            <p>Approaching due dates, missing documents, or policy changes (e.g., DTCA updates) generate action flags until resolved.</p>
+          </details>
+        </div>
       </section>
+
 
       <!-- // === FUNDING & GRANTS ======================================== -->
       <section id="view-funding" class="page" aria-hidden="true">
@@ -710,7 +804,7 @@
       const labels = {
         home: 'Home',
         permits: 'Permits',
-        monitoring: 'Monitoring',
+        monitoring: 'Compliance Monitoring',
         funding: 'Funding & Grants',
         'market-intel': 'Market Intelligence',
         'ip-tech': 'IP & Tech Transfer',
@@ -800,13 +894,47 @@
       });
 
 
-      // // --- Monitoring Alerts ---
-      const al = document.querySelector('#tblAlerts tbody');
-      if (al) al.innerHTML = [
-        {when:'Today', sev:'Medium', msg:'Supplier uplift review with BAE (VetNet) scheduled'},
-        {when:'Yesterday', sev:'Low',    msg:'Trailblazer cohort brief uploaded by Dr M. Law'},
-        {when:'This week', sev:'Info',   msg:'Defence SA pathways update from M. Opie'}
-      ].map(a=>`<tr><td>${a.when}</td><td>${a.sev}</td><td>${a.msg}</td></tr>`).join('');
+     /* ====COMPLIANCE MONITORING: data + render========================= */
+
+    // Deadlines (top card)
+    const deadlines = [
+      { date:'Oct 31, 2025', tag:'ITAR',   desc:'Submit annual ITAR compliance report.' },
+      { date:'Nov 15, 2025', tag:'Access', desc:'Renew controlled-tech access credentials for staff.' },
+      { date:'Dec 1, 2025',  tag:'DTCA',   desc:'Complete mandatory DTCA 2024 update training.' }
+    ];
+    const dlList = document.getElementById('deadlineList');
+    if (dlList) {
+      dlList.innerHTML = deadlines.map(d => `
+        <li class="deadline-item">
+          <div class="deadline-date">${d.date}</div>
+          <div class="deadline-desc">${d.desc}</div>
+          <span class="deadline-tag">${d.tag}</span>
+        </li>
+      `).join('');
+    }
+    
+    // KPI progress helpers
+    function setProgress(idPct, idText, pct, text){
+      const bar = document.getElementById(idPct);
+      const t   = document.getElementById(idText);
+      if (bar) bar.style.width = `${Math.max(0, Math.min(100, pct))}%`;
+      if (t && text) t.textContent = text;
+    }
+    
+    // Set KPI values (adjust any numbers/labels you want)
+    setProgress('progOverall','txtOverall', 95, '95% Complete');
+    setProgress('progITAR',  'txtITAR',     72, 'Q3 Report Due');
+    setProgress('progDSGL',  'txtDSGL',    100, 'Up to date');
+    
+    // Alerts table (kept simple—extend as needed)
+    const al = document.querySelector('#tblAlerts tbody');
+    if (al) al.innerHTML = [
+      {when:'Today',      sev:'Medium', msg:'Supplier uplift review with BAE (VetNet) scheduled'},
+      {when:'Yesterday',  sev:'Low',    msg:'Trailblazer cohort brief uploaded by Dr M. Law'},
+      {when:'This week',  sev:'Info',   msg:'Defence SA pathways update from M. Opie'},
+    ].map(a=>`<tr><td>${a.when}</td><td>${a.sev}</td><td>${a.msg}</td></tr>`).join('');
+    
+    /* ===== end Compliance Monitoring block ===== */
 
       // // --- Funding & Grants Data + Filters ---
       const grantsData = [
