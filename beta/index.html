@@ -135,53 +135,63 @@
     .pill.warn { background: #3a2d00; color: #ffe0a8; border-color: #6e5200; }
     .pill.ok { background: #083d0a; color: #c8ffc9; border-color: #0b6e0e; }
 
-    /* // --- FAQ Styling and Animations --- */
-    .faq-list {
-      grid-template-columns: 1fr;
-    }
+    /* // --- FAQ Styling and Animations (accordion, single-open) --- */
+    .faq-list { grid-template-columns: 1fr; }
+    
     .faq-list details {
       background: var(--card-soft);
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 14px 16px;
+      padding: 12px 14px;
       transition: background .2s ease, border-color .2s ease;
       overflow: hidden;
     }
-    .faq-list details + details {
-      margin-top: 12px;
-    }
+    .faq-list details + details { margin-top: 12px; }
+    
     .faq-list summary {
       font-weight: 700;
       cursor: pointer;
-      position: relative;
       list-style: none;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
+      outline: none;
     }
+    
+    /* remove native marker */
     .faq-list summary::marker,
-    .faq-list summary::-webkit-details-marker {
-      display: none;
+    .faq-list summary::-webkit-details-marker { display: none; }
+    
+    /* plus / minus icon on the LEFT */
+    .faq-list summary::before {
+      content: "+";
+      flex: 0 0 1.2em;
+      text-align: center;
+      font-weight: 900;
+      color: var(--accent);
+      transition: transform .2s ease, color .2s ease;
     }
-    .faq-list summary::after {
-      content: "▸";
-      transition: transform .25s ease;
-      font-size: 0.9em;
-      color: var(--muted);
-      margin-left: auto;
-    }
-    .faq-list details[open] summary::after {
-      transform: rotate(90deg);
+    .faq-list details[open] summary::before {
+      content: "–";
       color: var(--accent);
     }
+    
+    /* open state styles */
     .faq-list details[open] {
       background: var(--card-hover);
       border-color: color-mix(in oklab, var(--border), var(--accent) 35%);
     }
+    
     .faq-list p {
       margin: 8px 0 0;
       color: var(--muted);
-      line-height: 1.5;
+      line-height: 1.55;
+      animation: faq-fade .18s ease;
+    }
+    
+    @keyframes faq-fade {
+      from { opacity: 0; transform: translateY(-2px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
 
     /* // --- Progress Ring --- */
@@ -358,12 +368,18 @@
         </div>
 
         <!-- // --- Monitoring FAQ --- -->
-        <h3 class="section-title">Frequently Asked Questions</h3>
-        <hr class="section-rule" />
-        <div class="grid cols-2">
-          <details open><summary>What evidence should I retain?</summary><p class="muted">Keep permits, consignee/end-use statements, shipment docs, and communications for at least seven years or your contractual requirement.</p></details>
-          <details><summary>How are denied party screens logged?</summary><p class="muted">Screens are captured with timestamp, list version, and user ID; export a PDF from the checklist card for audit.</p></details>
-        </div>
+      <h3 class="section-title">Frequently Asked Questions</h3>
+      <hr class="section-rule" />
+      <div class="grid cols-1 faq-list">
+        <details>
+          <summary>What evidence should I retain?</summary>
+          <p class="muted">Keep permits, consignee/end-use statements, shipment docs, and communications for at least seven years or your contractual requirement.</p>
+        </details>
+        <details>
+          <summary>How are denied party screens logged?</summary>
+          <p class="muted">Screens are captured with timestamp, list version, and user ID; export a PDF from the checklist card for audit.</p>
+        </details>
+      </div>
       </section>
 
       <!-- // === FUNDING & GRANTS ======================================== -->
@@ -515,12 +531,18 @@
         </div>
 
         <!-- // --- IP/T2 FAQ --- -->
-        <h3 class="section-title">Frequently Asked Questions</h3>
-        <hr class="section-rule" />
-        <div class="grid cols-2">
-          <details open><summary>When is a TAA required?</summary><p class="muted">Technical Assistance Agreements (TAAs) are required for furnishing defence technical data/assistance to foreign persons under ITAR.</p></details>
-          <details><summary>How are document markings handled?</summary><p class="muted">Markings follow ISM/IRAP-aligned templates with propagation checks on exportable PDFs.</p></details>
-        </div>
+      <h3 class="section-title">Frequently Asked Questions</h3>
+      <hr class="section-rule" />
+      <div class="grid cols-1 faq-list">
+        <details>
+          <summary>When is a TAA required?</summary>
+          <p class="muted">Technical Assistance Agreements (TAAs) are required for furnishing defence technical data/assistance to foreign persons under ITAR.</p>
+        </details>
+        <details>
+          <summary>How are document markings handled?</summary>
+          <p class="muted">Markings follow ISM/IRAP-aligned templates with propagation checks on exportable PDFs.</p>
+        </details>
+      </div>
       </section>
 
       <!-- // === MADE IN AUS BRAND ======================================= -->
@@ -867,6 +889,22 @@
           </a>
         `).join('');
       }
+
+            /* // --- FAQ: single-open accordion (plus/minus, all start closed) --- */
+      document.querySelectorAll('.faq-list').forEach(list => {
+        const items = Array.from(list.querySelectorAll('details'));
+      
+        // Ensure all closed on load (prevents default-open on first item)
+        items.forEach(d => { d.open = false; });
+      
+        // Close siblings when one opens
+        items.forEach(d => {
+          d.addEventListener('toggle', function () {
+            if (!this.open) return;
+            items.forEach(other => { if (other !== this) other.open = false; });
+          });
+        });
+      });
 
       // // --- NDA Demo ---
       document.getElementById('btnNDA')?.addEventListener('click',()=>alert('NDA generated (demo).'));
