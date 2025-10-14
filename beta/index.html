@@ -1030,7 +1030,7 @@
       
         // initial state
         const active = chipRow.querySelector('.chip.active') || chips[0];
-        moveChipIndicator(active);
+        requestAnimationFrame(() => moveChipIndicator(active));
       }
       
       // first paint
@@ -1125,35 +1125,6 @@
     ].map(a=>`<tr><td>${a.when}</td><td>${a.sev}</td><td>${a.msg}</td></tr>`).join('');
     
     /* ===== end Compliance Monitoring block ===== */
-
-      // // --- Funding & Grants Data + Filters ---
-      const grantsData = [
-        {p:'Defence SA – Supplier Readiness (Pilot)', j:'SA',       c:'EOI: Q4',     s:'SME uplift & pathways', tag:'Capability'},
-        {p:'Defence Trailblazer – Tech Acceleration', j:'National', c:'Cohort: Nov', s:'R&D to TRL uplift',      tag:'Capability'},
-        {p:'BAE Systems – VetNet Supplier Uplift',    j:'Industry', c:'Rolling',     s:'Capability & quals',     tag:'Skilling'},
-        {p:'PMB – Advanced Battery Systems Collab',   j:'Industry', c:'Invite',      s:'Prototype & testbeds',   tag:'Export'}
-      ];
-      const gbody = document.querySelector('#tblGrants tbody');
-      function renderGrants(filter='All'){
-        const q = (document.getElementById('qGrant')?.value || '').toLowerCase();
-        const juris = document.getElementById('juris')?.value || 'All jurisdictions';
-        const data = grantsData.filter(x => {
-          const okTag = filter==='All' || x.tag===filter;
-          const okText = !q || (x.p+x.j+x.s).toLowerCase().includes(q);
-          const okJuris = juris==='All jurisdictions' || x.j===juris;
-          return okTag && okText && okJuris;
-        });
-        if (gbody) gbody.innerHTML = data.map(x=>`<tr><td>${x.p}</td><td>${x.j}</td><td>${x.c}</td><td>${x.s}</td><td>${x.tag}</td><td><button class="button secondary">View & Apply</button></td></tr>`).join('');
-      }
-      renderGrants();
-      document.getElementById('btnFind')?.addEventListener('click', () => renderGrants(currentGrantFilter));
-      let currentGrantFilter = 'All';
-      document.querySelectorAll('#grantFilters [data-fil]').forEach(btn=>{
-        btn.addEventListener('click', ()=>{
-          currentGrantFilter = btn.dataset.fil;
-          renderGrants(currentGrantFilter);
-        });
-      });
 
       // // --- Market Intel: Feed + Targets ---
       const intelFeedData = [
@@ -1256,9 +1227,10 @@
       document.getElementById('btnNDA')?.addEventListener('click',()=>alert('NDA generated (demo).'));
 
       // // --- Smoke tests ---
-      console.assert(document.getElementById('tblDrafts'), '[Test] Permits table present');
-      console.assert(document.getElementById('tblGrants'), '[Test] Funding table present');
+      console.assert(document.getElementById('appsList'),  '[Test] Permits apps list present');
+      console.assert(document.getElementById('grantTiles'),'[Test] Grant tiles present');
       console.assert(document.getElementById('intelList'), '[Test] Intel list present');
+
     })();
   </script>
 </body>
