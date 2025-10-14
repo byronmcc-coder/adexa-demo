@@ -297,7 +297,7 @@
 
           <div class="card">
             <h3>Alerts</h3>
-            <table class="table" id="tblAlerts">
+            <table class="table responsive" id="tblAlerts">
               <thead><tr><th>When</th><th>Severity</th><th>Message</th></tr></thead>
               <tbody></tbody>
             </table>
@@ -316,7 +316,7 @@
             <select class="select" id="stage"><option>Any stage</option><option>Idea</option><option>Prototype</option><option>Export ready</option></select>
             <button class="button" id="btnFind">Find</button>
           </div>
-          <table class="table" id="tblGrants">
+          <table class="table responsive" id="tblGrants">
             <thead><tr><th>Program</th><th>Jurisdiction</th><th>Closes</th><th>Support</th><th></th></tr></thead>
             <tbody></tbody>
           </table>
@@ -616,11 +616,14 @@
 
       // Monitoring
       const al = document.querySelector('#tblAlerts tbody');
-      if (al) al.innerHTML = [
-        {when:'Today',     sev:'Medium', msg:'Supplier uplift review with BAE (VetNet) scheduled'},
-        {when:'Yesterday', sev:'Low',    msg:'Trailblazer cohort brief uploaded by Dr M. Law'},
-        {when:'This week', sev:'Info',   msg:'Defence SA pathways update from M. Opie'},
-      ].map(a=>`<tr><td>${a.when}</td><td>${a.sev}</td><td>${a.msg}</td></tr>`).join('');
+      if (al) {
+        al.innerHTML = [
+          {when:'Today',     sev:'Medium', msg:'Supplier uplift review with BAE (VetNet) scheduled'},
+          {when:'Yesterday', sev:'Low',    msg:'Trailblazer cohort brief uploaded by Dr M. Law'},
+          {when:'This week', sev:'Info',   msg:'Defence SA pathways update from M. Opie'},
+        ].map(a=>`<tr><td>${a.when}</td><td>${a.sev}</td><td>${a.msg}</td></tr>`).join('');
+        addDataLabels('#tblAlerts', ['When','Severity','Message']);
+      }
 
       // Funding
       const gbody = document.querySelector('#tblGrants tbody');
@@ -631,7 +634,10 @@
           {p:'BAE Systems – VetNet Supplier Uplift',    j:'Industry', c:'Rolling',     s:'Capability & quals'},
           {p:'PMB – Advanced Battery Systems Collab',   j:'Industry', c:'Invite',      s:'Prototype & testbeds'}
         ];
-        if (gbody) gbody.innerHTML = data.map(x=>`<tr><td>${x.p}</td><td>${x.j}</td><td>${x.c}</td><td>${x.s}</td><td><button class="button secondary">Save</button></td></tr>`).join('');
+        if (gbody) {
+          gbody.innerHTML = data.map(x=>`<tr><td>${x.p}</td><td>${x.j}</td><td>${x.c}</td><td>${x.s}</td><td><button class="button secondary">Save</button></td></tr>`).join('');
+          addDataLabels('#tblGrants', ['Program','Jurisdiction','Closes','Support','']);
+        }
       }
       loadGrants();
       const btnFind = document.getElementById('btnFind'); if (btnFind) btnFind.addEventListener('click', loadGrants);
@@ -674,7 +680,7 @@
         const checks = document.querySelectorAll('#view-readiness input[type=checkbox].chk');
         const total = checks.length;
         const done = Array.from(checks).filter(c => c.checked).length;
-        const percent = Math.round((done / total) * 100);
+        const percent = total ? Math.round((done / total) * 100) : 0;
 
         const score  = document.getElementById('score');      // KPI ring on Market Intel
         const ring1  = document.getElementById('ringProg');   // Market Intel ring
@@ -686,9 +692,12 @@
         if (score2) score2.textContent = String(percent);
         setRing(ring1, percent);
         setRing(ring2, percent);
-        if (note) note.textContent = `${done} of ${total} actions complete (${percent}%)`;
+        if (note) note.textContent = total ? `${done} of ${total} actions complete (${percent}%)` : 'No actions available yet.';
       }
       if (btnCalcScore) btnCalcScore.addEventListener('click', recalcScore);
+      document.querySelectorAll('#view-readiness input[type=checkbox].chk').forEach(chk => {
+        chk.addEventListener('change', recalcScore);
+      });
 
       // Initialize rings to current #score (72)
       const initScore = parseInt((document.getElementById('score')?.textContent || '72').replace(/\D/g,''), 10) || 72;
