@@ -96,7 +96,7 @@
       border: 1px solid var(--border);
       background: var(--card);
       color: var(--muted);
-      font-size: 0.82rem;
+      font-size: 0.72rem;
       font-weight: 600;
       letter-spacing: .2px;
       box-shadow: var(--shadow);
@@ -978,7 +978,7 @@
       const versionEl = document.getElementById('appVersion');
       if (versionEl) {
         const branchLabel = branch === 'beta' ? 'Beta' : 'Main';
-        versionEl.textContent = `Version ${APP_VERSION} · ${branchLabel} build`;
+        versionEl.textContent = `v${APP_VERSION} · ${branchLabel}`;
         versionEl.setAttribute('data-branch', branch);
       }
 
