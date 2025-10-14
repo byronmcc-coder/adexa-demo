@@ -433,7 +433,7 @@
           <!-- Made in Aus -->
           <button class="item" data-target="made-in-aus">
             <span class="ico"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></span>
-            <span class="label">MadeInAus Brand</span>
+            <span class="label">Australia's Nation Brand</span>
             <span class="chev"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></span>
           </button>
         </nav>
@@ -630,7 +630,7 @@
           <!-- // Navigator CTA -->
           <div class="card">
             <h3>Navigator support</h3>
-            <p class="muted">Book time with a sector Navigator for case-managed advice.</p>
+            <p class="muted">Our expert Navigators provide one-on-one guidance to help you identify opportunities, navigate compliance, and develop your export strategy.</p>
             <button class="button" id="btnBook">Request session</button>
             <p class="note" style="margin-top:8px;">Typical response: &lt; 2 business days.</p>
           </div>
@@ -672,7 +672,7 @@
       <!-- // === IP & TECH TRANSFER ====================================== -->
       <section id="view-ip-tech" class="page" aria-hidden="true">
         <div class="page-head"><button class="btn" data-back>← Back</button><h2 class="page-title">IP &amp; Tech Transfer</h2></div>
-        <p class="lead">Micro-credentials, NDA generator and T2 controls to protect sovereign IP.</p>
+        <p class="lead">Embed T2 & IP Management Training. Mandatory micro-credentials on the platform ensure you can securely manage sovereign IP and navigate Technology Transfer (T2) protocols with allied partners.</p>
 
         <div class="grid cols-2">
           <div class="card">
@@ -722,18 +722,28 @@
 
       <!-- // === MADE IN AUS BRAND ======================================= -->
       <section id="view-made-in-aus" class="page" aria-hidden="true">
-        <div class="page-head"><button class="btn" data-back>← Back</button><h2 class="page-title">MadeInAus Defence Brand</h2></div>
-        <p class="lead">Leverage the 'Made in Australia' brand for defence exports. Access resources to connect with Team Defence Australia events and secure inclusion in the Australian Defence Export Catalogue.</p>
+        <div class="page-head"><button class="btn" data-back>← Back</button><h2 class="page-title">Australian Defence Branding</h2></div>
+        <p class="lead">Leverage the 'Brand Ausralia' Resources & 'Made in Australia' logo for defence exports. Access resources to connect with Team Defence Australia events and secure inclusion in the Australian Defence Export Catalogue.</p>
 
+                <!-- // TDA Events -->
+        <h3 class="section-title">Upcoming TDA Events</h3>
+        <hr class="section-rule" />
+        <div id="tdaEvents" class="grid cols-1">
+          <!-- event cards injected by JS -->
+        </div>
+        
         <!-- // Brand Resources -->
-        <h3 class="section-title">Brand Resources</h3>
+        <h3 class="section-title">Resources</h3>
         <hr class="section-rule" />
         <div class="grid cols-1">
-          <a class="card" href="https://www.defence.gov.au" target="_blank" rel="noopener">
-            <h3>Download Australian Defence Export Catalogue 2025</h3>
+          <a class="card" href="https://www.defence.gov.au/sites/default/files/2025-04/Australian-Defence-Export-Catalogue-2025-web.pdf" target="_blank" rel="noopener">
+            <h3>Download Australian Defence Export Catalogue 2025 (PDF, 11.21 MB)</h3>
           </a>
-          <a class="card" href="https://www.austrade.gov.au" target="_blank" rel="noopener">
-            <h3>Download 'MadeInAus' Brand Guidelines</h3>
+          <a class="card" href="https://assets.australiabrand.com.au/" target="_blank" rel="noopener">
+            <h3>Brand Australia Guidelines</h3>
+          </a>
+          <a class="card" href="https://australianmade.com.au/licensees/register/" target="_blank" rel="noopener">
+            <h3>Register for Australian Made Logo</h3>
           </a>
         </div>
 
@@ -759,13 +769,6 @@
               <a class="button secondary" href="#/made-in-aus" onclick="return false;">Upcoming events</a>
             </div>
           </div>
-        </div>
-
-        <!-- // TDA Events -->
-        <h3 class="section-title">Upcoming TDA Events</h3>
-        <hr class="section-rule" />
-        <div id="tdaEvents" class="grid cols-1">
-          <!-- event cards injected by JS -->
         </div>
 
         <!-- // --- MadeInAus FAQ --- -->
@@ -1129,7 +1132,7 @@
 
       // // --- Market Intel: Feed + Targets ---
       const intelFeedData = [
-        {title:'UK MoD seeks next-gen drone swarm tech', blurb:'Tender for autonomous systems creates opportunities for Australian firms with proven AI and sensor capability.', meta:'Region: UK | Sector: Autonomous Systems | Date: 12 Oct 2025'},
+        {title:'UK MoD seeks next-gen drone swarm tech', blurb:'The UK Ministry of Defence has released a tender for autonomous systems, creating opportunities for Australian firms with proven AI and sensor capabilities.', meta:'Region: UK | Sector: Autonomous Systems | Date: 12 Oct 2025'},
         {title:'AUKUS update: streamlined tech transfer protocols', blurb:'New regulations reduce admin burdens for sharing sensitive tech between AU, UK, US under AUKUS Pillar II.', meta:'Region: AUKUS | Sector: Policy | Date: 10 Oct 2025'},
         {title:'Japan increases defence budget, focuses on cyber', blurb:'Growing demand for cyber defence tooling and services; scope for AU SMEs in secure comms & training.', meta:'Region: APAC | Sector: Cyber | Date: 08 Oct 2025'}
       ];
