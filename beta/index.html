@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en" dir="ltr" data-branch="beta">
 <head>
   <!-- // --- Meta & Title --- -->
   <meta charset="UTF-8" />
@@ -86,7 +86,42 @@
     .brand-block { display: flex; flex-direction: column; gap: 2px; }
     .title { font-weight: 900; font-size: clamp(20px, 2.6vw, 26px); color: var(--adexa-cream); letter-spacing: 0.3px; }
     .subtitle { color: var(--muted); font-size: clamp(12px, 1.7vw, 14px); }
-    .top-actions { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+    .top-actions {
+      margin-left: auto;
+      display: grid;
+      gap: 8px;
+      justify-items: end;
+      align-content: start;
+    }
+    .top-controls { display: flex; align-items: center; gap: 10px; }
+    .version-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--muted);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: .2px;
+      box-shadow: var(--shadow);
+      white-space: nowrap;
+    }
+    .version-pill[data-branch="beta"] {
+      background: color-mix(in oklab, var(--card), #3a1f00 35%);
+      border-color: color-mix(in oklab, var(--border), var(--accent) 35%);
+      color: color-mix(in oklab, var(--text), var(--accent) 40%);
+    }
+
+    @media (max-width: 720px) {
+      header.topbar { flex-wrap: wrap; align-items: flex-start; }
+      .brand-block { flex: 1 0 180px; }
+      .top-actions { order: 3; width: 100%; }
+      .top-controls { flex-wrap: wrap; justify-content: flex-end; gap: 6px; width: 100%; }
+      .version-pill { font-size: 0.65rem; padding: 3px 8px; }
+    }
 
     /* // --- Small UI Tokens --- */
     .chip { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--border); background: var(--card); color: var(--text); border-radius: 999px; padding: 8px 12px; box-shadow: var(--shadow); }
@@ -405,11 +440,14 @@
         <div class="subtitle">Australian Defence Export Accelerator</div>
       </div>
       <div class="top-actions">
-        <span class="chip" title="Current section"><span class="dot"></span><span id="crumb">Home</span></span>
-        <button class="btn" id="themeToggle" aria-pressed="false" aria-label="Toggle theme">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 3a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V4a1 1 0 0 1 1-1Zm6.36 2.05a1 1 0 0 1 0 1.41l-1.41 1.41a1 1 0 1 1-1.41-1.41l1.41-1.41a1 1 0 0 1 1.41 0ZM21 13a1 1 0 1 1 0-2h2a1 1 0 1 1 0 2h-2ZM4 13a1 1 0 1 1 0-2H2a1 1 0 1 1 0 2h2Zm1.05-7.95a1 1 0 0 1 1.41 0l1.41 1.41A1 1 0 1 1 6.46 7.9L5.05 6.49a1 1 0 0 1 0-1.41ZM12 17a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1Zm7.95-1.05a1 1 0 0 1 0 1.41l-1.41 1.41a1 1 0 0 1-1.41-1.41l1.41-1.41a1 1 0 0 1 1.41 0ZM6.87 18.88a1 1 0 0 1-1.41 0l-1.41-1.41a1 1 0 1 1 1.41-1.41l1.41 1.41a1 1 0 0 1 0 1.41Z"/></svg>
-          <span id="themeLabel">Light</span>
-        </button>
+        <span class="version-pill" id="appVersion" aria-live="polite">Version</span>
+        <div class="top-controls">
+          <span class="chip" title="Current section"><span class="dot"></span><span id="crumb">Home</span></span>
+          <button class="btn" id="themeToggle" aria-pressed="false" aria-label="Toggle theme">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 3a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V4a1 1 0 0 1 1-1Zm6.36 2.05a1 1 0 0 1 0 1.41l-1.41 1.41a1 1 0 1 1-1.41-1.41l1.41-1.41a1 1 0 0 1 1.41 0ZM21 13a1 1 0 1 1 0-2h2a1 1 0 1 1 0 2h-2ZM4 13a1 1 0 1 1 0-2H2a1 1 0 1 1 0 2h2Zm1.05-7.95a1 1 0 0 1 1.41 0l1.41 1.41A1 1 0 1 1 6.46 7.9L5.05 6.49a1 1 0 0 1 0-1.41ZM12 17a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1Zm7.95-1.05a1 1 0 0 1 0 1.41l-1.41 1.41a1 1 0 0 1-1.41-1.41l1.41-1.41a1 1 0 0 1 1.41 0ZM6.87 18.88a1 1 0 0 1-1.41 0l-1.41-1.41a1 1 0 1 1 1.41-1.41l1.41 1.41a1 1 0 0 1 0 1.41Z"/></svg>
+            <span id="themeLabel">Light</span>
+          </button>
+        </div>
       </div>
     </header>
 
@@ -939,6 +977,16 @@
         chip.innerHTML = '<span class="dot"></span><span>Panel mode</span>';
         const actions = document.querySelector('.top-actions');
         actions && actions.prepend(chip);
+      }
+
+      // // --- Version indicator ---
+      const APP_VERSION = '1.0.0';
+      const branch = (document.documentElement.getAttribute('data-branch') || '').toLowerCase() || (location.pathname.includes('/beta') ? 'beta' : 'main');
+      const versionEl = document.getElementById('appVersion');
+      if (versionEl) {
+        const branchLabel = branch === 'beta' ? 'Beta' : 'Main';
+        versionEl.textContent = `v${APP_VERSION} · ${branchLabel}`;
+        versionEl.setAttribute('data-branch', branch);
       }
 
       /* =========================
