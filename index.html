@@ -83,17 +83,18 @@
     /* // --- Header --- */
     header.topbar { display: flex; align-items: center; gap: clamp(10px,1.6vw,16px); }
     .logo { width: clamp(56px, 7vw, 84px); height: auto; flex: 0 0 auto; border-radius: 10px; }
-    .brand-block { display: flex; flex-direction: column; gap: 2px; }
+    .brand-block { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1 1 200px; }
     .title { font-weight: 900; font-size: clamp(20px, 2.6vw, 26px); color: var(--adexa-cream); letter-spacing: 0.3px; }
     .subtitle { color: var(--muted); font-size: clamp(12px, 1.7vw, 14px); }
     .top-actions {
       margin-left: auto;
       display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 8px;
+      align-items: center;
+      justify-content: flex-end;
+      gap: clamp(8px, 1.2vw, 14px);
+      flex-wrap: wrap;
     }
-    .top-controls { display: flex; align-items: center; justify-content: flex-end; gap: 10px; }
+    .top-controls { display: inline-flex; align-items: center; justify-content: flex-end; gap: 10px; }
     .version-pill {
       display: inline-flex;
       align-items: center;
@@ -119,8 +120,8 @@
     @media (max-width: 720px) {
       header.topbar { flex-wrap: wrap; align-items: flex-start; }
       .brand-block { flex: 1 0 180px; }
-      .top-actions { order: 3; width: 100%; align-items: flex-end; }
-      .top-controls { flex-wrap: wrap; gap: 6px; width: 100%; }
+      .top-actions { order: 3; width: 100%; justify-content: flex-start; gap: 6px; }
+      .top-controls { flex-wrap: wrap; gap: 6px; width: 100%; justify-content: flex-start; }
       .version-pill { font-size: 0.64rem; padding: 3px 9px; }
     }
 
