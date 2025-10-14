@@ -14,39 +14,51 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
 
-    /* // --- Brand & Design Tokens (Dark default) --- */
-    :root {
-      /* Brand from logo */
-      --adexa-green: #004B40;
-      --adexa-orange: #E87024;
-      --adexa-cream: #FAF7ED;
-      --adexa-dark: #002F2F;
+/* // --- Australia Nation Brand vibe (deep green + wattle gold) --- */
+:root {
+  /* Core palette */
+  --adexa-green: #0b3b34;   /* deep “brand green” */
+  --adexa-gold:  #f2c351;   /* “wattle” gold */
+  --adexa-cream: #fff7e5;   /* warm light */
+  --adexa-dark:  #022d2a;   /* card/background dark */
 
-      /* Default (dark) theme */
-      --bg: var(--adexa-dark);
-      --card: #013a3a;
-      --card-hover: #014646;
-      --card-soft: #002a2a;
-      --border: #026060;
-      --text: #f0f5f2;
-      --muted: #b3c7c7;
-      --accent: var(--adexa-orange);
-      --radius: 14px;
-      --shadow: 0 4px 18px rgba(0,0,0,.35), 0 1px 4px rgba(0,0,0,.2);
-    }
+  /* App tokens (dark default) */
+  --bg: var(--adexa-dark);
+  --card: #083a35;
+  --card-hover: #0a433d;
+  --card-soft: #062f2b;
+  --border: #0e564f;
+  --text: #eef6f3;
+  --muted: #b8cbc7;
+  --accent: var(--adexa-gold);
+  --radius: 14px;
+  --shadow: 0 4px 18px rgba(0,0,0,.35), 0 1px 4px rgba(0,0,0,.2);
+}
 
-    /* // --- Light Theme (white + professional blue) --- */
-    :root[data-theme="light"] {
-      --bg: #f7f9fc;
-      --card: #ffffff;
-      --card-hover: #f5f8fc;
-      --card-soft: #ffffff;
-      --border: #e6eef5;
-      --text: #0b1f2a;
-      --muted: #5b6b7a;
-      --accent: #0a62c2;
-      --shadow: 0 8px 24px rgba(10, 35, 66, .06), 0 1px 3px rgba(10, 35, 66, .06);
-    }
+/* Optional: light theme tuned to the same brand */
+:root[data-theme="light"] {
+  --bg: #f6faf8;
+  --card: #ffffff;
+  --card-hover: #f7fbfa;
+  --card-soft: #ffffff;
+  --border: #dce9e6;
+  --text: #0b3b34;
+  --muted: #5f726e;
+  --accent: var(--adexa-gold);
+  --shadow: 0 8px 24px rgba(10, 35, 66, .06), 0 1px 3px rgba(10, 35, 66, .06);
+}
+
+/* Buttons pick up the gold automatically via --accent, but these help the look */
+.button { 
+  background: linear-gradient(180deg, var(--accent), color-mix(in oklab, var(--accent), #000 18%));
+  color: #1e251f; 
+  border-color: color-mix(in oklab, var(--accent), #000 28%);
+}
+.button.secondary {
+  background: #083933;
+  color: var(--text);
+  border-color: var(--border);
+}
     :root[data-theme="light"] .title { color: #0b1f2a; }
     :root[data-theme="light"] .chip { background: #fff; color: #0b1f2a; border-color: #d6e2ee; }
     :root[data-theme="light"] .input,
@@ -55,6 +67,7 @@
     :root[data-theme="light"] .button.secondary { background: #eef4fb; color: #0b1f2a; border-color: #c9d9ea; }
     :root[data-theme="light"] details { background: #f7fbff; border-color: #d6e2ee; }
 
+    
     /* // --- Base layout --- */
     * { box-sizing: border-box; }
     body {
@@ -434,7 +447,8 @@
           <button class="item" data-target="made-in-aus">
             <span class="ico">
             <span class="ico">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M2 16c3 1 6 1 8-1 2-1 3-3 4-5s2-4 4-5c3-2 7 0 6 3-1 3-5 6-8 8 2 0 4 1 6 2-1 1-2 2-3 2H8c-2 0-4-1-6-2v-2z"/></svg></span>
+            <span class="ico">
+            <span class="ico"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></span>
             <span class="label">Australia's National Brand</span>
             <span class="chev"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></span>
           </button>
