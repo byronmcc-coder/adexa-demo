@@ -149,13 +149,14 @@
         z-index: 0;
         height: 36px;
         border-radius: 999px;
-        background: color-mix(in oklab, var(--accent), #000 80%);
-        opacity: .25;
+        background: var(--accent);
+        opacity: 0.18;              /* soft glow look */
         top: 50%;
         transform: translateY(-50%);
-        transition: left .22s ease, width .22s ease;
+        transition: left .22s ease, width .22s ease, opacity .15s ease;
         pointer-events: none;
       }
+
       
       /* Grant tiles */
       .grant-card {
@@ -402,7 +403,7 @@
           <!-- Permits -->
           <button class="item" data-target="permits">
             <span class="ico"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg></span>
-            <span class="label">Permits</span>
+            <span class="label">Export Permits</span>
             <span class="chev"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></span>
           </button>
           <!-- Monitoring -->
