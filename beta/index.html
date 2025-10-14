@@ -135,6 +135,55 @@
     .pill.warn { background: #3a2d00; color: #ffe0a8; border-color: #6e5200; }
     .pill.ok { background: #083d0a; color: #c8ffc9; border-color: #0b6e0e; }
 
+    /* // --- FAQ Styling and Animations --- */
+    .faq-list {
+      grid-template-columns: 1fr;
+    }
+    .faq-list details {
+      background: var(--card-soft);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      transition: background .2s ease, border-color .2s ease;
+      overflow: hidden;
+    }
+    .faq-list details + details {
+      margin-top: 12px;
+    }
+    .faq-list summary {
+      font-weight: 700;
+      cursor: pointer;
+      position: relative;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .faq-list summary::marker,
+    .faq-list summary::-webkit-details-marker {
+      display: none;
+    }
+    .faq-list summary::after {
+      content: "▸";
+      transition: transform .25s ease;
+      font-size: 0.9em;
+      color: var(--muted);
+      margin-left: auto;
+    }
+    .faq-list details[open] summary::after {
+      transform: rotate(90deg);
+      color: var(--accent);
+    }
+    .faq-list details[open] {
+      background: var(--card-hover);
+      border-color: color-mix(in oklab, var(--border), var(--accent) 35%);
+    }
+    .faq-list p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
     /* // --- Progress Ring --- */
     .ring { width: 140px; height: 140px; margin: 0 auto 10px auto; position: relative; }
     .ring svg { display: block; width: 100%; height: 100%; }
@@ -253,9 +302,19 @@
         <!-- // --- Permits FAQ --- -->
         <h3 class="section-title">Frequently Asked Questions</h3>
         <hr class="section-rule" />
-        <div class="grid cols-2">
-          <details open><summary>What are the 2024 DTCA changes?</summary><p class="muted">The Defence Trade Controls Amendment Act 2024 enables licence-free trade for most defence items among AUKUS partners and creates new offences for unauthorised supply of DSGL technology/services (commencing Mar 2025).</p></details>
-          <details><summary>How does ITAR affect my exports?</summary><p class="muted">If your product contains US-origin components on the USML, ITAR applies. Re-export/third-country transfers need US State Department approval; strict compliance and records are required.</p></details>
+        <div class="grid cols-1 faq-list">
+          <details>
+            <summary>What are the 2024 DTCA changes?</summary>
+            <p>The Defence Trade Controls Amendment Act 2024 enables licence-free trade for most defence items among AUKUS partners and creates new offences for unauthorised supply of DSGL technology and services. These provisions commence in March 2025.</p>
+          </details>
+          <details>
+            <summary>How does ITAR affect my exports?</summary>
+            <p>If your product includes U.S.-origin components or technology listed on the USML, ITAR applies. Re-export or third-country transfers require U.S. State Department approval, with strict record-keeping and compliance obligations.</p>
+          </details>
+          <details>
+            <summary>Who can help with complex export applications?</summary>
+            <p>Contact Defence Export Controls (DEC) or the Office of Defence Industry Support (ODIS) for tailored support, guidance, and pre-assessment of export applications.</p>
+          </details>
         </div>
       </section>
 
@@ -337,9 +396,19 @@
         <!-- // --- Funding FAQ --- -->
         <h3 class="section-title">Frequently Asked Questions</h3>
         <hr class="section-rule" />
-        <div class="grid cols-2">
-          <details open><summary>What makes a strong application?</summary><p class="muted">Clear problem/solution, measurable outcomes, partner letters, matched funding where required, and credible delivery plan with milestones.</p></details>
-          <details><summary>Can I apply for multiple grants?</summary><p class="muted">Yes, provided rules allow stacking. Note co-funding and any exclusivity requirements in your plan.</p></details>
+        <div class="grid cols-1 faq-list">
+          <details>
+            <summary>Which grants are best for new exporters?</summary>
+            <p>The Defence Industry Development Grant and Export Market Development Grant (EMDG) are ideal starting points for SMEs expanding into global defence markets.</p>
+          </details>
+          <details>
+            <summary>Can I apply for multiple grants at once?</summary>
+            <p>Yes, as long as there’s no overlap in funding for the same costs or deliverables. Defence SA or ODIS can help structure combined funding applications.</p>
+          </details>
+          <details>
+            <summary>What is the typical grant approval timeline?</summary>
+            <p>Grant approvals usually take 6–12 weeks after submission, depending on the complexity of the project and verification of eligibility documentation.</p>
+          </details>
         </div>
       </section>
 
@@ -393,9 +462,19 @@
         <!-- // --- Market Intel FAQ --- -->
         <h3 class="section-title">Frequently Asked Questions</h3>
         <hr class="section-rule" />
-        <div class="grid cols-2">
-          <details open><summary>How do you select intel sources?</summary><p class="muted">We blend government tenders, prime announcements, academic feeds, and trade partners. Navigator notes add context for SMEs.</p></details>
-          <details><summary>Can I personalise the feed?</summary><p class="muted">Use the region/keyword controls; Navigator sessions can also tailor watchlists for you.</p></details>
+        <div class="grid cols-1 faq-list">
+          <details>
+            <summary>How often is the Intel Feed updated?</summary>
+            <p>Market Intelligence is refreshed weekly to include updates from Defence Connect, ASPI, and AUKUS-related tenders. High-priority opportunities are highlighted via ADEXA notifications.</p>
+          </details>
+          <details>
+            <summary>Can I filter intel by domain (air, sea, land)?</summary>
+            <p>Yes. Use the in-page filters to view intelligence aligned to your capability area—Autonomous Systems, Maritime Sustainment, ISR, or Cyber.</p>
+          </details>
+          <details>
+            <summary>How do I engage a Navigator advisor?</summary>
+            <p>Registered ADEXA users can book a virtual session with a Navigator for tailored export-readiness assessments or partner introductions.</p>
+          </details>
         </div>
       </section>
 
@@ -495,9 +574,19 @@
         <!-- // --- MadeInAus FAQ --- -->
         <h3 class="section-title">Frequently Asked Questions</h3>
         <hr class="section-rule" />
-        <div class="grid cols-2">
-          <details open><summary>How do I get listed in the Export Catalogue?</summary><p class="muted">Prepare a concise capability statement, ensure export compliance, then submit via the catalogue portal when the next intake opens.</p></details>
-          <details><summary>Can I co-brand with a prime?</summary><p class="muted">Yes, if your contract permits. Follow the prime’s brand rules alongside MadeInAus guidance.</p></details>
+        <div class="grid cols-1 faq-list">
+          <details>
+            <summary>How do I qualify to use the ‘Made in Australia’ mark?</summary>
+            <p>Companies must demonstrate Australian content of at least 50% and hold relevant export control compliance clearances. Validation is managed through Team Defence Australia.</p>
+          </details>
+          <details>
+            <summary>Can I feature in the Australian Defence Export Catalogue?</summary>
+            <p>Yes. Once approved for brand use, your company will be automatically reviewed for inclusion in the next edition of the Australian Defence Export Catalogue.</p>
+          </details>
+          <details>
+            <summary>Where can I find Team Defence Australia events?</summary>
+            <p>Upcoming TDA events are published through ADEXA and include DSEI Japan, Sea-Air-Space (USA), and Indo-Pacific 2026 (Sydney). Links and registration portals are updated regularly.</p>
+          </details>
         </div>
       </section>
 
