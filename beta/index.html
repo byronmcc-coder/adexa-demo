@@ -85,7 +85,14 @@
     .logo { width: clamp(56px, 7vw, 84px); height: auto; flex: 0 0 auto; border-radius: 10px; }
     .brand-block { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1 1 200px; }
     .title { font-weight: 900; font-size: clamp(20px, 2.6vw, 26px); color: var(--adexa-cream); letter-spacing: 0.3px; }
-    .subtitle { color: var(--muted); font-size: clamp(12px, 1.7vw, 14px); }
+    .subtitle {
+      color: var(--muted);
+      font-size: clamp(12px, 1.7vw, 14px);
+      line-height: 1.2;
+      display: inline-flex;
+      flex-direction: column;
+    }
+    .subtitle span { display: block; }
     .top-actions {
       margin-left: auto;
       display: flex;
@@ -118,10 +125,10 @@
     }
 
     @media (max-width: 720px) {
-      header.topbar { flex-wrap: wrap; align-items: flex-start; }
-      .brand-block { flex: 1 0 180px; }
-      .top-actions { order: 3; width: 100%; justify-content: flex-start; gap: 6px; }
-      .top-controls { flex-wrap: wrap; gap: 6px; width: 100%; justify-content: flex-start; }
+      header.topbar { gap: 12px; }
+      .brand-block { flex: 1 1 auto; }
+      .top-actions { gap: 6px; }
+      .top-controls { flex-wrap: wrap; gap: 6px; justify-content: flex-end; }
       .version-pill { font-size: 0.64rem; padding: 3px 9px; }
     }
 
@@ -448,7 +455,10 @@
       <img src="Adexa.svg" alt="ADEXA Logo" class="logo">
       <div class="brand-block">
         <div class="title">ADEXA</div>
-        <div class="subtitle">Australian Defence Export Accelerator</div>
+        <div class="subtitle" role="text">
+          <span>Australian Defence</span>
+          <span>Export Accelerator</span>
+        </div>
       </div>
       <div class="top-actions">
         <span class="version-pill" id="appVersion" aria-live="polite">Version</span>
