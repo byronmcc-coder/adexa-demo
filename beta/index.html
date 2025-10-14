@@ -1,14 +1,20 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
+  <!-- // --- Meta & Title --- -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ADEXA Prototype</title>
   <meta name="color-scheme" content="dark light" />
-  <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="%23004B40"/><circle cx="16" cy="16" r="6" fill="%23E87024"/></svg>' />
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
 
+  <!-- // --- Tiny inline favicon (brand dot) --- -->
+  <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="%23004B40"/><circle cx="16" cy="16" r="6" fill="%23E87024"/></svg>' />
+
+  <!-- // --- Fonts --- -->
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
+
+    /* // --- Brand & Design Tokens (Dark default) --- */
     :root {
       /* Brand from logo */
       --adexa-green: #004B40;
@@ -16,7 +22,7 @@
       --adexa-cream: #FAF7ED;
       --adexa-dark: #002F2F;
 
-      /* Default (dark) theme tokens */
+      /* Default (dark) theme */
       --bg: var(--adexa-dark);
       --card: #013a3a;
       --card-hover: #014646;
@@ -29,7 +35,7 @@
       --shadow: 0 4px 18px rgba(0,0,0,.35), 0 1px 4px rgba(0,0,0,.2);
     }
 
-    /* Light theme variables (clean white + professional blues) */
+    /* // --- Light Theme (white + professional blue) --- */
     :root[data-theme="light"] {
       --bg: #f7f9fc;
       --card: #ffffff;
@@ -49,38 +55,36 @@
     :root[data-theme="light"] .button.secondary { background: #eef4fb; color: #0b1f2a; border-color: #c9d9ea; }
     :root[data-theme="light"] details { background: #f7fbff; border-color: #d6e2ee; }
 
+    /* // --- Base layout --- */
     * { box-sizing: border-box; }
-
     body {
       margin: 0;
-      font-family: 'Roboto', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      font-family: 'Roboto', system-ui, -apple-system, Segoe UI, Helvetica, Arial;
       background: linear-gradient(180deg, var(--bg), color-mix(in oklab, var(--bg), #000 4%));
       color: var(--text);
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
+      -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
       min-height: 100dvh;
     }
-
     .app { max-width: 1100px; margin: 0 auto; padding: clamp(16px, 2.6vw, 28px); display: grid; grid-template-rows: auto 1fr; gap: 18px; }
 
-    /* Header */
+    /* // --- Header --- */
     header.topbar { display: flex; align-items: center; gap: clamp(10px,1.6vw,16px); }
     .logo { width: clamp(56px, 7vw, 84px); height: auto; flex: 0 0 auto; border-radius: 10px; }
     .brand-block { display: flex; flex-direction: column; gap: 2px; }
-    .title { font-weight: 800; font-size: clamp(18px, 2.2vw, 22px); color: var(--adexa-cream); letter-spacing: 0.3px; }
+    .title { font-weight: 900; font-size: clamp(20px, 2.6vw, 26px); color: var(--adexa-cream); letter-spacing: 0.3px; }
     .subtitle { color: var(--muted); font-size: clamp(12px, 1.7vw, 14px); }
     .top-actions { margin-left: auto; display: flex; align-items: center; gap: 10px; }
 
+    /* // --- Small UI Tokens --- */
     .chip { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--border); background: var(--card); color: var(--text); border-radius: 999px; padding: 8px 12px; box-shadow: var(--shadow); }
     .chip .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
-
     .btn { border: 1px solid var(--border); background: linear-gradient(180deg, var(--card), var(--card-soft)); color: var(--text); padding: 10px 12px; border-radius: 12px; cursor: pointer; font: inherit; display: inline-flex; align-items: center; gap: 8px; transition: transform .08s ease, background .2s ease, border-color .2s ease; }
     .btn:hover { background: var(--card-hover); border-color: color-mix(in oklab, var(--border), var(--accent) 30%); }
     .btn:active { transform: translateY(1px); }
 
     main.card { background: var(--card); border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow); padding: clamp(14px, 2.2vw, 22px); }
 
-    /* Menu */
+    /* // --- Home Menu --- */
     nav.menu { display: grid; gap: 14px; }
     .item { --pad: clamp(12px, 2.2vw, 18px); display: grid; grid-template-columns: 40px 1fr auto; align-items: center; background: linear-gradient(180deg, var(--card), var(--card-soft)); border: 1px solid var(--border); border-radius: var(--radius); padding: var(--pad); cursor: pointer; transition: transform .12s ease, background-color .2s ease, border-color .2s ease; text-align: left; }
     .item:hover { background: var(--card-hover); border-color: color-mix(in oklab, var(--border), var(--accent) 30%); transform: translateY(-1px); }
@@ -88,15 +92,15 @@
     .ico svg, .chev svg { width: 24px; height: 24px; stroke: var(--muted); }
     .label { font-weight: 700; font-size: 1.06rem; color: var(--text); letter-spacing: .2px; }
 
-    /* Pages */
+    /* // --- Page visibility --- */
     section.page { display: none; opacity: 0; transform: translateY(6px); transition: opacity .22s ease, transform .22s ease; }
     section.page[aria-hidden="false"] { display: block; opacity: 1; transform: translateY(0); }
 
     .page-head { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
-    .page-title { flex: 1; text-align: center; font-size: clamp(20px, 3vw, 28px); font-weight: 900; letter-spacing: .2px; color: var(--text); }
+    .page-title { flex: 1; text-align: center; font-size: clamp(22px, 3vw, 32px); font-weight: 900; letter-spacing: .2px; color: var(--text); }
     .lead { font-size: 1.06rem; line-height: 1.7; color: var(--muted); }
 
-    /* Components */
+    /* // --- Grid helpers --- */
     .grid { display: grid; gap: 16px; }
     .grid.cols-2 { grid-template-columns: repeat(2, minmax(0,1fr)); }
     .grid.cols-3 { grid-template-columns: repeat(3, minmax(0,1fr)); }
@@ -105,28 +109,16 @@
     @media (max-width: 780px) { .grid.cols-3, .grid.cols-4 { grid-template-columns: repeat(2, minmax(0,1fr)); } }
     @media (max-width: 560px) { .grid.cols-2, .grid.cols-3, .grid.cols-4 { grid-template-columns: 1fr; } .item { grid-template-columns: 32px 1fr 18px; gap: 12px; } .ico svg { width: 22px; height: 22px; } .chev svg { width: 18px; height: 18px; } }
 
+    /* // --- Cards, tables, lists --- */
     .card { background: var(--card-soft); border: 1px solid var(--border); border-radius: 12px; padding: 16px; min-width: 0; overflow: hidden; }
     .card h3 { margin: 0 0 8px 0; font-size: 1.05rem; color: var(--text); }
     .muted { color: var(--muted); }
+    .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
 
-    .kpi { display: flex; align-items: baseline; gap: 8px; }
-    .kpi .value { font-size: 1.8rem; font-weight: 800; }
-    .kpi .unit { color: var(--muted); font-weight: 600; }
-
-    .pill { display: inline-flex; align-items: center; gap: 6px; background: #073b2f; color: #c7fff2; border: 1px solid #0b6b56; border-radius: 999px; padding: 4px 10px; font-size: 0.85rem; }
-    .pill.warn { background: #3a2d00; color: #ffe0a8; border-color: #6e5200; }
-    .pill.ok { background: #083d0a; color: #c8ffc9; border-color: #0b6e0e; }
-
-    .row { display: flex; gap: 10px; align-items: center; }
-
-    /* Base table rules (desktop) */
     .table { width: 100%; border-collapse: collapse; table-layout: fixed; }
     .table th, .table td { padding: 10px 8px; text-align: left; border-bottom: 1px solid var(--border); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .table th { color: var(--muted); font-weight: 600; }
-    /* Tidy desktop widths for drafts table */
-    #tblDrafts th:nth-child(1), #tblDrafts td:nth-child(1) { width: 110px; }
-    #tblDrafts th:nth-child(2), #tblDrafts td:nth-child(2) { width: 86px; }
-    #tblDrafts th:nth-child(4), #tblDrafts td:nth-child(4) { width: 92px; white-space: nowrap; }
+    @media (max-width: 780px) { .table th, .table td { white-space: normal; word-break: break-word; } }
 
     .toolbar { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; }
     .input, .select, .button { background: #001e1e; color: var(--text); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; font: inherit; }
@@ -138,54 +130,26 @@
     details + details { margin-top: 10px; }
     summary { cursor: pointer; font-weight: 600; color: var(--text); }
 
-    .note { font-size: .92rem; color: var(--muted); }
+    /* // --- Status pills --- */
+    .pill { display: inline-flex; align-items: center; gap: 6px; background: #073b2f; color: #c7fff2; border: 1px solid #0b6b56; border-radius: 999px; padding: 4px 10px; font-size: 0.85rem; }
+    .pill.warn { background: #3a2d00; color: #ffe0a8; border-color: #6e5200; }
+    .pill.ok { background: #083d0a; color: #c8ffc9; border-color: #0b6e0e; }
 
-    /* Phone: convert tables into clean stacked cards (fix clipping) */
-@media (max-width: 560px) {
-  /* cancel any desktop column widths on mobile */
-  #tblDrafts th, #tblDrafts td { width: auto !important; }
-
-  .table.responsive { table-layout: auto; width: 100%; }
-  .table.responsive thead { display: none; }
-
-  .table.responsive tbody tr {
-    display: block;
-    background: var(--card-soft);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 12px;
-    margin: 12px 0;
-  }
-
-  .table.responsive td {
-    display: grid;
-    grid-template-columns: 110px 1fr;
-    gap: 8px;
-    align-items: start;
-    padding: 8px 0;
-    border: 0;
-    white-space: normal;      /* allow wrapping */
-    word-break: break-word;   /* long strings wrap */
-    overflow: visible;        /* unclip content */
-  }
-
-  .table.responsive td::before {
-    content: attr(data-th);
-    color: var(--muted);
-    font-weight: 600;
-  }
-}
-
-
-    /* Progress Ring */
+    /* // --- Progress Ring --- */
     .ring { width: 140px; height: 140px; margin: 0 auto 10px auto; position: relative; }
     .ring svg { display: block; width: 100%; height: 100%; }
     .ring .value { position: absolute; inset: 0; display:flex; align-items:center; justify-content:center; font-weight: 800; font-size: 1.6rem; }
+
+    /* // --- Section headers (big) --- */
+    .section-title { font-size: clamp(22px, 2.6vw, 30px); font-weight: 900; margin: 22px 0 8px; }
+    .section-rule { height: 1px; background: var(--border); border: 0; margin: 8px 0 16px; }
   </style>
 </head>
 <body>
   <div class="app">
+    <!-- // --- Topbar: Logo + Title + Theme Toggle + Crumb --- -->
     <header class="topbar">
+      <!-- Replace with your local file or Base64 if preferred -->
       <img src="Adexa.svg" alt="ADEXA Logo" class="logo">
       <div class="brand-block">
         <div class="title">ADEXA</div>
@@ -200,58 +164,58 @@
       </div>
     </header>
 
+    <!-- // --- MAIN VIEW CONTAINER --- -->
     <main id="views" class="card" role="region" aria-live="polite">
-      <!-- HOME -->
+
+      <!-- // === HOME ===================================================== -->
       <section id="view-home" class="page" aria-hidden="false">
         <nav class="menu" aria-label="Main menu">
+          <!-- Permits -->
           <button class="item" data-target="permits">
             <span class="ico"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg></span>
             <span class="label">Permits</span>
             <span class="chev"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></span>
           </button>
+          <!-- Monitoring -->
           <button class="item" data-target="monitoring">
             <span class="ico"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg></span>
             <span class="label">Monitoring</span>
             <span class="chev"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></span>
           </button>
+          <!-- Funding -->
           <button class="item" data-target="funding">
             <span class="ico"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>
-            <span class="label">Funding</span>
+            <span class="label">Funding & Grants</span>
             <span class="chev"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></span>
           </button>
+          <!-- Market Intel -->
           <button class="item" data-target="market-intel">
             <span class="ico"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>
-            <span class="label">Market Intel</span>
+            <span class="label">Market Intelligence</span>
             <span class="chev"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></span>
           </button>
+          <!-- IP & Tech Transfer -->
           <button class="item" data-target="ip-tech">
             <span class="ico"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/><path d="M2 12h3"/><path d="M19 12h3"/><path d="M12 2v3"/><path d="M12 19v3"/></svg></span>
             <span class="label">IP & Tech Transfer</span>
             <span class="chev"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></span>
           </button>
+          <!-- Made in Aus -->
           <button class="item" data-target="made-in-aus">
-  <span class="ico">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-      <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
-      <line x1="7" y1="7" x2="7.01" y2="7"/>
-    </svg>
-  </span>
-  <span class="label">Made in Australia Brand</span>
-  <span class="chev">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-      <polyline points="9 18 15 12 9 6"/>
-    </svg>
-  </span>
-</button>
+            <span class="ico"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></span>
+            <span class="label">MadeInAus Brand</span>
+            <span class="chev"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></span>
+          </button>
         </nav>
       </section>
 
-      <!-- SUB-PAGES -->
+      <!-- // === PERMITS =================================================== -->
       <section id="view-permits" class="page" aria-hidden="true">
         <div class="page-head"><button class="btn" data-back>← Back</button><h2 class="page-title">Permits</h2></div>
-        <p class="lead">Manage export permits end-to-end. Create, validate, submit and track—all in one place.</p>
+        <p class="lead">Manage export permits end-to-end. Create, validate, submit and track — all in one place.</p>
 
         <div class="grid cols-3">
+          <!-- // Start New Application -->
           <div class="card">
             <h3>Start new application</h3>
             <div class="toolbar">
@@ -266,14 +230,16 @@
             <p class="note">Templates auto-fill company details, goods list and previous consignee data.</p>
           </div>
 
+          <!-- // Drafts Table -->
           <div class="card">
             <h3>My drafts</h3>
-            <table class="table responsive" id="tblDrafts">
+            <table class="table" id="tblDrafts">
               <thead><tr><th>Ref</th><th>Type</th><th>Consignee</th><th>Updated</th></tr></thead>
               <tbody></tbody>
             </table>
           </div>
 
+          <!-- // Status KPIs -->
           <div class="card">
             <h3>Status</h3>
             <div class="kpi"><span class="value" id="kOpen">0</span><span class="unit">open</span></div>
@@ -283,8 +249,17 @@
             </details>
           </div>
         </div>
+
+        <!-- // --- Permits FAQ --- -->
+        <h3 class="section-title">Frequently Asked Questions</h3>
+        <hr class="section-rule" />
+        <div class="grid cols-2">
+          <details open><summary>What are the 2024 DTCA changes?</summary><p class="muted">The Defence Trade Controls Amendment Act 2024 enables licence-free trade for most defence items among AUKUS partners and creates new offences for unauthorised supply of DSGL technology/services (commencing Mar 2025).</p></details>
+          <details><summary>How does ITAR affect my exports?</summary><p class="muted">If your product contains US-origin components on the USML, ITAR applies. Re-export/third-country transfers need US State Department approval; strict compliance and records are required.</p></details>
+        </div>
       </section>
 
+      <!-- // === MONITORING =============================================== -->
       <section id="view-monitoring" class="page" aria-hidden="true">
         <div class="page-head"><button class="btn" data-back>← Back</button><h2 class="page-title">Monitoring</h2></div>
         <p class="lead">Compliance monitoring and reporting with configurable checklists and alerts.</p>
@@ -297,6 +272,7 @@
         </div>
 
         <div class="grid cols-2" style="margin-top:16px;">
+          <!-- // Shipment checklist -->
           <div class="card">
             <h3>Checklist: Shipment compliance</h3>
             <div class="toolbar">
@@ -312,20 +288,39 @@
             </ul>
           </div>
 
+          <!-- // Alerts table -->
           <div class="card">
             <h3>Alerts</h3>
-            <table class="table responsive" id="tblAlerts">
+            <table class="table" id="tblAlerts">
               <thead><tr><th>When</th><th>Severity</th><th>Message</th></tr></thead>
               <tbody></tbody>
             </table>
           </div>
         </div>
+
+        <!-- // --- Monitoring FAQ --- -->
+        <h3 class="section-title">Frequently Asked Questions</h3>
+        <hr class="section-rule" />
+        <div class="grid cols-2">
+          <details open><summary>What evidence should I retain?</summary><p class="muted">Keep permits, consignee/end-use statements, shipment docs, and communications for at least seven years or your contractual requirement.</p></details>
+          <details><summary>How are denied party screens logged?</summary><p class="muted">Screens are captured with timestamp, list version, and user ID; export a PDF from the checklist card for audit.</p></details>
+        </div>
       </section>
 
+      <!-- // === FUNDING & GRANTS ======================================== -->
       <section id="view-funding" class="page" aria-hidden="true">
-        <div class="page-head"><button class="btn" data-back>← Back</button><h2 class="page-title">Funding</h2></div>
-        <p class="lead">Discover federal/state grants, EFA finance, and partner programs. Save and compare.</p>
+        <div class="page-head"><button class="btn" data-back>← Back</button><h2 class="page-title">Funding & Grants</h2></div>
+        <p class="lead">The definitive single point of entry to discover and apply for relevant federal and state grants. The ADEXA Hub unifies grants, compliance, and support on one digital platform.</p>
 
+        <!-- // Filter chips -->
+        <div class="row" id="grantFilters" style="margin:8px 0 14px;">
+          <button class="btn chip" data-fil="All"><span class="dot"></span>All</button>
+          <button class="btn chip" data-fil="Export">Export</button>
+          <button class="btn chip" data-fil="Capability">Capability</button>
+          <button class="btn chip" data-fil="Skilling">Skilling</button>
+        </div>
+
+        <!-- // Search & table -->
         <div class="card">
           <div class="toolbar">
             <input class="input" id="qGrant" placeholder="Search grants (e.g. export, R&D, defence)" />
@@ -333,18 +328,35 @@
             <select class="select" id="stage"><option>Any stage</option><option>Idea</option><option>Prototype</option><option>Export ready</option></select>
             <button class="button" id="btnFind">Find</button>
           </div>
-          <table class="table responsive" id="tblGrants">
-            <thead><tr><th>Program</th><th>Jurisdiction</th><th>Closes</th><th>Support</th><th></th></tr></thead>
+          <table class="table" id="tblGrants">
+            <thead><tr><th>Program</th><th>Jurisdiction</th><th>Closes</th><th>Support</th><th>Tag</th><th></th></tr></thead>
             <tbody></tbody>
           </table>
         </div>
+
+        <!-- // --- Funding FAQ --- -->
+        <h3 class="section-title">Frequently Asked Questions</h3>
+        <hr class="section-rule" />
+        <div class="grid cols-2">
+          <details open><summary>What makes a strong application?</summary><p class="muted">Clear problem/solution, measurable outcomes, partner letters, matched funding where required, and credible delivery plan with milestones.</p></details>
+          <details><summary>Can I apply for multiple grants?</summary><p class="muted">Yes, provided rules allow stacking. Note co-funding and any exclusivity requirements in your plan.</p></details>
+        </div>
       </section>
 
+      <!-- // === MARKET INTELLIGENCE ===================================== -->
       <section id="view-market-intel" class="page" aria-hidden="true">
-        <div class="page-head"><button class="btn" data-back>← Back</button><h2 class="page-title">Market Intel</h2></div>
-        <p class="lead">Signals, demand and Navigators. Target the right market with the right product.</p>
+        <div class="page-head"><button class="btn" data-back>← Back</button><h2 class="page-title">Market Intelligence</h2></div>
+        <p class="lead">Access proactive, data-driven intelligence. Connect with expert ‘Navigators’ — human advisors who provide tailored, case-managed support for your export journey.</p>
 
-        <div class="grid cols-3">
+        <!-- // Latest Intel Feed -->
+        <h3 class="section-title">Latest Intel Feed</h3>
+        <hr class="section-rule" />
+        <div id="intelFeed" class="grid cols-1">
+          <!-- Cards injected by JS -->
+        </div>
+
+        <div class="grid cols-3" style="margin-top:16px;">
+          <!-- // Targets scanner -->
           <div class="card">
             <h3>Target markets</h3>
             <div class="toolbar">
@@ -355,6 +367,7 @@
             <ul id="intelList" class="muted" style="padding-left:18px; line-height:1.8;"></ul>
           </div>
 
+          <!-- // Navigator CTA -->
           <div class="card">
             <h3>Navigator support</h3>
             <p class="muted">Book time with a sector Navigator for case-managed advice.</p>
@@ -362,15 +375,13 @@
             <p class="note" style="margin-top:8px;">Typical response: &lt; 2 business days.</p>
           </div>
 
+          <!-- // Export readiness KPI -->
           <div class="card">
             <h3>Export readiness</h3>
             <div class="ring" aria-hidden="true">
               <svg viewBox="0 0 120 120">
-                <!-- track -->
                 <circle cx="60" cy="60" r="52" stroke="currentColor" opacity="0.15" stroke-width="12" fill="none"/>
-                <!-- progress -->
-                <circle id="ringProg" cx="60" cy="60" r="52" stroke="var(--accent)" stroke-width="12" fill="none"
-                        stroke-linecap="round" transform="rotate(-90 60 60)" stroke-dasharray="327" stroke-dashoffset="91"/>
+                <circle id="ringProg" cx="60" cy="60" r="52" stroke="var(--accent)" stroke-width="12" fill="none" stroke-linecap="round" transform="rotate(-90 60 60)" stroke-dasharray="327" stroke-dashoffset="91"/>
               </svg>
               <div class="value"><span id="score">72</span><span style="opacity:.7;font-size:.9rem;">/100</span></div>
             </div>
@@ -378,8 +389,17 @@
             <button class="button secondary" id="btnImprove">View next actions</button>
           </div>
         </div>
+
+        <!-- // --- Market Intel FAQ --- -->
+        <h3 class="section-title">Frequently Asked Questions</h3>
+        <hr class="section-rule" />
+        <div class="grid cols-2">
+          <details open><summary>How do you select intel sources?</summary><p class="muted">We blend government tenders, prime announcements, academic feeds, and trade partners. Navigator notes add context for SMEs.</p></details>
+          <details><summary>Can I personalise the feed?</summary><p class="muted">Use the region/keyword controls; Navigator sessions can also tailor watchlists for you.</p></details>
+        </div>
       </section>
 
+      <!-- // === IP & TECH TRANSFER ====================================== -->
       <section id="view-ip-tech" class="page" aria-hidden="true">
         <div class="page-head"><button class="btn" data-back>← Back</button><h2 class="page-title">IP &amp; Tech Transfer</h2></div>
         <p class="lead">Micro-credentials, NDA generator and T2 controls to protect sovereign IP.</p>
@@ -414,18 +434,77 @@
             <p class="note">Outputs a pre-filled draft with your company details and retention rules.</p>
           </div>
         </div>
+
+        <!-- // --- IP/T2 FAQ --- -->
+        <h3 class="section-title">Frequently Asked Questions</h3>
+        <hr class="section-rule" />
+        <div class="grid cols-2">
+          <details open><summary>When is a TAA required?</summary><p class="muted">Technical Assistance Agreements (TAAs) are required for furnishing defence technical data/assistance to foreign persons under ITAR.</p></details>
+          <details><summary>How are document markings handled?</summary><p class="muted">Markings follow ISM/IRAP-aligned templates with propagation checks on exportable PDFs.</p></details>
+        </div>
       </section>
 
-      <!-- EXPORT READINESS CHECKLIST -->
-      <section id="view-readiness" class="page" aria-hidden="true">
-        <div class="page-head">
-          <button class="btn" data-back>← Back</button>
-          <h2 class="page-title">Export Readiness Checklist</h2>
+      <!-- // === MADE IN AUS BRAND ======================================= -->
+      <section id="view-made-in-aus" class="page" aria-hidden="true">
+        <div class="page-head"><button class="btn" data-back>← Back</button><h2 class="page-title">MadeInAus Defence Brand</h2></div>
+        <p class="lead">Leverage the 'Made in Australia' brand for defence exports. Access resources to connect with Team Defence Australia events and secure inclusion in the Australian Defence Export Catalogue.</p>
+
+        <!-- // Brand Resources -->
+        <h3 class="section-title">Brand Resources</h3>
+        <hr class="section-rule" />
+        <div class="grid cols-1">
+          <a class="card" href="https://www.defence.gov.au" target="_blank" rel="noopener">
+            <h3>Download Australian Defence Export Catalogue 2025</h3>
+          </a>
+          <a class="card" href="https://www.austrade.gov.au" target="_blank" rel="noopener">
+            <h3>Download 'MadeInAus' Brand Guidelines</h3>
+          </a>
         </div>
 
-        <p class="lead">
-          A structured self-assessment aligned with Defence SA / Austrade readiness themes. Tick off actions to lift your readiness score.
-        </p>
+        <!-- // Eligibility Checklist -->
+        <div class="grid cols-2" style="margin-top:16px;">
+          <div class="card">
+            <h3>Eligibility checklist</h3>
+            <ul class="muted" style="line-height:1.9; padding-left:18px;">
+              <li><input type="checkbox" /> Meets Australian content threshold</li>
+              <li><input type="checkbox" /> Compliance with export controls</li>
+              <li><input type="checkbox" /> Marketing use approved</li>
+              <li><input type="checkbox" /> Catalogue entry prepared</li>
+            </ul>
+            <button class="button secondary">Validate eligibility</button>
+          </div>
+
+          <!-- // Downloads / Links -->
+          <div class="card">
+            <h3>Assets &amp; quick links</h3>
+            <div class="row">
+              <a class="button" href="https://www.defenceaustralia.com.au" target="_blank" rel="noopener">Download logo pack</a>
+              <a class="button secondary" href="https://www.defence.gov.au" target="_blank" rel="noopener">Brand guidelines</a>
+              <a class="button secondary" href="#/made-in-aus" onclick="return false;">Upcoming events</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- // TDA Events -->
+        <h3 class="section-title">Upcoming TDA Events</h3>
+        <hr class="section-rule" />
+        <div id="tdaEvents" class="grid cols-1">
+          <!-- event cards injected by JS -->
+        </div>
+
+        <!-- // --- MadeInAus FAQ --- -->
+        <h3 class="section-title">Frequently Asked Questions</h3>
+        <hr class="section-rule" />
+        <div class="grid cols-2">
+          <details open><summary>How do I get listed in the Export Catalogue?</summary><p class="muted">Prepare a concise capability statement, ensure export compliance, then submit via the catalogue portal when the next intake opens.</p></details>
+          <details><summary>Can I co-brand with a prime?</summary><p class="muted">Yes, if your contract permits. Follow the prime’s brand rules alongside MadeInAus guidance.</p></details>
+        </div>
+      </section>
+
+      <!-- // === EXPORT READINESS CHECKLIST =============================== -->
+      <section id="view-readiness" class="page" aria-hidden="true">
+        <div class="page-head"><button class="btn" data-back>← Back</button><h2 class="page-title">Export Readiness Checklist</h2></div>
+        <p class="lead">A structured self-assessment aligned with Defence SA / Austrade readiness themes. Tick off actions to lift your readiness score.</p>
 
         <div class="grid cols-2" style="margin-top:20px;">
           <!-- Business Foundations -->
@@ -443,7 +522,7 @@
           <div class="card">
             <h3>Compliance & Licensing</h3>
             <ul class="muted" style="line-height:1.9; padding-left:18px;">
-              <li><input type="checkbox" class="chk"> Defence Export Controls (DEC) registration complete</li>
+              <li><input type="checkbox" class="chk"> DEC registration complete</li>
               <li><input type="checkbox" class="chk"> DTC/ITAR processes embedded in business systems</li>
               <li><input type="checkbox" class="chk"> Permits and authorisations tracked centrally</li>
               <li><input type="checkbox" class="chk"> Staff trained in export control awareness</li>
@@ -454,9 +533,9 @@
           <div class="card">
             <h3>Supply Chain & Capability</h3>
             <ul class="muted" style="line-height:1.9; padding-left:18px;">
-              <li><input type="checkbox" class="chk"> Capability statement reviewed within last 12 months</li>
+              <li><input type="checkbox" class="chk"> Capability statement reviewed in last 12 months</li>
               <li><input type="checkbox" class="chk"> Supplier quality certifications (ISO9001, AS9100)</li>
-              <li><input type="checkbox" class="chk"> Production meets traceability and security requirements</li>
+              <li><input type="checkbox" class="chk"> Production meets traceability/security requirements</li>
               <li><input type="checkbox" class="chk"> Participation in SME/Prime collaboration programs</li>
             </ul>
           </div>
@@ -468,17 +547,17 @@
               <li><input type="checkbox" class="chk"> Target markets identified and prioritised</li>
               <li><input type="checkbox" class="chk"> ‘Made in Australia’ brand assets integrated</li>
               <li><input type="checkbox" class="chk"> Attended Team Defence Australia / trade events</li>
-              <li><input type="checkbox" class="chk"> Capability listed in the Defence Export Catalogue</li>
+              <li><input type="checkbox" class="chk"> Listed in the Defence Export Catalogue</li>
             </ul>
           </div>
         </div>
 
+        <!-- // Score Ring -->
         <div style="margin-top:20px; text-align:center;">
           <div class="ring" aria-hidden="true">
             <svg viewBox="0 0 120 120">
               <circle cx="60" cy="60" r="52" stroke="currentColor" opacity="0.15" stroke-width="12" fill="none"/>
-              <circle id="ringProg2" cx="60" cy="60" r="52" stroke="var(--accent)" stroke-width="12" fill="none"
-                      stroke-linecap="round" transform="rotate(-90 60 60)" stroke-dasharray="327" stroke-dashoffset="91"/>
+              <circle id="ringProg2" cx="60" cy="60" r="52" stroke="var(--accent)" stroke-width="12" fill="none" stroke-linecap="round" transform="rotate(-90 60 60)" stroke-dasharray="327" stroke-dashoffset="91"/>
             </svg>
             <div class="value"><span id="score2">72</span><span style="opacity:.7;font-size:.9rem;">/100</span></div>
           </div>
@@ -489,38 +568,10 @@
     </main>
   </div>
 
-  <section id="view-made-in-aus" class="page" aria-hidden="true">
-  <div class="page-head">
-    <button class="btn" data-back>← Back</button>
-    <h2 class="page-title">Made in Australia Brand</h2>
-  </div>
-
-  <p class="lead">
-    Resources and guidelines for using the Made in Australia brand across defence exports,
-    ensuring consistent messaging, provenance integrity, and alignment with Team Defence Australia branding.
-  </p>
-
-  <div class="grid cols-2" style="margin-top:16px;">
-    <div class="card">
-      <h3>Brand Toolkit</h3>
-      <p class="muted">Download approved logos, templates, and brand guidelines for marketing collateral.</p>
-      <button class="button">Download toolkit</button>
-    </div>
-
-    <div class="card">
-      <h3>Brand Readiness</h3>
-      <p class="muted">Evaluate your use of national branding, defence provenance, and export certification alignment.</p>
-      <button class="button secondary">Run brand audit</button>
-    </div>
-  </div>
-</section>
-
+  <!-- // === SCRIPTS ====================================================== -->
   <script>
-    
-    
-    
-    // Router + theme toggle + breadcrumb + demo data
     (function () {
+      // // --- Router Config ---
       const routes = {
         home: 'view-home',
         permits: 'view-permits',
@@ -535,56 +586,39 @@
         home: 'Home',
         permits: 'Permits',
         monitoring: 'Monitoring',
-        funding: 'Funding',
-        'market-intel': 'Market Intel',
+        funding: 'Funding & Grants',
+        'market-intel': 'Market Intelligence',
         'ip-tech': 'IP & Tech Transfer',
         'made-in-aus': 'MadeInAus Brand',
         readiness: 'Export Readiness'
       };
       const crumb = document.getElementById('crumb');
 
-      function getEl(id) { const el = document.getElementById(id); if(!el) console.warn('[ADEXA] Missing #'+id); return el; }
-      function hideAll() { Object.values(routes).forEach(id => { const el = getEl(id); if (el) el.setAttribute('aria-hidden','true'); }); }
-      function show(routeKey, pushHash=false) {
+      function getEl(id){ const el = document.getElementById(id); if(!el) console.warn('[ADEXA] Missing #'+id); return el; }
+      function hideAll(){ Object.values(routes).forEach(id => { const el = getEl(id); if(el) el.setAttribute('aria-hidden','true'); }); }
+      function show(routeKey, pushHash=false){
         const id = routes[routeKey] || routes.home; const el = getEl(id); if(!el) return;
         hideAll(); el.setAttribute('aria-hidden','false');
-        if (crumb) { crumb.textContent = labels[routeKey] || 'Home'; }
+        if (crumb) crumb.textContent = labels[routeKey] || 'Home';
         if (pushHash) { const h = routeKey==='home'?'#/':`#/${routeKey}`; history.pushState({r:routeKey},'',h); }
       }
 
-      // Theme toggle (Dark default; label shows TARGET mode)
+      // // --- Theme Toggle (dark default) ---
       const themeBtn = document.getElementById('themeToggle');
       const themeLabel = document.getElementById('themeLabel');
-
-      function currentTheme() {
-        return document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
-      }
-      function applyTheme(next) {
-        if (next === 'light') {
-          document.documentElement.setAttribute('data-theme', 'light');
-          localStorage.setItem('adexa-theme', 'light');
-        } else {
-          document.documentElement.removeAttribute('data-theme');
-          localStorage.removeItem('adexa-theme');
-        }
-        refreshThemeLabel();
-      }
-      function refreshThemeLabel() {
-        const cur = currentTheme();
-        const target = cur === 'light' ? 'Dark' : 'Light';
-        if (themeLabel) themeLabel.textContent = target;
-        if (themeBtn) themeBtn.setAttribute('aria-pressed', String(cur === 'dark'));
-      }
       const saved = localStorage.getItem('adexa-theme');
       if (saved === 'light') document.documentElement.setAttribute('data-theme', 'light');
+      function currentTheme(){ return document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark'; }
+      function refreshThemeLabel(){ const cur=currentTheme(); themeLabel.textContent = cur==='light'?'Dark':'Light'; themeBtn.setAttribute('aria-pressed', String(cur==='dark')); }
       refreshThemeLabel();
-
-      if (themeBtn) themeBtn.addEventListener('click', () => {
-        const next = currentTheme() === 'light' ? 'dark' : 'light';
-        applyTheme(next);
+      themeBtn.addEventListener('click', () => {
+        const isLight = currentTheme()==='light';
+        if (isLight) { document.documentElement.removeAttribute('data-theme'); localStorage.removeItem('adexa-theme'); }
+        else { document.documentElement.setAttribute('data-theme','light'); localStorage.setItem('adexa-theme','light'); }
+        refreshThemeLabel();
       });
 
-      // Panel easter egg: ?panel=hartas|law|opie|satchell
+      // // --- Panel Easter Egg (?panel=hartas|law|opie|satchell) ---
       const qs = new URLSearchParams(location.search);
       const panelKey = (qs.get('panel')||'').toLowerCase();
       if (panelKey) {
@@ -599,23 +633,21 @@
         actions && actions.prepend(chip);
       }
 
-      // Wiring
+      // // --- Wiring: Menu + Back + History ---
       document.querySelectorAll('[data-target]').forEach(b => b.addEventListener('click', () => show(b.dataset.target, true)));
       document.querySelectorAll('[data-back]').forEach(b => b.addEventListener('click', () => show('home', true)));
       window.addEventListener('popstate', e => { const r=(e.state&&e.state.r)||location.hash.replace('#/','')||'home'; show(r,false); });
       show(location.hash.replace('#/','')||'home', false);
 
-      // --- Demo data population ---
-      // Permits
+      // // --- Demo Data: Permits ---
       const drafts = [
-        {ref:'ADEXA-0251', type:'DTC',    ent:'PMB Defence – Submarine Battery Systems', upd:'11 Oct'},
+        {ref:'ADEXA-0251', type:'DTC',    ent:'PMB Defence – Submarine Battery Systems',  upd:'11 Oct'},
         {ref:'ADEXA-0252', type:'Export', ent:'Defence Trailblazer – Tech Acceleration',   upd:'10 Oct'},
         {ref:'ADEXA-0253', type:'Customs',ent:'BAE Systems – VetNet Program',              upd:'08 Oct'},
         {ref:'ADEXA-0254', type:'DTC',    ent:'Defence SA – SME Readiness',                upd:'06 Oct'}
       ];
       const tb = document.querySelector('#tblDrafts tbody');
       if (tb) tb.innerHTML = drafts.map(d=>`<tr><td>${d.ref}</td><td>${d.type}</td><td>${d.ent}</td><td>${d.upd}</td></tr>`).join('');
-      addDataLabels('#tblDrafts', ['Ref','Type','Consignee','Updated']);
       const events = [
         'DTC ADEXA-0251 submitted (PMB – Submarine Batteries)',
         'Customs ADEXA-0253 awaiting docs (BAE – VetNet)',
@@ -629,36 +661,68 @@
       const btnDraft = document.getElementById('btnDraft');
       if (btnDraft) btnDraft.addEventListener('click', () => alert('Draft created (demo).'));
 
-      // Monitoring
+      // // --- Monitoring Alerts ---
       const al = document.querySelector('#tblAlerts tbody');
       if (al) al.innerHTML = [
-        {when:'Today',      sev:'Medium', msg:'Supplier uplift review with BAE (VetNet) scheduled'},
-        {when:'Yesterday',  sev:'Low',    msg:'Trailblazer cohort brief uploaded by Dr M. Law'},
-        {when:'This week',  sev:'Info',   msg:'Defence SA pathways update from M. Opie'},
+        {when:'Today', sev:'Medium', msg:'Supplier uplift review with BAE (VetNet) scheduled'},
+        {when:'Yesterday', sev:'Low',    msg:'Trailblazer cohort brief uploaded by Dr M. Law'},
+        {when:'This week', sev:'Info',   msg:'Defence SA pathways update from M. Opie'}
       ].map(a=>`<tr><td>${a.when}</td><td>${a.sev}</td><td>${a.msg}</td></tr>`).join('');
 
-      // Funding
+      // // --- Funding & Grants Data + Filters ---
+      const grantsData = [
+        {p:'Defence SA – Supplier Readiness (Pilot)', j:'SA',       c:'EOI: Q4',     s:'SME uplift & pathways', tag:'Capability'},
+        {p:'Defence Trailblazer – Tech Acceleration', j:'National', c:'Cohort: Nov', s:'R&D to TRL uplift',      tag:'Capability'},
+        {p:'BAE Systems – VetNet Supplier Uplift',    j:'Industry', c:'Rolling',     s:'Capability & quals',     tag:'Skilling'},
+        {p:'PMB – Advanced Battery Systems Collab',   j:'Industry', c:'Invite',      s:'Prototype & testbeds',   tag:'Export'}
+      ];
       const gbody = document.querySelector('#tblGrants tbody');
-      function loadGrants(){
-        const data = [
-          {p:'Defence SA – Supplier Readiness (Pilot)', j:'SA',       c:'EOI: Q4',     s:'SME uplift & pathways'},
-          {p:'Defence Trailblazer – Tech Acceleration', j:'National', c:'Cohort: Nov', s:'R&D to TRL uplift'},
-          {p:'BAE Systems – VetNet Supplier Uplift',    j:'Industry', c:'Rolling',     s:'Capability & quals'},
-          {p:'PMB – Advanced Battery Systems Collab',   j:'Industry', c:'Invite',      s:'Prototype & testbeds'}
-        ];
-        if (gbody) gbody.innerHTML = data.map(x=>`<tr><td>${x.p}</td><td>${x.j}</td><td>${x.c}</td><td>${x.s}</td><td><button class="button secondary">Save</button></td></tr>`).join('');
+      function renderGrants(filter='All'){
+        const q = (document.getElementById('qGrant')?.value || '').toLowerCase();
+        const juris = document.getElementById('juris')?.value || 'All jurisdictions';
+        const data = grantsData.filter(x => {
+          const okTag = filter==='All' || x.tag===filter;
+          const okText = !q || (x.p+x.j+x.s).toLowerCase().includes(q);
+          const okJuris = juris==='All jurisdictions' || x.j===juris;
+          return okTag && okText && okJuris;
+        });
+        if (gbody) gbody.innerHTML = data.map(x=>`<tr><td>${x.p}</td><td>${x.j}</td><td>${x.c}</td><td>${x.s}</td><td>${x.tag}</td><td><button class="button secondary">View & Apply</button></td></tr>`).join('');
       }
-      loadGrants();
-      const btnFind = document.getElementById('btnFind'); if (btnFind) btnFind.addEventListener('click', loadGrants);
+      renderGrants();
+      document.getElementById('btnFind')?.addEventListener('click', () => renderGrants(currentGrantFilter));
+      let currentGrantFilter = 'All';
+      document.querySelectorAll('#grantFilters [data-fil]').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          currentGrantFilter = btn.dataset.fil;
+          renderGrants(currentGrantFilter);
+        });
+      });
 
-      // Intel (realistic themes)
+      // // --- Market Intel: Feed + Targets ---
+      const intelFeedData = [
+        {title:'UK MoD seeks next-gen drone swarm tech', blurb:'Tender for autonomous systems creates opportunities for Australian firms with proven AI and sensor capability.', meta:'Region: UK | Sector: Autonomous Systems | Date: 12 Oct 2025'},
+        {title:'AUKUS update: streamlined tech transfer protocols', blurb:'New regulations reduce admin burdens for sharing sensitive tech between AU, UK, US under AUKUS Pillar II.', meta:'Region: AUKUS | Sector: Policy | Date: 10 Oct 2025'},
+        {title:'Japan increases defence budget, focuses on cyber', blurb:'Growing demand for cyber defence tooling and services; scope for AU SMEs in secure comms & training.', meta:'Region: APAC | Sector: Cyber | Date: 08 Oct 2025'}
+      ];
+      const intelFeed = document.getElementById('intelFeed');
+      if (intelFeed) {
+        intelFeed.innerHTML = intelFeedData.map(i=>`
+          <div class="card">
+            <h3 style="color:var(--accent); font-size:1.2rem;">${i.title}</h3>
+            <p class="muted">${i.blurb}</p>
+            <p class="note">${i.meta}</p>
+          </div>
+        `).join('');
+      }
+
+      // Targets (list)
       const intelList = document.getElementById('intelList');
       const btnScan = document.getElementById('btnScan');
       function loadIntel(){
         if (intelList) {
           intelList.innerHTML = [
             'AUKUS: submarine component manufacture (precision machining, additive metals)',
-            'Autonomous undersea vehicles (e.g., large UUV integration & sustainment)',
+            'Autonomous undersea vehicles (large UUV integration & sustainment)',
             'Counter-drone / C-UAS: RF sensing, jamming, EW payloads; sustainment services',
             'LRASM / long-range strike: harnesses, composite structures, test support',
             'ISR payloads: EO/IR, maritime radar modules; repair & MRO export',
@@ -667,76 +731,61 @@
         }
       }
       loadIntel();
-      if (btnScan) btnScan.addEventListener('click', loadIntel);
+      btnScan?.addEventListener('click', loadIntel);
+      document.getElementById('btnBook')?.addEventListener('click', ()=>alert('Navigator request sent (demo).'));
 
-      const btnNDA = document.getElementById('btnNDA'); if(btnNDA) btnNDA.addEventListener('click',()=>alert('NDA generated (demo).'));
+      // // --- Export Readiness nav from Intel KPI ---
+      document.getElementById('btnImprove')?.addEventListener('click', ()=>show('readiness', true));
 
-      // Export readiness navigation
-      const btnImprove = document.getElementById('btnImprove');
-      if (btnImprove) btnImprove.addEventListener('click', () => show('readiness', true));
-
-      // Progress ring helpers
-      const CIRCUM = 2 * Math.PI * 52; // ~327
-      function setRing(el, pct){
-        const clamp = Math.max(0, Math.min(100, pct));
-        const offset = CIRCUM * (1 - clamp/100);
-        if (el) el.style.strokeDashoffset = String(offset);
-      }
-
-      // Export readiness scoring (syncs both rings + KPI number)
-      const btnCalcScore = document.getElementById('btnCalcScore');
-      function recalcScore(){
-        const checks = document.querySelectorAll('#view-readiness input[type=checkbox].chk');
-        const total = checks.length;
-        const done = Array.from(checks).filter(c => c.checked).length;
-        const percent = Math.round((done / total) * 100);
-
-        const score  = document.getElementById('score');     // KPI ring on Market Intel
-        const ring1  = document.getElementById('ringProg');  // Market Intel ring
-        const score2 = document.getElementById('score2');    // Big ring on Readiness
-        const ring2  = document.getElementById('ringProg2'); // Readiness ring
-        const note   = document.getElementById('scoreNote');
-
-        if (score)  score.textContent = String(percent);
-        if (score2) score2.textContent = String(percent);
-        setRing(ring1, percent);
-        setRing(ring2, percent);
-        if (note) note.textContent = `${done} of ${total} actions complete (${percent}%)`;
-      }
-      if (btnCalcScore) btnCalcScore.addEventListener('click', recalcScore);
-
-      // Initialize rings to current #score (72)
-      const initScore = parseInt((document.getElementById('score')?.textContent || '72').replace(/\D/g,''), 10) || 72;
+      // // --- Progress Rings & Scoring ---
+      const CIRCUM = 2 * Math.PI * 52;
+      function setRing(el, pct){ const clamp = Math.max(0, Math.min(100, pct)); const offset = CIRCUM * (1 - clamp/100); if (el) el.style.strokeDashoffset = String(offset); }
+      const initScore = 72;
       setRing(document.getElementById('ringProg'), initScore);
       setRing(document.getElementById('ringProg2'), initScore);
       const score2Init = document.getElementById('score2'); if (score2Init) score2Init.textContent = String(initScore);
 
-      // ----- Mobile table labels (inject data-th for card rows) -----
-      function addDataLabels(tableSelector, headers) {
-        document.querySelectorAll(`${tableSelector} tbody tr`).forEach(tr => {
-          headers.forEach((h, i) => {
-            if (tr.children[i]) tr.children[i].setAttribute('data-th', h);
-          });
-        });
-      }
-      addDataLabels('#tblDrafts', ['Ref','Type','Consignee','Updated']);
-      addDataLabels('#tblAlerts', ['When','Severity','Message']);
-      addDataLabels('#tblGrants', ['Program','Jurisdiction','Closes','Support','']);
-function addDataLabels(selector, labels){
-  const table = document.querySelector(selector);
-  if (!table) return;
-  const rows = table.querySelectorAll('tbody tr');
-  rows.forEach(row => {
-    row.querySelectorAll('td').forEach((td, i) => {
-      td.setAttribute('data-th', labels[i] || '');
-    });
-  });
-}
+      document.getElementById('btnCalcScore')?.addEventListener('click', ()=>{
+        const checks = document.querySelectorAll('#view-readiness input[type=checkbox].chk');
+        const total = checks.length;
+        const done = Array.from(checks).filter(c => c.checked).length;
+        const percent = Math.round((done / total) * 100);
+        const score = document.getElementById('score');
+        const ring1 = document.getElementById('ringProg');
+        const score2 = document.getElementById('score2');
+        const ring2 = document.getElementById('ringProg2');
+        const note = document.getElementById('scoreNote');
+        if (score)  score.textContent = String(percent);
+        if (score2) score2.textContent = String(percent);
+        setRing(ring1, percent); setRing(ring2, percent);
+        if (note) note.textContent = `${done} of ${total} actions complete (${percent}%)`;
+      });
 
-      // Smoke tests
+      // // --- MadeInAus: TDA Events (links) ---
+      const tdaEvents = [
+        {name:'DSEI Japan', dates:'15–17 March 2026', location:'Chiba, Japan', url:'https://www.dsei-japan.com'},
+        {name:'Sea-Air-Space', dates:'3–5 April 2026', location:'National Harbor, MD, USA', url:'https://seaairspace.org'},
+        {name:'Indo Pacific', dates:'7–9 November 2026', location:'Sydney, Australia', url:'https://www.indopacificexpo.com.au'},
+        {name:'Farnborough International Airshow', dates:'20–24 July 2026', location:'Farnborough, UK', url:'https://www.farnboroughairshow.com'},
+        {name:'Euronaval', dates:'Oct 2026 (TBC)', location:'Paris-Le Bourget, France', url:'https://www.euronaval.fr'}
+      ];
+      const tdaWrap = document.getElementById('tdaEvents');
+      if (tdaWrap) {
+        tdaWrap.innerHTML = tdaEvents.map(e=>`
+          <a class="card" href="${e.url}" target="_blank" rel="noopener">
+            <h3><strong>${e.name}</strong>: ${e.dates}, ${e.location}</h3>
+            <p class="note">Tap to visit event website</p>
+          </a>
+        `).join('');
+      }
+
+      // // --- NDA Demo ---
+      document.getElementById('btnNDA')?.addEventListener('click',()=>alert('NDA generated (demo).'));
+
+      // // --- Smoke tests ---
       console.assert(document.getElementById('tblDrafts'), '[Test] Permits table present');
-      console.assert(document.getElementById('tblGrants'),  '[Test] Funding table present');
-      console.assert(document.getElementById('intelList'),  '[Test] Intel list present');
+      console.assert(document.getElementById('tblGrants'), '[Test] Funding table present');
+      console.assert(document.getElementById('intelList'), '[Test] Intel list present');
     })();
   </script>
 </body>
