@@ -157,7 +157,44 @@
       gap: 10px;
       outline: none;
     }
+
+    /* // --- Permits: Applications list (merged drafts + status) --- */
+    .apps-list { display: grid; gap: 10px; }
+    .app-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      background: var(--card-soft);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px 18px;
+    }
+    .app-row + .app-row { border-top: none; }
+    .app-left h4 {
+      margin: 0 0 4px;
+      font-size: 1.05rem;
+      letter-spacing: .2px;
+      color: var(--text);
+    }
+    .app-id { color: var(--muted); font-size: .9rem; }
     
+    /* pill styles reused but with status variants */
+    .app-status {
+      display: inline-flex; align-items: center;
+      padding: 6px 12px; border-radius: 999px; font-weight: 700;
+      border: 1px solid transparent; font-size: .86rem;
+    }
+    .app-status.ok      { background: #0c3f1a; color: #d8ffe5; border-color: #1f7a39; }
+    .app-status.pending { background: #3c2d00; color: #ffe6a3; border-color: #6f5600; }
+    .app-status.danger  { background: #4a1010; color: #ffd1d1; border-color: #8a1f1f; }
+    
+    /* call-to-action button centered */
+    .permits-cta { display: flex; justify-content: center; margin-top: 16px; }
+    .permits-cta .button {
+      background: linear-gradient(180deg, var(--accent), color-mix(in oklab, var(--accent), #000 15%));
+      border-color: color-mix(in oklab, var(--accent), #000 25%);
+    }
+
     /* remove native marker */
     .faq-list summary::marker,
     .faq-list summary::-webkit-details-marker { display: none; }
@@ -270,45 +307,21 @@
 
       <!-- // === PERMITS =================================================== -->
       <section id="view-permits" class="page" aria-hidden="true">
-        <div class="page-head"><button class="btn" data-back>← Back</button><h2 class="page-title">Permits</h2></div>
-        <p class="lead">Manage export permits end-to-end. Create, validate, submit and track — all in one place.</p>
-
-        <div class="grid cols-3">
-          <!-- // Start New Application -->
-          <div class="card">
-            <h3>Start new application</h3>
-            <div class="toolbar">
-              <select class="select" id="permitType">
-                <option value="DTC">DTC Permit</option>
-                <option value="ITAR">ITAR Exemption</option>
-                <option value="Customs">Customs (S10/112)</option>
-              </select>
-              <input class="input" id="entity" placeholder="Consignee / End-user" />
-              <button class="button" id="btnDraft">Create draft</button>
-            </div>
-            <p class="note">Templates auto-fill company details, goods list and previous consignee data.</p>
-          </div>
-
-          <!-- // Drafts Table -->
-          <div class="card">
-            <h3>My drafts</h3>
-            <table class="table" id="tblDrafts">
-              <thead><tr><th>Ref</th><th>Type</th><th>Consignee</th><th>Updated</th></tr></thead>
-              <tbody></tbody>
-            </table>
-          </div>
-
-          <!-- // Status KPIs -->
-          <div class="card">
-            <h3>Status</h3>
-            <div class="kpi"><span class="value" id="kOpen">0</span><span class="unit">open</span></div>
-            <div class="row"><span class="pill ok">Approved <strong id="kApproved">0</strong></span><span class="pill warn">Actions <strong id="kActions">0</strong></span></div>
-            <details><summary>Latest events</summary>
-              <ul id="events" class="muted" style="padding-left:18px; margin:6px 0 0 0;"></ul>
-            </details>
-          </div>
+        <div class="page-head"><button class="btn" data-back>← Back</button><h2 class="page-title">Export Permits</h2></div>
+        <p class="lead">A single digital ecosystem to manage applications, track status, and access pre-filled templates—simplifying compliance and reducing friction for exporters.</p>
+      
+        <!-- // My Applications -->
+        <h3 class="section-title">My Applications</h3>
+        <hr class="section-rule" />
+        <div id="appsList" class="apps-list">
+          <!-- rows injected by JS -->
         </div>
-
+      
+        <!-- // CTA -->
+        <div class="permits-cta">
+          <button class="button" id="btnLodge">Lodge New Application</button>
+        </div>
+      
         <!-- // --- Permits FAQ --- -->
         <h3 class="section-title">Frequently Asked Questions</h3>
         <hr class="section-rule" />
@@ -327,6 +340,7 @@
           </details>
         </div>
       </section>
+
 
       <!-- // === MONITORING =============================================== -->
       <section id="view-monitoring" class="page" aria-hidden="true">
@@ -750,27 +764,41 @@
       window.addEventListener('popstate', e => { const r=(e.state&&e.state.r)||location.hash.replace('#/','')||'home'; show(r,false); });
       show(location.hash.replace('#/','')||'home', false);
 
-      // // --- Demo Data: Permits ---
-      const drafts = [
-        {ref:'ADEXA-0251', type:'DTC',    ent:'PMB Defence – Submarine Battery Systems',  upd:'11 Oct'},
-        {ref:'ADEXA-0252', type:'Export', ent:'Defence Trailblazer – Tech Acceleration',   upd:'10 Oct'},
-        {ref:'ADEXA-0253', type:'Customs',ent:'BAE Systems – VetNet Program',              upd:'08 Oct'},
-        {ref:'ADEXA-0254', type:'DTC',    ent:'Defence SA – SME Readiness',                upd:'06 Oct'}
+      // // --- Permits: Applications list (merged) ---
+      const applications = [
+        { title: 'DSP-5 Application: RWS to UK',           id: 'AUS-2025-8817', status: 'Approved' },
+        { title: 'Tech Data Licence: AUKUS Pillar II',      id: 'AUS-2025-8821', status: 'Pending Review' },
+        { title: 'DSGL Assessment: New Sensor Array',       id: 'AUS-2025-8819', status: 'Action Required' },
+        // carry over previous drafts if you want them visible:
+        { title: 'DTC: PMB Defence – Submarine Battery Systems', id: 'ADEXA-0251', status: 'Approved' },
+        { title: 'Customs: BAE Systems – VetNet Program',        id: 'ADEXA-0253', status: 'Pending Review' }
       ];
-      const tb = document.querySelector('#tblDrafts tbody');
-      if (tb) tb.innerHTML = drafts.map(d=>`<tr><td>${d.ref}</td><td>${d.type}</td><td>${d.ent}</td><td>${d.upd}</td></tr>`).join('');
-      const events = [
-        'DTC ADEXA-0251 submitted (PMB – Submarine Batteries)',
-        'Customs ADEXA-0253 awaiting docs (BAE – VetNet)',
-        'Trailblazer acceleration brief added to ADEXA-0252'
-      ];
-      const ev = document.getElementById('events');
-      if (ev) ev.innerHTML = events.map(e=>`<li>${e}</li>`).join('');
-      const kOpen = document.getElementById('kOpen'); if(kOpen) kOpen.textContent = String(drafts.length);
-      const kApproved = document.getElementById('kApproved'); if(kApproved) kApproved.textContent = '3';
-      const kActions = document.getElementById('kActions'); if(kActions) kActions.textContent = '1';
-      const btnDraft = document.getElementById('btnDraft');
-      if (btnDraft) btnDraft.addEventListener('click', () => alert('Draft created (demo).'));
+      
+      const appsList = document.getElementById('appsList');
+      function statusClass(s){
+        if (/^approved/i.test(s)) return 'ok';
+        if (/pending/i.test(s))   return 'pending';
+        return 'danger'; // action required / rejected / etc.
+      }
+      function renderApps(){
+        if (!appsList) return;
+        appsList.innerHTML = applications.map(a => `
+          <div class="app-row">
+            <div class="app-left">
+              <h4>${a.title}</h4>
+              <div class="app-id">ID: ${a.id}</div>
+            </div>
+            <span class="app-status ${statusClass(a.status)}">${a.status}</span>
+          </div>
+        `).join('');
+      }
+      renderApps();
+      
+      // CTA
+      document.getElementById('btnLodge')?.addEventListener('click', () => {
+        alert('Start new application (demo).');
+      });
+
 
       // // --- Monitoring Alerts ---
       const al = document.querySelector('#tblAlerts tbody');
