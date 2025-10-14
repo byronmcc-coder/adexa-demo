@@ -129,6 +129,82 @@
     details { border: 1px solid var(--border); border-radius: 10px; background: #002424; padding: 10px 12px; }
     details + details { margin-top: 10px; }
     summary { cursor: pointer; font-weight: 600; color: var(--text); }
+    /* // --- Funding & Grants: chips + sliding indicator + tiles --- */
+      #grantFilters {
+        position: relative;
+        gap: 10px;
+      }
+      
+      #grantFilters .chip {
+        position: relative;
+        z-index: 1;
+        user-select: none;
+      }
+      
+      #grantFilters .chip .dot { background: #6e8b8b; }               /* inactive */
+      #grantFilters .chip.active .dot { background: var(--accent); }   /* active */
+      
+      #chipIndicator {
+        position: absolute;
+        z-index: 0;
+        height: 36px;
+        border-radius: 999px;
+        background: color-mix(in oklab, var(--accent), #000 80%);
+        opacity: .25;
+        top: 50%;
+        transform: translateY(-50%);
+        transition: left .22s ease, width .22s ease;
+        pointer-events: none;
+      }
+      
+      /* Grant tiles */
+      .grant-card {
+        display: grid;
+        gap: 6px;
+        background: var(--card-soft);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 14px;
+      }
+      
+      .grant-title {
+        font-weight: 800;
+        font-size: 1.05rem;
+        line-height: 1.35;
+      }
+      
+      .grant-value {
+        font-weight: 700;
+        color: var(--accent);
+      }
+      
+      .grant-desc {
+        color: var(--muted);
+      }
+      
+      .grant-meta {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      
+      .grant-tag {
+        padding: 3px 8px;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        font-size: .82rem;
+        color: var(--muted);
+      }
+      
+      /* 2-cols on medium screens */
+      @media (min-width: 780px) {
+        #grantTiles.grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      }
+      /* 3-cols on wide */
+      @media (min-width: 1080px) {
+        #grantTiles.grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      }
 
     /* // --- Status pills --- */
     .pill { display: inline-flex; align-items: center; gap: 6px; background: #073b2f; color: #c7fff2; border: 1px solid #0b6b56; border-radius: 999px; padding: 4px 10px; font-size: 0.85rem; }
@@ -495,27 +571,17 @@
         <div class="page-head"><button class="btn" data-back>← Back</button><h2 class="page-title">Funding & Grants</h2></div>
         <p class="lead">The definitive single point of entry to discover and apply for relevant federal and state grants. The ADEXA Hub unifies grants, compliance, and support on one digital platform.</p>
 
-        <!-- // Filter chips -->
+        <!-- // --- Filter chips (with sliding indicator) --- -->
         <div class="row" id="grantFilters" style="margin:8px 0 14px;">
-          <button class="btn chip" data-fil="All"><span class="dot"></span>All</button>
-          <button class="btn chip" data-fil="Export">Export</button>
-          <button class="btn chip" data-fil="Capability">Capability</button>
-          <button class="btn chip" data-fil="Skilling">Skilling</button>
+          <button class="btn chip active" data-fil="All"><span class="dot"></span>All</button>
+          <button class="btn chip" data-fil="Export"><span class="dot"></span>Export</button>
+          <button class="btn chip" data-fil="Capability"><span class="dot"></span>Capability</button>
+          <button class="btn chip" data-fil="Skilling"><span class="dot"></span>Skilling</button>
+          <span id="chipIndicator" aria-hidden="true"></span>
         </div>
-
-        <!-- // Search & table -->
-        <div class="card">
-          <div class="toolbar">
-            <input class="input" id="qGrant" placeholder="Search grants (e.g. export, R&D, defence)" />
-            <select class="select" id="juris"><option>All jurisdictions</option><option>Federal</option><option>SA</option><option>QLD</option><option>NSW</option><option>NT</option></select>
-            <select class="select" id="stage"><option>Any stage</option><option>Idea</option><option>Prototype</option><option>Export ready</option></select>
-            <button class="button" id="btnFind">Find</button>
-          </div>
-          <table class="table" id="tblGrants">
-            <thead><tr><th>Program</th><th>Jurisdiction</th><th>Closes</th><th>Support</th><th>Tag</th><th></th></tr></thead>
-            <tbody></tbody>
-          </table>
-        </div>
+        
+        <!-- // --- Grant tiles (max 5 shown) --- -->
+        <div id="grantTiles" class="grid cols-1"></div>
 
         <!-- // --- Funding FAQ --- -->
         <h3 class="section-title">Frequently Asked Questions</h3>
@@ -851,6 +917,130 @@
         const actions = document.querySelector('.top-actions');
         actions && actions.prepend(chip);
       }
+
+      /* =========================
+         FUNDING & GRANTS: data + filters + tile renderer
+         ========================= */
+      
+      const grantsData = [
+        // ------- Export -------
+        {
+          title: "Export Market Development Grant (EMDG)",
+          value: "Up to $770k (tiered across 8 years)",
+          desc: "Supports eligible marketing and expansion activities to grow exports, including defence-related services.",
+          tag: "Export", url: "https://www.austrade.gov.au"
+        },
+        {
+          title: "Defence Global Competitiveness Grant",
+          value: "Up to $150,000 (co-funded)",
+          desc: "For SMEs investing in projects that enhance competitiveness in international defence markets.",
+          tag: "Export", url: "https://www.business.gov.au"
+        },
+        {
+          title: "Landing Pads – North America",
+          value: "Access & advisory",
+          desc: "Short-term market entry support to establish partnerships and channels in the US & Canada defence ecosystem.",
+          tag: "Export", url: "https://www.austrade.gov.au"
+        },
+      
+        // ------- Capability -------
+        {
+          title: "Sovereign Industrial Capability Priority Grant",
+          value: "$50k–$1M (co-funded)",
+          desc: "Build capabilities aligned with Defence's strategic priorities; equipment, tooling and certification eligible.",
+          tag: "Capability", url: "https://www.business.gov.au"
+        },
+        {
+          title: "Defence Trailblazer – Tech Acceleration",
+          value: "Cohort / milestone based",
+          desc: "Scale deep-tech with university partners to lift TRLs and speed to mission.",
+          tag: "Capability", url: "https://www.defencetrailblazer.org"
+        },
+        {
+          title: "Defence SA – Supplier Readiness (Pilot)",
+          value: "EOI: Q4",
+          desc: "SME uplift program: quality, audits and pre-qualification into major defence primes.",
+          tag: "Capability", url: "https://defencesa.com"
+        },
+      
+        // ------- Skilling -------
+        {
+          title: "Skilling Australia’s Defence Industry Grant",
+          value: "Program based",
+          desc: "Subsidises technical and trade training for defence industry SMEs to strengthen workforce capability.",
+          tag: "Skilling", url: "https://www.business.gov.au"
+        },
+        {
+          title: "Defence Industry Internship Program",
+          value: "Wage support",
+          desc: "Place final-year engineering students into defence SMEs; co-funded stipends and recruitment support.",
+          tag: "Skilling", url: "https://www.dst.defence.gov.au"
+        },
+        {
+          title: "Cyber Uplift for SMEs (ACSC)",
+          value: "Advisory + tooling",
+          desc: "Targeted uplift to Essential Eight maturity—often a prerequisite for defence contracts.",
+          tag: "Skilling", url: "https://www.cyber.gov.au"
+        }
+      ];
+      
+      // DOM
+      const tilesWrap = document.getElementById('grantTiles');
+      const chipRow   = document.getElementById('grantFilters');
+      const chipIndicator = document.getElementById('chipIndicator');
+      
+      // slide the highlight behind the active chip
+      function moveChipIndicator(btn){
+        if (!btn || !chipIndicator) return;
+        const rowRect = chipRow.getBoundingClientRect();
+        const bRect   = btn.getBoundingClientRect();
+        chipIndicator.style.left  = `${bRect.left - rowRect.left}px`;
+        chipIndicator.style.width = `${bRect.width}px`;
+      }
+      
+      // render tiles (limit 5)
+      let grantFilter = 'All';
+      function renderGrantTiles() {
+        if (!tilesWrap) return;
+        const data = grantsData.filter(g => grantFilter === 'All' || g.tag === grantFilter)
+                               .slice(0, 5);
+        tilesWrap.innerHTML = data.map(g => `
+          <div class="grant-card">
+            <div class="grant-title">${g.title}</div>
+            <div class="grant-value">${g.value}</div>
+            <div class="grant-desc">${g.desc}</div>
+            <div class="grant-meta">
+              <span class="grant-tag">${g.tag}</span>
+              <a class="button secondary" href="${g.url}" target="_blank" rel="noopener">View &amp; Apply</a>
+            </div>
+          </div>
+        `).join('');
+      }
+      
+      // chip wiring
+      if (chipRow) {
+        const chips = Array.from(chipRow.querySelectorAll('.chip'));
+        chips.forEach(ch => ch.addEventListener('click', () => {
+          chips.forEach(c => c.classList.remove('active'));
+          ch.classList.add('active');
+          grantFilter = ch.dataset.fil || 'All';
+          moveChipIndicator(ch);
+          renderGrantTiles();
+        }));
+      
+        // initial state
+        const active = chipRow.querySelector('.chip.active') || chips[0];
+        moveChipIndicator(active);
+      }
+      
+      // first paint
+      renderGrantTiles();
+      
+      // keep indicator aligned on resize
+      window.addEventListener('resize', () => {
+        const active = chipRow?.querySelector('.chip.active');
+        if (active) moveChipIndicator(active);
+      });
 
       // // --- Wiring: Menu + Back + History ---
       document.querySelectorAll('[data-target]').forEach(b => b.addEventListener('click', () => show(b.dataset.target, true)));
