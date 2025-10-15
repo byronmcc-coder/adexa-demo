@@ -39,13 +39,13 @@
 :root[data-theme="light"] {
   --bg: #f6faf8;
   --card: #ffffff;
-  --card-hover: #f7fbfa;
+  --card-hover: #f0f6f5;
   --card-soft: #ffffff;
-  --border: #dce9e6;
-  --text: #0b3b34;
-  --muted: #5f726e;
+  --border: #d6e2ee;
+  --text: #0b1f2a;
+  --muted: #5f6b78;
   --accent: var(--adexa-gold);
-  --shadow: 0 8px 24px rgba(10, 35, 66, .06), 0 1px 3px rgba(10, 35, 66, .06);
+  --shadow: 0 18px 32px rgba(13, 54, 86, .12), 0 2px 8px rgba(13, 54, 86, .08);
 }
 
 /* Buttons pick up the gold automatically via --accent, but these help the look */
@@ -60,24 +60,40 @@
   border-color: var(--border);
 }
     :root[data-theme="light"] .title { color: #0b1f2a; }
-    :root[data-theme="light"] .chip { background: #fff; color: #0b1f2a; border-color: #d6e2ee; }
+    :root[data-theme="light"] .subtitle { color: color-mix(in oklab, var(--muted), #fff 6%); }
+    :root[data-theme="light"] .chip { background: #ffffff; color: #0b1f2a; border-color: #d6e2ee; box-shadow: 0 10px 22px rgba(13, 54, 86, .08); }
     :root[data-theme="light"] .input,
-    :root[data-theme="light"] .select { background: #ffffff; color: #0b1f2a; border-color: #d6e2ee; }
+    :root[data-theme="light"] .select { background: #ffffff; color: #0b1f2a; border-color: #c4d4e4; box-shadow: inset 0 1px 2px rgba(13, 54, 86, .06); }
     :root[data-theme="light"] .button { background: linear-gradient(180deg, #0a62c2, #084c97); color: #ffffff; border-color: #0a62c2; }
     :root[data-theme="light"] .button.secondary { background: #eef4fb; color: #0b1f2a; border-color: #c9d9ea; }
     :root[data-theme="light"] details { background: #f7fbff; border-color: #d6e2ee; }
-    :root[data-theme="light"] .page-head {
-      background: linear-gradient(180deg, color-mix(in oklab, #ffffff, var(--accent) 6%), #ffffff);
+    :root[data-theme="light"] main.card { background: #ffffff; border-color: #d6e2ee; box-shadow: 0 18px 32px rgba(13, 54, 86, .12), 0 2px 8px rgba(13, 54, 86, .08); }
+    :root[data-theme="light"] nav.menu .item {
+      background: linear-gradient(180deg, #ffffff, #f3f8ff);
       border-color: #d6e2ee;
-      box-shadow: 0 18px 46px rgba(13, 54, 86, .18), 0 2px 12px rgba(13, 54, 86, .08);
+      box-shadow: 0 12px 26px rgba(13, 54, 86, .1);
     }
-    :root[data-theme="light"] .page-head::after { opacity: .22; }
-    :root[data-theme="light"] .page-eyebrow { color: #4f6470; }
-    :root[data-theme="light"] .page-subtitle { color: #4a5d68; }
+    :root[data-theme="light"] nav.menu .item:hover {
+      background: linear-gradient(180deg, #f8fbff, #e9f2ff);
+      border-color: color-mix(in oklab, #2b6cb0, #000 8%);
+    }
+    :root[data-theme="light"] .ico svg,
+    :root[data-theme="light"] .chev svg { stroke: #7a8b97; }
+    :root[data-theme="light"] .page-head {
+      background: linear-gradient(180deg, color-mix(in oklab, #ffffff, var(--accent) 14%), #ffffff 78%);
+      border-color: #d6e2ee;
+      box-shadow: 0 28px 56px rgba(13, 54, 86, .18), 0 2px 16px rgba(13, 54, 86, .12);
+    }
+    :root[data-theme="light"] .page-head::after { opacity: .18; filter: blur(0.6px); }
+    :root[data-theme="light"] .page-eyebrow { color: #5a7180; }
+    :root[data-theme="light"] .page-title { color: #0b1f2a; }
+    :root[data-theme="light"] .page-subtitle { color: #47616f; }
+    :root[data-theme="light"] .lead { color: #4c6572; }
     :root[data-theme="light"] .page-back {
       background: #eef4fb;
       color: #0b1f2a;
       border-color: #c9d9ea;
+      box-shadow: 0 10px 22px rgba(13, 54, 86, .12);
     }
     :root[data-theme="light"] .page-back:hover {
       background: #dfeafb;
@@ -462,6 +478,22 @@
     .pill.warn { background: #3a2d00; color: #ffe0a8; border-color: #6e5200; }
     .pill.ok { background: #083d0a; color: #c8ffc9; border-color: #0b6e0e; }
 
+    :root[data-theme="light"] .pill {
+      background: #e6f3ef;
+      color: #145144;
+      border-color: #b9ddd6;
+    }
+    :root[data-theme="light"] .pill.warn {
+      background: #fff0d6;
+      color: #735005;
+      border-color: #f0d19a;
+    }
+    :root[data-theme="light"] .pill.ok {
+      background: #e7f6ed;
+      color: #176438;
+      border-color: #b6e2c5;
+    }
+
     /* // --- FAQ Styling and Animations (accordion, single-open) --- */
     .faq-list { grid-template-columns: 1fr; }
     .faq-list {
@@ -517,6 +549,33 @@
     .app-status.ok      { background: #0c3f1a; color: #d8ffe5; border-color: #1f7a39; }
     .app-status.pending { background: #3c2d00; color: #ffe6a3; border-color: #6f5600; }
     .app-status.danger  { background: #4a1010; color: #ffd1d1; border-color: #8a1f1f; }
+
+    :root[data-theme="light"] .app-row {
+      background: #ffffff;
+      border-color: #d6e2ee;
+      box-shadow: 0 12px 28px rgba(13, 54, 86, .12);
+    }
+    :root[data-theme="light"] .app-left h4 { color: #0b1f2a; }
+    :root[data-theme="light"] .app-id { color: #5a7180; }
+    :root[data-theme="light"] .app-status {
+      border-color: transparent;
+      box-shadow: inset 0 0 0 1px rgba(13, 54, 86, .08);
+    }
+    :root[data-theme="light"] .app-status.ok {
+      background: #e7f6ed;
+      color: #176438;
+      border-color: #b6e2c5;
+    }
+    :root[data-theme="light"] .app-status.pending {
+      background: #fff3d6;
+      color: #7c5c04;
+      border-color: #f5d99a;
+    }
+    :root[data-theme="light"] .app-status.danger {
+      background: #ffe7e7;
+      color: #b02a2a;
+      border-color: #f2b5b5;
+    }
     
     /* call-to-action button centered */
     .permits-cta { display: flex; justify-content: center; margin-top: 16px; }
