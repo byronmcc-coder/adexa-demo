@@ -138,6 +138,79 @@
     .market-hero__feed-meta strong { color: var(--adexa-cream); font-weight: 600; }
     .market-hero__feed .button { padding-inline: 18px; }
 
+    .portal-hero {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      align-items: stretch;
+      background: linear-gradient(135deg, rgba(0, 90, 80, 0.6), rgba(0, 36, 36, 0.92));
+      border: 1px solid rgba(118, 229, 205, 0.35);
+      border-radius: calc(var(--radius) + 2px);
+      padding: 24px 26px;
+      margin-bottom: 26px;
+      box-shadow: var(--shadow);
+    }
+    .portal-hero__content { flex: 1 1 320px; }
+    .portal-hero__badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      background: rgba(232, 112, 36, 0.18);
+      color: #ffd2b1;
+      border: 1px solid rgba(232, 112, 36, 0.5);
+    }
+    .portal-hero__title { margin: 14px 0 10px; font-size: 1.6rem; color: var(--adexa-cream); }
+    .portal-hero__lead { margin: 0; font-size: 1.02rem; line-height: 1.7; color: var(--muted); }
+    .portal-hero__benefits {
+      flex: 1 1 240px;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 12px;
+      align-content: start;
+    }
+    .portal-hero__benefits li {
+      background: rgba(0, 32, 32, 0.75);
+      border: 1px solid rgba(118, 229, 205, 0.25);
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-size: 0.95rem;
+      color: var(--adexa-cream);
+    }
+
+    .portal-layout {
+      display: grid;
+      gap: 20px;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      align-items: stretch;
+    }
+    .portal-steps__list {
+      margin: 12px 0 0;
+      padding-left: 20px;
+      display: grid;
+      gap: 12px;
+      font-size: 0.98rem;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+    .portal-steps__list strong { color: var(--adexa-cream); }
+    .portal-progress { display: grid; gap: 16px; }
+
+    @media (max-width: 960px) {
+      .portal-layout { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .portal-hero { padding: 20px; }
+      .portal-hero__title { font-size: 1.4rem; }
+    }
+
     /* --- Components --- */
     .grid { display: grid; gap: 16px; }
     .grid.cols-2 { grid-template-columns: repeat(2, minmax(0,1fr)); }
@@ -208,7 +281,7 @@
         <nav class="menu">
           <button class="item" data-target="permits">
             <span class="ico"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg></span>
-            <span class="label">Permits</span>
+            <span class="label">MADE Export Portal</span>
             <span class="chev"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></span>
           </button>
           <button class="item" data-target="monitoring">
@@ -241,39 +314,64 @@
 
       <!-- SUB‑PAGES (IDs must match routes below) -->
       <section id="view-permits" class="page" aria-hidden="true">
-        <div class="page-head"><button class="back" data-back>← Back</button><h2 class="page-title">Permits</h2></div>
-        <p class="lead">Manage export permits end‑to‑end. Create, validate, submit and track—all in one place.</p>
+        <div class="page-head"><button class="back" data-back>← Back</button><h2 class="page-title">MADE Export Portal</h2></div>
 
-        <div class="grid cols-3">
-          <div class="card">
-            <h3>Start new application</h3>
-            <div class="toolbar">
-              <select class="select" id="permitType">
-                <option value="DTC">DTC Permit</option>
-                <option value="ITAR">ITAR Exemption</option>
-                <option value="Customs">Customs (S10/112)</option>
-              </select>
-              <input class="input" id="entity" placeholder="Consignee / End‑user" />
-              <button class="button" id="btnDraft">Create draft</button>
+        <section class="portal-hero">
+          <div class="portal-hero__content">
+            <span class="portal-hero__badge">My Australian Defence Exports</span>
+            <h3 class="portal-hero__title">A streamlined pathway from registration to authorised exports.</h3>
+            <p class="portal-hero__lead">The MADE portal mirrors Defence’s workflows so exporters can progress confidently—submit applications, collaborate with DEC, and keep stakeholders informed.</p>
+          </div>
+          <ul class="portal-hero__benefits">
+            <li><strong>Guided onboarding</strong> aligned with Defence guidance</li>
+            <li><strong>Smart validation</strong> for goods, end-use and licensing</li>
+            <li><strong>Live status</strong> sharing with partners and government</li>
+          </ul>
+        </section>
+
+        <div class="portal-layout">
+          <div class="portal-steps card">
+            <h3>How to use the MADE portal</h3>
+            <ol class="portal-steps__list">
+              <li><strong>Getting started:</strong> confirm business profile, digital identity and security contacts.</li>
+              <li><strong>Navigate the portal:</strong> personalise dashboards, invite collaborators and link Navigator support.</li>
+              <li><strong>Prepare your export:</strong> build applications with templated goods lists and contextual guidance.</li>
+              <li><strong>DEC liaison & tracking:</strong> share reference IDs, respond to queries and upload supporting artefacts.</li>
+              <li><strong>Authorised AUS/UK/US community:</strong> surface licence conditions, share compliance packs and mark fulfilment.</li>
+            </ol>
+          </div>
+
+          <div class="portal-progress">
+            <div class="card">
+              <h3>Application workspace</h3>
+              <div class="toolbar">
+                <select class="select" id="permitType">
+                  <option value="DTC">DTC Permit</option>
+                  <option value="ITAR">ITAR Exemption</option>
+                  <option value="Customs">Customs (S10/112)</option>
+                </select>
+                <input class="input" id="entity" placeholder="Consignee / End‑user" />
+                <button class="button" id="btnDraft">Create draft</button>
+              </div>
+              <p class="note">Structured drafting keeps your MADE submission aligned with Defence export controls.</p>
             </div>
-            <p class="note">Templates auto‑fill company details, goods list and previous consignee data.</p>
-          </div>
 
-          <div class="card">
-            <h3>My drafts</h3>
-            <table class="table" id="tblDrafts">
-              <thead><tr><th>Ref</th><th>Type</th><th>Consignee</th><th>Updated</th></tr></thead>
-              <tbody></tbody>
-            </table>
-          </div>
+            <div class="card">
+              <h3>My applications</h3>
+              <table class="table" id="tblDrafts">
+                <thead><tr><th>Ref</th><th>Type</th><th>Consignee</th><th>Updated</th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
 
-          <div class="card">
-            <h3>Status</h3>
-            <div class="kpi"><span class="value" id="kOpen">0</span><span class="unit">open</span></div>
-            <div class="row"><span class="pill ok">Approved <strong id="kApproved">0</strong></span><span class="pill warn">Actions <strong id="kActions">0</strong></span></div>
-            <details><summary>Latest events</summary>
-              <ul id="events" class="muted" style="padding-left:18px; margin:6px 0 0 0;"></ul>
-            </details>
+            <div class="card">
+              <h3>Progress tracker</h3>
+              <div class="kpi"><span class="value" id="kOpen">0</span><span class="unit">in progress</span></div>
+              <div class="row"><span class="pill ok">Authorised <strong id="kApproved">0</strong></span><span class="pill warn">Actions <strong id="kActions">0</strong></span></div>
+              <details><summary>Latest events</summary>
+                <ul id="events" class="muted" style="padding-left:18px; margin:6px 0 0 0;"></ul>
+              </details>
+            </div>
           </div>
         </div>
       </section>
