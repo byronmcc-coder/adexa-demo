@@ -90,15 +90,15 @@
     :root[data-theme="light"] .page-subtitle { color: #47616f; }
     :root[data-theme="light"] .lead { color: #4c6572; }
     :root[data-theme="light"] .page-back {
-      background: #eef4fb;
-      color: #0b1f2a;
-      border-color: #c9d9ea;
-      box-shadow: 0 10px 22px rgba(13, 54, 86, .12);
+      background: linear-gradient(180deg, color-mix(in oklab, var(--accent), #ffffff 20%), color-mix(in oklab, var(--accent), #000 12%));
+      border-color: color-mix(in oklab, var(--accent), #000 20%);
+      color: #082321;
+      box-shadow: 0 12px 26px rgba(13, 54, 86, .18);
     }
     :root[data-theme="light"] .page-back:hover {
-      background: #dfeafb;
-      border-color: color-mix(in oklab, #0a62c2, #000 8%);
-      color: #06223a;
+      background: linear-gradient(180deg, color-mix(in oklab, var(--accent), #ffffff 12%), color-mix(in oklab, var(--accent), #000 18%));
+      border-color: color-mix(in oklab, var(--accent), #000 26%);
+      color: #041d16;
     }
 
     
@@ -116,6 +116,29 @@
 
     /* // --- Header --- */
     header.topbar { display: flex; align-items: center; gap: clamp(10px,1.6vw,16px); }
+    .brand-home {
+      display: inline-flex;
+      align-items: center;
+      gap: clamp(10px, 1.6vw, 16px);
+      padding: clamp(4px, 0.8vw, 6px);
+      margin: 0;
+      border: none;
+      background: transparent;
+      color: inherit;
+      cursor: pointer;
+      text-align: left;
+      border-radius: 14px;
+      min-width: 0;
+      flex: 1 1 auto;
+    }
+    .brand-home:focus-visible {
+      outline: 2px solid color-mix(in oklab, var(--accent), #ffffff 12%);
+      outline-offset: 4px;
+    }
+    .brand-home:hover .title,
+    .brand-home:focus-visible .title {
+      color: color-mix(in oklab, var(--accent), var(--text) 40%);
+    }
     .logo { width: clamp(56px, 7vw, 84px); height: auto; flex: 0 0 auto; border-radius: 10px; }
     .brand-block { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1 1 200px; }
     .title { font-weight: 900; font-size: clamp(20px, 2.6vw, 26px); color: var(--adexa-cream); letter-spacing: 0.3px; }
@@ -224,26 +247,31 @@
       z-index: 2;
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 8px 14px;
+      gap: 10px;
+      padding: 10px 18px;
       border-radius: 999px;
-      border: 1px solid color-mix(in oklab, var(--border), var(--accent) 20%);
-      background: color-mix(in oklab, var(--card), #000 4%);
-      color: color-mix(in oklab, var(--muted), #fff 14%);
-      font-size: .78rem;
+      border: 1px solid color-mix(in oklab, var(--accent), #000 28%);
+      background: linear-gradient(180deg, color-mix(in oklab, var(--accent), #000 10%), color-mix(in oklab, var(--accent), #000 26%));
+      color: #082321;
+      font-size: .82rem;
       font-weight: 700;
-      letter-spacing: .16em;
+      letter-spacing: .18em;
       text-transform: uppercase;
       text-decoration: none;
       cursor: pointer;
-      transition: transform .18s ease, background .22s ease, border-color .22s ease, color .22s ease;
+      transition: transform .18s ease, background .22s ease, border-color .22s ease, color .22s ease, box-shadow .22s ease;
+      box-shadow: 0 12px 26px rgba(0,0,0,.28);
     }
-    .page-back svg { width: 18px; height: 18px; }
+    .page-back svg { width: 22px; height: 22px; stroke-width: 2.2; }
     .page-back span { display: inline-flex; align-items: center; }
     .page-back:hover {
-      background: color-mix(in oklab, var(--card), var(--accent) 12%);
-      border-color: color-mix(in oklab, var(--accent), #000 14%);
-      color: var(--text);
+      background: linear-gradient(180deg, color-mix(in oklab, var(--accent), #000 4%), color-mix(in oklab, var(--accent), #000 20%));
+      border-color: color-mix(in oklab, var(--accent), #000 18%);
+      color: #041d16;
+    }
+    .page-back:focus-visible {
+      outline: 2px solid color-mix(in oklab, var(--accent), #ffffff 18%);
+      outline-offset: 3px;
     }
     .page-back:active { transform: translateY(1px); }
     .lead { font-size: 1.06rem; line-height: 1.7; color: var(--muted); }
@@ -261,12 +289,12 @@
         position: static;
         order: -1;
         margin-bottom: 6px;
-        padding: 8px 12px;
+        padding: 10px 14px;
       }
     }
     @media (max-width: 520px) {
       .page-back span { display: none; }
-      .page-back { padding: 8px; }
+      .page-back { padding: 10px; }
     }
 
     /* // --- Intel carousel --- */
@@ -779,14 +807,16 @@
     <!-- // --- Topbar: Logo + Title + Theme Toggle + Crumb --- -->
     <header class="topbar">
       <!-- Replace with your local file or Base64 if preferred -->
-      <img src="Adexa.svg" alt="ADEXA Logo" class="logo">
-      <div class="brand-block">
-        <div class="title">ADEXA</div>
-        <div class="subtitle" role="text">
-          <span>Australian Defence</span>
-          <span>Export Accelerator</span>
+      <button type="button" class="brand-home" data-target="home" aria-label="Go to ADEXA home">
+        <img src="Adexa.svg" alt="ADEXA Logo" class="logo">
+        <div class="brand-block">
+          <div class="title">ADEXA</div>
+          <div class="subtitle" role="text">
+            <span>Australian Defence</span>
+            <span>Export Accelerator</span>
+          </div>
         </div>
-      </div>
+      </button>
       <div class="top-actions">
         <div class="top-controls">
           <button class="btn" id="themeToggle" aria-pressed="false" aria-label="Toggle theme">
