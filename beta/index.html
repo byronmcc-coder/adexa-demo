@@ -601,6 +601,11 @@
       color: var(--muted);
       line-height: 1.6;
     }
+    .guidance-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
     .guidance-link {
       display: inline-flex;
       align-items: center;
@@ -614,10 +619,19 @@
       background: linear-gradient(180deg, color-mix(in oklab, var(--card), var(--accent) 30%), var(--card-soft));
       transition: transform .12s ease, border-color .2s ease, background .2s ease;
     }
+    .guidance-link.secondary {
+      color: var(--text);
+      border-color: color-mix(in oklab, var(--border), transparent 30%);
+      background: linear-gradient(180deg, var(--card), var(--card-soft));
+    }
     .guidance-link:hover {
       transform: translateY(-1px);
       border-color: color-mix(in oklab, var(--accent), #000 12%);
       background: linear-gradient(180deg, color-mix(in oklab, var(--card-hover), var(--accent) 35%), var(--card));
+    }
+    .guidance-link.secondary:hover {
+      border-color: color-mix(in oklab, var(--border), var(--accent) 30%);
+      background: linear-gradient(180deg, var(--card-hover), var(--card));
     }
     .guidance-link svg { width: 18px; height: 18px; stroke: currentColor; }
 
@@ -635,6 +649,15 @@
     :root[data-theme="light"] .guidance-link:hover {
       border-color: color-mix(in oklab, #0a62c2, #000 8%);
       background: linear-gradient(180deg, #e9f2ff, #dfeafb);
+    }
+    :root[data-theme="light"] .guidance-link.secondary {
+      color: #0b1f2a;
+      background: linear-gradient(180deg, #ffffff, #f0f6f5);
+      border-color: #d6e2ee;
+    }
+    :root[data-theme="light"] .guidance-link.secondary:hover {
+      border-color: color-mix(in oklab, #2b6cb0, #000 10%);
+      background: linear-gradient(180deg, #f0f6f5, #e6efed);
     }
 
     /* call-to-action button centered */
@@ -835,11 +858,17 @@
 
         <div class="guidance-card" role="note">
           <span class="guidance-eyebrow">My Australian Defence Exports (MADE) portal</span>
-          <p>Use the official MADE portal factsheet to confirm the five-step process, registration requirements, and DEC contact points before you submit or update an export permit.</p>
-          <a class="guidance-link" href="https://www.defence.gov.au/business-industry/exports/my-australian-defence-exports-made-portal" target="_blank" rel="noopener">
-            View MADE portal guidance
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 5l7 7-7 7"/></svg>
-          </a>
+          <p>Check the factsheet for the five-step process, registration essentials, and DEC contacts before you lodge or update an export permit.</p>
+          <div class="guidance-actions">
+            <a class="guidance-link" href="https://www.defence.gov.au/business-industry/exports/my-australian-defence-exports-made-portal" target="_blank" rel="noopener">
+              View MADE portal guidance
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 5l7 7-7 7"/></svg>
+            </a>
+            <a class="guidance-link secondary" href="https://www.defence.gov.au/business-industry/exporting/applications-pre-notification/my-australian-defence-exports-portal" target="_blank" rel="noopener">
+              Open MADE portal
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 5l7 7-7 7"/></svg>
+            </a>
+          </div>
         </div>
 
         <!-- // My Applications -->
