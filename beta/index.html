@@ -131,9 +131,150 @@
     section.page { display: none; opacity: 0; transform: translateY(6px); transition: opacity .22s ease, transform .22s ease; }
     section.page[aria-hidden="false"] { display: block; opacity: 1; transform: translateY(0); }
 
-    .page-head { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
-    .page-title { flex: 1; text-align: center; font-size: clamp(22px, 3vw, 32px); font-weight: 900; letter-spacing: .2px; color: var(--text); }
+    .page-head {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: clamp(16px, 3vw, 24px) clamp(18px, 3.6vw, 32px);
+      margin: clamp(18px, 3vw, 28px) 0 clamp(18px, 2.4vw, 26px);
+      border-radius: calc(var(--radius) + 4px);
+      border: 1px solid color-mix(in oklab, var(--border), #000 6%);
+      background: linear-gradient(180deg, color-mix(in oklab, var(--card), #0a3a36 22%), var(--card-soft));
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .page-head::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(circle at top right, color-mix(in oklab, var(--accent), transparent 70%) 0%, transparent 55%);
+      opacity: .55;
+    }
+    .page-head-main { position: relative; z-index: 1; display: grid; gap: 6px; max-width: min(600px, 100%); }
+    .page-eyebrow {
+      font-size: .72rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: color-mix(in oklab, var(--accent), #fff 12%);
+      margin: 0;
+    }
+    .page-title { margin: 0; font-size: clamp(24px, 4vw, 38px); font-weight: 900; letter-spacing: .2px; color: var(--text); }
+    .page-subtitle { margin: 0; font-size: clamp(.9rem, 2vw, 1.05rem); color: var(--muted); line-height: 1.5; }
+    .page-back {
+      position: absolute;
+      left: clamp(12px, 3vw, 26px);
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 2;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid color-mix(in oklab, var(--border), var(--accent) 24%);
+      background: linear-gradient(180deg, color-mix(in oklab, var(--card), #0f4640 18%), color-mix(in oklab, var(--card-soft), #000 8%));
+      color: var(--text);
+      cursor: pointer;
+      transition: transform .12s ease, border-color .2s ease, background .2s ease;
+    }
+    .page-back:hover { transform: translateY(-50%) translateY(-1px); border-color: color-mix(in oklab, var(--accent), #000 10%); }
+    .page-back:active { transform: translateY(-50%) translateY(0); }
+    .page-back svg { width: 18px; height: 18px; }
     .lead { font-size: 1.06rem; line-height: 1.7; color: var(--muted); }
+
+    @media (max-width: 640px) {
+      .page-head { padding: 18px 18px 24px; }
+      .page-back { position: static; transform: none; margin-bottom: 12px; }
+      .page-head { flex-direction: column; gap: 12px; }
+      .page-head::after { opacity: .35; }
+      .page-head-main { text-align: center; }
+    }
+
+    /* // --- Intel carousel --- */
+    .intel-carousel {
+      position: relative;
+      display: grid;
+      gap: clamp(12px, 2.6vw, 18px);
+      padding: clamp(14px, 2.4vw, 20px);
+      border-radius: calc(var(--radius) + 6px);
+      border: 1px solid color-mix(in oklab, var(--border), #000 6%);
+      background: linear-gradient(180deg, color-mix(in oklab, var(--card), #0f3b36 14%), color-mix(in oklab, var(--card-soft), #000 6%));
+      box-shadow: var(--shadow);
+    }
+    .intel-carousel[data-multi="false"] .intel-controls { display: none; }
+    .intel-track {
+      position: relative;
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: 100%;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      border-radius: calc(var(--radius) + 2px);
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .intel-track::-webkit-scrollbar { display: none; }
+    .intel-card {
+      scroll-snap-align: center;
+      padding: clamp(18px, 3vw, 26px);
+      display: grid;
+      gap: 12px;
+      border-radius: calc(var(--radius) + 1px);
+      border: 1px solid color-mix(in oklab, var(--border), #000 8%);
+      background: linear-gradient(180deg, color-mix(in oklab, var(--card), #0c3a34 18%), color-mix(in oklab, var(--card-soft), #000 4%));
+      box-shadow: var(--shadow);
+      min-height: 200px;
+    }
+    .intel-card.is-active {
+      border-color: color-mix(in oklab, var(--accent), #000 24%);
+      box-shadow: 0 0 0 1px color-mix(in oklab, var(--accent), transparent 75%), var(--shadow);
+    }
+    .intel-card h3 { margin: 0; font-size: clamp(1.12rem, 3vw, 1.4rem); color: var(--accent); line-height: 1.3; }
+    .intel-card p { margin: 0; }
+    .intel-card .intel-meta { color: var(--muted); font-size: .85rem; letter-spacing: .01em; }
+    .intel-controls { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+    .intel-dots { display: inline-flex; gap: 8px; align-items: center; }
+    .intel-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      border: 1px solid color-mix(in oklab, var(--border), #000 10%);
+      background: transparent;
+      cursor: pointer;
+      transition: background .2s ease, border-color .2s ease, transform .2s ease;
+    }
+    .intel-dot.is-active { background: var(--accent); border-color: var(--accent); transform: scale(1.15); }
+    .intel-nav { display: inline-flex; gap: 8px; align-items: center; }
+    .intel-btn {
+      border: 1px solid color-mix(in oklab, var(--border), var(--accent) 20%);
+      background: linear-gradient(180deg, color-mix(in oklab, var(--card), #11443d 18%), color-mix(in oklab, var(--card-soft), #000 6%));
+      color: var(--text);
+      padding: 6px 14px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: border-color .2s ease, transform .12s ease;
+    }
+    .intel-btn span { font-size: .82rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; }
+    .intel-btn:hover { border-color: color-mix(in oklab, var(--accent), #000 12%); transform: translateY(-1px); }
+    .intel-btn:active { transform: translateY(0); }
+    .intel-btn svg { width: 16px; height: 16px; }
+
+    @media (max-width: 760px) {
+      .intel-controls { justify-content: center; }
+      .intel-nav { order: 2; }
+    }
+
+    @media (max-width: 520px) {
+      .intel-btn span { display: none; }
+    }
 
     /* // --- Grid helpers --- */
     .grid { display: grid; gap: 16px; }
@@ -502,7 +643,17 @@
 
       <!-- // === PERMITS =================================================== -->
       <section id="view-permits" class="page" aria-hidden="true">
-        <div class="page-head"><button class="btn" data-back>← Back</button><h2 class="page-title">Export Permits</h2></div>
+        <div class="page-head">
+          <button type="button" class="page-back" data-back aria-label="Go back to home">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 5l-7 7 7 7"/><path d="M5 12h14"/></svg>
+            <span>Back</span>
+          </button>
+          <div class="page-head-main">
+            <p class="page-eyebrow">Permits &amp; licences</p>
+            <h2 class="page-title">Export Permits</h2>
+            <p class="page-subtitle">Keep applications, authorisations, and renewals on track in one workspace.</p>
+          </div>
+        </div>
         <p class="lead">A single digital ecosystem to manage applications, track status, and access pre-filled templates—simplifying compliance and reducing friction for exporters.</p>
       
         <!-- // My Applications -->
@@ -540,8 +691,15 @@
       <!-- // === COMPLIANCE MONITORING ===================================== -->
       <section id="view-monitoring" class="page" aria-hidden="true">
         <div class="page-head">
-          <button class="btn" data-back>← Back</button>
-          <h2 class="page-title">Compliance Monitoring</h2>
+          <button type="button" class="page-back" data-back aria-label="Go back to home">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 5l-7 7 7 7"/><path d="M5 12h14"/></svg>
+            <span>Back</span>
+          </button>
+          <div class="page-head-main">
+            <p class="page-eyebrow">Assurance &amp; reporting</p>
+            <h2 class="page-title">Compliance Monitoring</h2>
+            <p class="page-subtitle">Automate obligations, surface red flags early, and keep regulators confident.</p>
+          </div>
         </div>
         <p class="lead">
           Track obligations and manage reporting through a unified dashboard. Automate workflows and receive sector-specific checklists to maintain compliance with Australian and international regulations.
@@ -630,7 +788,17 @@
 
       <!-- // === FUNDING & GRANTS ======================================== -->
       <section id="view-funding" class="page" aria-hidden="true">
-        <div class="page-head"><button class="btn" data-back>← Back</button><h2 class="page-title">Funding & Grants</h2></div>
+        <div class="page-head">
+          <button type="button" class="page-back" data-back aria-label="Go back to home">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 5l-7 7 7 7"/><path d="M5 12h14"/></svg>
+            <span>Back</span>
+          </button>
+          <div class="page-head-main">
+            <p class="page-eyebrow">Capital pathways</p>
+            <h2 class="page-title">Funding &amp; Grants</h2>
+            <p class="page-subtitle">Filter targeted support programs and see which incentives align to your strategy.</p>
+          </div>
+        </div>
         <p class="lead">The definitive single point of entry to discover and apply for relevant federal and state grants. The ADEXA Hub unifies grants, compliance, and support on one digital platform.</p>
 
         <!-- // --- Filter chips (with sliding indicator) --- -->
@@ -667,13 +835,23 @@
 
       <!-- // === MARKET INTELLIGENCE ===================================== -->
       <section id="view-market-intel" class="page" aria-hidden="true">
-        <div class="page-head"><button class="btn" data-back>← Back</button><h2 class="page-title">Market Intelligence</h2></div>
+        <div class="page-head">
+          <button type="button" class="page-back" data-back aria-label="Go back to home">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 5l-7 7 7 7"/><path d="M5 12h14"/></svg>
+            <span>Back</span>
+          </button>
+          <div class="page-head-main">
+            <p class="page-eyebrow">Insights &amp; leads</p>
+            <h2 class="page-title">Market Intelligence</h2>
+            <p class="page-subtitle">Stay across sovereign demand signals and surface the next opportunity automatically.</p>
+          </div>
+        </div>
         <p class="lead">Access proactive, data-driven intelligence. Connect with expert ‘Navigators’ — human advisors who provide tailored, case-managed support for your export journey.</p>
 
         <!-- // Latest Intel Feed -->
         <h3 class="section-title">Latest Intel Feed</h3>
         <hr class="section-rule" />
-        <div id="intelFeed" class="grid cols-1">
+        <div id="intelFeed">
           <!-- Cards injected by JS -->
         </div>
 
@@ -733,7 +911,17 @@
 
       <!-- // === IP & TECH TRANSFER ====================================== -->
       <section id="view-ip-tech" class="page" aria-hidden="true">
-        <div class="page-head"><button class="btn" data-back>← Back</button><h2 class="page-title">IP &amp; Tech Transfer</h2></div>
+        <div class="page-head">
+          <button type="button" class="page-back" data-back aria-label="Go back to home">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 5l-7 7 7 7"/><path d="M5 12h14"/></svg>
+            <span>Back</span>
+          </button>
+          <div class="page-head-main">
+            <p class="page-eyebrow">Sovereign IP</p>
+            <h2 class="page-title">IP &amp; Tech Transfer</h2>
+            <p class="page-subtitle">Embed governance, credentials, and agreement tools to protect sensitive know-how.</p>
+          </div>
+        </div>
         <p class="lead">Embed T2 & IP Management Training. Mandatory micro-credentials on the platform ensure you can securely manage sovereign IP and navigate Technology Transfer (T2) protocols with allied partners.</p>
 
         <div class="grid cols-2">
@@ -784,7 +972,17 @@
 
       <!-- // === MADE IN AUS BRAND ======================================= -->
       <section id="view-made-in-aus" class="page" aria-hidden="true">
-        <div class="page-head"><button class="btn" data-back>← Back</button><h2 class="page-title">Australian Defence Branding</h2></div>
+        <div class="page-head">
+          <button type="button" class="page-back" data-back aria-label="Go back to home">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 5l-7 7 7 7"/><path d="M5 12h14"/></svg>
+            <span>Back</span>
+          </button>
+          <div class="page-head-main">
+            <p class="page-eyebrow">Brand &amp; storytelling</p>
+            <h2 class="page-title">Australian Defence Branding</h2>
+            <p class="page-subtitle">Access approved assets, narratives, and partnerships to amplify your presence offshore.</p>
+          </div>
+        </div>
         <p class="lead">Leverage the 'Brand Ausralia' Resources & 'Made in Australia' logo for defence exports. Access resources to connect with Team Defence Australia events and secure inclusion in the Australian Defence Export Catalogue.</p>
 
                 <!-- // TDA Events -->
@@ -854,7 +1052,17 @@
 
       <!-- // === EXPORT READINESS CHECKLIST =============================== -->
       <section id="view-readiness" class="page" aria-hidden="true">
-        <div class="page-head"><button class="btn" data-back>← Back</button><h2 class="page-title">Export Readiness Checklist</h2></div>
+        <div class="page-head">
+          <button type="button" class="page-back" data-back aria-label="Go back to home">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 5l-7 7 7 7"/><path d="M5 12h14"/></svg>
+            <span>Back</span>
+          </button>
+          <div class="page-head-main">
+            <p class="page-eyebrow">Capability score</p>
+            <h2 class="page-title">Export Readiness Checklist</h2>
+            <p class="page-subtitle">Measure maturity across compliance, partners, and pipeline to unlock new markets.</p>
+          </div>
+        </div>
         <p class="lead">A structured self-assessment aligned with Defence SA / Austrade readiness themes. Tick off actions to lift your readiness score.</p>
 
         <div class="grid cols-2" style="margin-top:20px;">
@@ -1230,19 +1438,141 @@
 
       // // --- Market Intel: Feed + Targets ---
       const intelFeedData = [
-        {title:'UK MoD seeks next-gen drone swarm tech', blurb:'The UK Ministry of Defence has released a tender for autonomous systems, creating opportunities for Australian firms with proven AI and sensor capabilities.', meta:'Region: UK | Sector: Autonomous Systems | Date: 12 Oct 2025'},
-        {title:'AUKUS update: streamlined tech transfer protocols', blurb:'New regulations reduce admin burdens for sharing sensitive tech between AU, UK, US under AUKUS Pillar II.', meta:'Region: AUKUS | Sector: Policy | Date: 10 Oct 2025'},
-        {title:'Japan increases defence budget, focuses on cyber', blurb:'Growing demand for cyber defence tooling and services; scope for AU SMEs in secure comms & training.', meta:'Region: APAC | Sector: Cyber | Date: 08 Oct 2025'}
+        {title:'UK MoD seeks next-gen drone swarm tech', blurb:'The UK Ministry of Defence has released a tender for autonomous systems, creating opportunities for Australian firms with proven AI and sensor capabilities.', meta:'Region: UK · Sector: Autonomous Systems · Date: 12 Oct 2025'},
+        {title:'AUKUS update: streamlined tech transfer protocols', blurb:'New regulations reduce admin burdens for sharing sensitive tech between AU, UK, US under AUKUS Pillar II.', meta:'Region: AUKUS · Sector: Policy · Date: 10 Oct 2025'},
+        {title:'Japan increases defence budget, focuses on cyber', blurb:'Growing demand for cyber defence tooling and services; scope for AU SMEs in secure comms & training.', meta:'Region: APAC · Sector: Cyber · Date: 08 Oct 2025'},
+        {title:'US Navy planning sustainment hubs for AUKUS partners', blurb:'Pacific Fleet signals need for joint maintenance partners to support Virginia-class sustainment in Australia.', meta:'Region: USA · Sector: Sustainment · Date: 07 Oct 2025'},
+        {title:'India issues RFI for maritime autonomous systems', blurb:'Indian Navy seeking collaborative prototypes for uncrewed surface vessels with sovereign IP protections.', meta:'Region: India · Sector: Maritime Robotics · Date: 05 Oct 2025'}
       ];
       const intelFeed = document.getElementById('intelFeed');
-      if (intelFeed) {
-        intelFeed.innerHTML = intelFeedData.map(i=>`
-          <div class="card">
-            <h3 style="color:var(--accent); font-size:1.2rem;">${i.title}</h3>
-            <p class="muted">${i.blurb}</p>
-            <p class="note">${i.meta}</p>
+      if (intelFeed && intelFeedData.length) {
+        intelFeed.classList.add('intel-carousel');
+        intelFeed.innerHTML = `
+          <div class="intel-track" role="list"></div>
+          <div class="intel-controls">
+            <div class="intel-dots" role="tablist" aria-label="Intel feed slides"></div>
+            <div class="intel-nav">
+              <button type="button" class="intel-btn intel-prev" aria-label="Previous intel item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 5l-7 7 7 7"/><path d="M5 12h14"/></svg>
+                <span>Prev</span>
+              </button>
+              <button type="button" class="intel-btn intel-next" aria-label="Next intel item">
+                <span>Next</span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 5l7 7-7 7"/><path d="M5 12h14"/></svg>
+              </button>
+            </div>
           </div>
-        `).join('');
+        `;
+        const track = intelFeed.querySelector('.intel-track');
+        const dotsWrap = intelFeed.querySelector('.intel-dots');
+        if (track) {
+          track.innerHTML = intelFeedData.map((item, idx) => `
+            <article class="intel-card" role="group" aria-roledescription="slide" aria-label="Intel ${idx + 1} of ${intelFeedData.length}" id="intel-slide-${idx}">
+              <h3>${item.title}</h3>
+              <p class="muted">${item.blurb}</p>
+              <p class="intel-meta">${item.meta}</p>
+            </article>
+          `).join('');
+        }
+        if (dotsWrap) {
+          dotsWrap.innerHTML = intelFeedData.map((_, idx) => `
+            <button type="button" class="intel-dot${idx === 0 ? ' is-active' : ''}" data-index="${idx}" role="tab" aria-selected="${idx === 0 ? 'true' : 'false'}" aria-controls="intel-slide-${idx}" aria-label="Show intel ${idx + 1}" ${idx === 0 ? '' : 'tabindex="-1"'}></button>
+          `).join('');
+        }
+
+        const slides = Array.from(track?.children ?? []);
+        const dots = Array.from(dotsWrap?.querySelectorAll('.intel-dot') ?? []);
+        const prevBtn = intelFeed.querySelector('.intel-prev');
+        const nextBtn = intelFeed.querySelector('.intel-next');
+        const hasMultiple = slides.length > 1;
+        intelFeed.dataset.multi = hasMultiple ? 'true' : 'false';
+        let activeIndex = 0;
+
+        function syncIndicators({ focusDot = false } = {}) {
+          slides.forEach((slide, idx) => slide.classList.toggle('is-active', idx === activeIndex));
+          dots.forEach((dot, idx) => {
+            const selected = idx === activeIndex;
+            dot.classList.toggle('is-active', selected);
+            dot.setAttribute('aria-selected', selected ? 'true' : 'false');
+            dot.setAttribute('tabindex', selected ? '0' : '-1');
+            if (focusDot && selected) {
+              dot.focus({ preventScroll: true });
+            }
+          });
+        }
+
+        function setActive(newIndex, { instant = false, focusDot = false } = {}) {
+          if (!slides.length) return;
+          activeIndex = (newIndex + slides.length) % slides.length;
+          const target = slides[activeIndex];
+          if (track && target) {
+            const offset = target.offsetLeft - track.offsetLeft;
+            track.scrollTo({ left: offset, behavior: instant ? 'auto' : 'smooth' });
+          }
+          syncIndicators({ focusDot });
+        }
+
+        setActive(0, { instant: true });
+
+        prevBtn?.addEventListener('click', () => setActive(activeIndex - 1));
+        nextBtn?.addEventListener('click', () => setActive(activeIndex + 1));
+        dots.forEach(dot => {
+          dot.addEventListener('click', () => {
+            const idx = Number(dot.dataset.index ?? '0');
+            setActive(idx, { focusDot: true });
+          });
+        });
+
+        const motionQuery = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
+        let autoplay = !(motionQuery?.matches);
+        let timerId;
+        const AUTO_DELAY = 8000;
+
+        const startAuto = () => {
+          if (!autoplay || !hasMultiple) return;
+          clearInterval(timerId);
+          timerId = window.setInterval(() => setActive(activeIndex + 1), AUTO_DELAY);
+        };
+        const stopAuto = () => { clearInterval(timerId); };
+
+        if (hasMultiple) {
+          startAuto();
+
+          const resumeIfNeeded = () => {
+            if (!intelFeed.contains(document.activeElement)) startAuto();
+          };
+
+          intelFeed.addEventListener('pointerenter', stopAuto);
+          intelFeed.addEventListener('pointerleave', startAuto);
+          intelFeed.addEventListener('focusin', stopAuto);
+          intelFeed.addEventListener('focusout', resumeIfNeeded);
+
+          if (motionQuery && typeof motionQuery.addEventListener === 'function') {
+            motionQuery.addEventListener('change', (event) => {
+              autoplay = !event.matches;
+              if (autoplay) startAuto(); else stopAuto();
+            });
+          } else if (motionQuery && typeof motionQuery.addListener === 'function') {
+            motionQuery.addListener((event) => {
+              autoplay = !event.matches;
+              if (autoplay) startAuto(); else stopAuto();
+            });
+          }
+
+          let scrollTimeout;
+          track?.addEventListener('scroll', () => {
+            stopAuto();
+            if (!track) return;
+            clearTimeout(scrollTimeout);
+            scrollTimeout = window.setTimeout(() => {
+              const slideWidth = track.clientWidth || 1;
+              const idx = Math.round(track.scrollLeft / slideWidth);
+              activeIndex = Math.max(0, Math.min(slides.length - 1, idx));
+              syncIndicators();
+              startAuto();
+            }, 160);
+          }, { passive: true });
+        }
       }
 
       // Targets (list)
