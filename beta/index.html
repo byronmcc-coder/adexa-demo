@@ -576,7 +576,67 @@
       color: #b02a2a;
       border-color: #f2b5b5;
     }
-    
+
+    .guidance-card {
+      display: grid;
+      gap: 12px;
+      margin: 0 auto clamp(18px, 2.6vw, 24px);
+      padding: clamp(16px, 2.6vw, 24px);
+      border-radius: var(--radius);
+      border: 1px solid color-mix(in oklab, var(--border), transparent 25%);
+      background: linear-gradient(180deg, color-mix(in oklab, var(--card), transparent 10%), color-mix(in oklab, var(--card-soft), #000 4%));
+      box-shadow: 0 16px 38px rgba(0, 0, 0, .28), 0 2px 10px rgba(0, 0, 0, .2);
+      max-width: min(760px, 100%);
+      text-align: left;
+    }
+    .guidance-eyebrow {
+      font-size: .78rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 700;
+    }
+    .guidance-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .guidance-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: 12px;
+      font-weight: 600;
+      color: var(--adexa-cream);
+      text-decoration: none;
+      border: 1px solid color-mix(in oklab, var(--accent), #000 30%);
+      background: linear-gradient(180deg, color-mix(in oklab, var(--card), var(--accent) 30%), var(--card-soft));
+      transition: transform .12s ease, border-color .2s ease, background .2s ease;
+    }
+    .guidance-link:hover {
+      transform: translateY(-1px);
+      border-color: color-mix(in oklab, var(--accent), #000 12%);
+      background: linear-gradient(180deg, color-mix(in oklab, var(--card-hover), var(--accent) 35%), var(--card));
+    }
+    .guidance-link svg { width: 18px; height: 18px; stroke: currentColor; }
+
+    :root[data-theme="light"] .guidance-card {
+      background: linear-gradient(180deg, #ffffff, #f4f8fb);
+      border-color: #d6e2ee;
+      box-shadow: 0 20px 40px rgba(13, 54, 86, .16), 0 2px 12px rgba(13, 54, 86, .1);
+    }
+    :root[data-theme="light"] .guidance-card p { color: #4c6572; }
+    :root[data-theme="light"] .guidance-link {
+      color: #0b1f2a;
+      background: linear-gradient(180deg, #f8fbff, #e9f2ff);
+      border-color: #c9d9ea;
+    }
+    :root[data-theme="light"] .guidance-link:hover {
+      border-color: color-mix(in oklab, #0a62c2, #000 8%);
+      background: linear-gradient(180deg, #e9f2ff, #dfeafb);
+    }
+
     /* call-to-action button centered */
     .permits-cta { display: flex; justify-content: center; margin-top: 16px; }
     .permits-cta .button {
@@ -769,10 +829,19 @@
           <div class="page-head-main">
             <p class="page-eyebrow">Permits &amp; licences</p>
             <h2 class="page-title">Export Permits</h2>
-            <p class="page-subtitle">Keep applications, authorisations, and renewals on track in one workspace.</p>
+            <p class="page-subtitle">Keep applications, authorisations, and renewals on track in one workspace, aligned with the My Australian Defence Exports (MADE) portal guidance.</p>
           </div>
         </div>
-      
+
+        <div class="guidance-card" role="note">
+          <span class="guidance-eyebrow">My Australian Defence Exports (MADE) portal</span>
+          <p>Use the official MADE portal factsheet to confirm the five-step process, registration requirements, and DEC contact points before you submit or update an export permit.</p>
+          <a class="guidance-link" href="https://www.defence.gov.au/business-industry/exports/my-australian-defence-exports-made-portal" target="_blank" rel="noopener">
+            View MADE portal guidance
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+
         <!-- // My Applications -->
         <h3 class="section-title">My Applications</h3>
         <hr class="section-rule" />
@@ -1468,12 +1537,11 @@
 
       // // --- Permits: Applications list (merged) ---
       const applications = [
-        { title: 'DSP-5 Application: RWS to UK',           id: 'AUS-2025-8817', status: 'Approved' },
-        { title: 'Tech Data Licence: AUKUS Pillar II',      id: 'AUS-2025-8821', status: 'Pending Review' },
-        { title: 'DSGL Assessment: New Sensor Array',       id: 'AUS-2025-8819', status: 'Action Required' },
-        // carry over previous drafts if you want them visible:
-        { title: 'DTC: PMB Defence – Submarine Battery Systems', id: 'ADEXA-0251', status: 'Approved' },
-        { title: 'Customs: BAE Systems – VetNet Program',        id: 'ADEXA-0253', status: 'Pending Review' }
+        { title: 'MADE Portal Export Permit: RWS to UK (DSP-5)',            id: 'MADE-2025-048', status: 'Approved' },
+        { title: 'MADE Portal Tech Data Licence: AUKUS Pillar II',          id: 'MADE-2025-052', status: 'Pending Review' },
+        { title: 'MADE Portal DSGL Assessment: New Sensor Array',           id: 'MADE-2025-055', status: 'Action Required' },
+        { title: 'MADE Portal Export Permit: PMB Defence – Battery Modules', id: 'MADE-2025-059', status: 'Approved' },
+        { title: 'MADE Portal Declaration: BAE Systems – VetNet Program',    id: 'MADE-2025-063', status: 'Pending Review' }
       ];
       
       const appsList = document.getElementById('appsList');
