@@ -138,6 +138,11 @@
       font-weight: 700;
       text-decoration: none;
       letter-spacing: 0.02em;
+      background: none;
+      border: none;
+      padding: 0;
+      font: inherit;
+      cursor: pointer;
     }
 
     .site-footer .footer-copy {
@@ -157,6 +162,10 @@
       }
     }
 
+    .about-section[hidden] {
+      display: none;
+    }
+
     .about-section {
       max-width: 1100px;
       margin: 0 auto clamp(40px, 6vw, 72px);
@@ -173,10 +182,31 @@
       gap: 12px;
     }
 
+    .about-card:focus-visible {
+      outline: 2px solid color-mix(in oklab, var(--accent), #ffffff 20%);
+      outline-offset: 6px;
+    }
+
     .about-card h2 {
       margin: 0;
       font-size: clamp(1.4rem, 2.8vw, 1.8rem);
       color: var(--text);
+    }
+
+    .about-card h2 .about-title-button {
+      border: none;
+      background: none;
+      padding: 0;
+      margin: 0;
+      font: inherit;
+      color: inherit;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .about-card h2 .about-title-button:hover,
+    .about-card h2 .about-title-button:focus-visible {
+      text-decoration: underline;
     }
 
     .about-card p {
@@ -189,6 +219,10 @@
       margin-top: 8px;
       font-size: 0.85rem;
       color: color-mix(in oklab, var(--muted), #fff 12%);
+    }
+
+    .about-card .about-return {
+      justify-self: start;
     }
 
     /* // --- Header --- */
@@ -1439,19 +1473,20 @@
       </section>
     </main>
     <footer class="site-footer">
-      <a class="footer-link" href="#about">About ADEXA</a>
+      <button class="footer-link" type="button" id="aboutToggle" aria-expanded="false" aria-controls="about">About ADEXA</button>
       <small class="footer-copy">&copy; 2025 Team UNO</small>
     </footer>
     <p class="version-footnote" id="appVersion" aria-live="polite"></p>
   </div>
 
-  <section id="about" class="about-section" aria-labelledby="about-title">
-    <article class="about-card">
-      <h2 id="about-title">About ADEXA</h2>
+  <section id="about" class="about-section" aria-labelledby="about-title" aria-hidden="true" hidden>
+    <article class="about-card" tabindex="-1">
+      <h2 id="about-title"><button type="button" class="about-title-button" id="aboutTitleButton" aria-expanded="false" aria-controls="about">About ADEXA</button></h2>
       <p>Team UNO, a cohort of emerging leaders from the Defence Industry Leadership Program (DILP), developed ADEXA as a practical response to challenges uncovered in our research project: Improving Australia’s Competitiveness in Export Markets.</p>
       <p>Our study explored how Australia can enhance its position in global defence exports while safeguarding national sovereignty and building resilient sovereign industrial capability. Through literature reviews, targeted surveys, and stakeholder interviews, we identified recurring pain points — fragmented compliance systems, limited visibility of export pathways, and inefficiencies in grant access and reporting.</p>
       <p>ADEXA (Australian Defence Export Accelerator) is our proposed digital solution. It unifies export permits, compliance monitoring, funding discovery, and market intelligence into a single, intuitive ecosystem — reducing friction, improving regulatory transparency, and empowering SMEs to grow with confidence in international defence markets.</p>
       <p class="about-copy">&copy; 2025 Team UNO. All rights reserved.</p>
+      <button type="button" class="button secondary about-return" id="aboutReturn">Return to main page</button>
     </article>
   </section>
 
@@ -1525,6 +1560,73 @@
         const branchLabel = branch || 'main';
         versionEl.textContent = `v${APP_VERSION} · ${branchLabel}`;
         if (branch) versionEl.setAttribute('data-branch', branch);
+      }
+
+      // // --- About section toggle ---
+      const aboutSection = document.getElementById('about');
+      const aboutToggle = document.getElementById('aboutToggle');
+      const aboutReturn = document.getElementById('aboutReturn');
+      const aboutTitleButton = document.getElementById('aboutTitleButton');
+      const aboutCard = aboutSection?.querySelector('.about-card');
+      const appShell = document.querySelector('.app');
+
+      function focusAboutCard(){
+        if (!aboutCard) return;
+        if (typeof aboutCard.focus === 'function') {
+          aboutCard.focus({ preventScroll: true });
+        }
+      }
+
+      function scrollToMain(){
+        if (appShell && typeof appShell.scrollIntoView === 'function') {
+          appShell.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }
+
+      function scrollToAbout(){
+        if (aboutSection && typeof aboutSection.scrollIntoView === 'function') {
+          aboutSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }
+
+      function setAboutOpen(open){
+        if (!aboutSection || !aboutToggle) return;
+        const isOpen = Boolean(!aboutSection.hidden);
+        if (open === isOpen) return;
+        aboutSection.hidden = !open;
+        aboutSection.setAttribute('aria-hidden', open ? 'false' : 'true');
+        aboutToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+        aboutTitleButton?.setAttribute('aria-expanded', open ? 'true' : 'false');
+
+        if (open) {
+          scrollToAbout();
+          requestAnimationFrame(focusAboutCard);
+        } else {
+          scrollToMain();
+          if (typeof aboutToggle.focus === 'function') {
+            aboutToggle.focus();
+          }
+        }
+      }
+
+      function openAbout(){ setAboutOpen(true); }
+      function closeAbout(){ setAboutOpen(false); }
+
+      aboutToggle?.addEventListener('click', () => {
+        const willOpen = Boolean(aboutSection?.hidden);
+        if (willOpen) openAbout(); else closeAbout();
+      });
+
+      aboutReturn?.addEventListener('click', closeAbout);
+
+      if (aboutTitleButton) {
+        aboutTitleButton.addEventListener('click', closeAbout);
+        aboutTitleButton.addEventListener('keydown', (event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            closeAbout();
+          }
+        });
       }
 
       /* =========================
