@@ -1,159 +1,241 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr" data-branch="beta">
+<html lang="en" dir="ltr">
 <head>
-  <!-- // --- Meta & Title --- -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ADEXA Prototype</title>
-  <meta name="color-scheme" content="dark light" />
-
-  <!-- // --- Tiny inline favicon (brand dot) --- -->
-  <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="%23004B40"/><circle cx="16" cy="16" r="6" fill="%23E87024"/></svg>' />
-
-  <!-- // --- Fonts --- -->
+  <meta name="color-scheme" content="dark" />
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
 
-/* // --- Australia Nation Brand vibe (deep green + wattle gold) --- */
-:root {
-  /* Core palette */
-  --adexa-green: #0b3b34;   /* deep “brand green” */
-  --adexa-gold:  #f2c351;   /* “wattle” gold */
-  --adexa-cream: #fff7e5;   /* warm light */
-  --adexa-dark:  #022d2a;   /* card/background dark */
+    :root {
+      /* Brand from logo */
+      --adexa-green: #004B40;
+      --adexa-orange: #E87024;
+      --adexa-cream: #FAF7ED;
+      --adexa-dark: #002F2F;
 
-  /* App tokens (dark default) */
-  --bg: var(--adexa-dark);
-  --card: #083a35;
-  --card-hover: #0a433d;
-  --card-soft: #062f2b;
-  --border: #0e564f;
-  --text: #eef6f3;
-  --muted: #b8cbc7;
-  --accent: var(--adexa-gold);
-  --radius: 14px;
-  --shadow: 0 4px 18px rgba(0,0,0,.35), 0 1px 4px rgba(0,0,0,.2);
-}
+      /* UI tokens */
+      --bg: var(--adexa-dark);
+      --card: #013a3a;
+      --card-hover: #014646;
+      --card-soft: #002a2a;
+      --border: #026060;
+      --text: #f0f5f2;
+      --muted: #b3c7c7;
+      --accent: var(--adexa-orange);
+      --radius: 14px;
+      --shadow: 0 4px 18px rgba(0,0,0,.35), 0 1px 4px rgba(0,0,0,.2);
+    }
 
-/* Optional: light theme tuned to the same brand */
-:root[data-theme="light"] {
-  --bg: #f6faf8;
-  --card: #ffffff;
-  --card-hover: #f7fbfa;
-  --card-soft: #ffffff;
-  --border: #dce9e6;
-  --text: #0b3b34;
-  --muted: #5f726e;
-  --accent: var(--adexa-gold);
-  --shadow: 0 8px 24px rgba(10, 35, 66, .06), 0 1px 3px rgba(10, 35, 66, .06);
-}
-
-/* Buttons pick up the gold automatically via --accent, but these help the look */
-.button { 
-  background: linear-gradient(180deg, var(--accent), color-mix(in oklab, var(--accent), #000 18%));
-  color: #1e251f; 
-  border-color: color-mix(in oklab, var(--accent), #000 28%);
-}
-.button.secondary {
-  background: #083933;
-  color: var(--text);
-  border-color: var(--border);
-}
-    :root[data-theme="light"] .title { color: #0b1f2a; }
-    :root[data-theme="light"] .chip { background: #fff; color: #0b1f2a; border-color: #d6e2ee; }
-    :root[data-theme="light"] .input,
-    :root[data-theme="light"] .select { background: #ffffff; color: #0b1f2a; border-color: #d6e2ee; }
-    :root[data-theme="light"] .button { background: linear-gradient(180deg, #0a62c2, #084c97); color: #ffffff; border-color: #0a62c2; }
-    :root[data-theme="light"] .button.secondary { background: #eef4fb; color: #0b1f2a; border-color: #c9d9ea; }
-    :root[data-theme="light"] details { background: #f7fbff; border-color: #d6e2ee; }
-
-    
-    /* // --- Base layout --- */
     * { box-sizing: border-box; }
+
     body {
       margin: 0;
-      font-family: 'Roboto', system-ui, -apple-system, Segoe UI, Helvetica, Arial;
-      background: linear-gradient(180deg, var(--bg), color-mix(in oklab, var(--bg), #000 4%));
+      font-family: 'Roboto', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      background: linear-gradient(180deg, var(--adexa-dark), #001f1f);
       color: var(--text);
-      -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
-      min-height: 100dvh;
-    }
-    .app { max-width: 1100px; margin: 0 auto; padding: clamp(16px, 2.6vw, 28px); display: grid; grid-template-rows: auto 1fr; gap: 18px; }
-
-    /* // --- Header --- */
-    header.topbar { display: flex; align-items: center; gap: clamp(10px,1.6vw,16px); }
-    .logo { width: clamp(56px, 7vw, 84px); height: auto; flex: 0 0 auto; border-radius: 10px; }
-    .brand-block { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1 1 200px; }
-    .title { font-weight: 900; font-size: clamp(20px, 2.6vw, 26px); color: var(--adexa-cream); letter-spacing: 0.3px; }
-    .subtitle {
-      color: var(--muted);
-      font-size: clamp(12px, 1.7vw, 14px);
-      line-height: 1.2;
-      display: inline-flex;
-      flex-direction: column;
-    }
-    .subtitle span { display: block; }
-    .top-actions {
-      margin-left: auto;
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      gap: clamp(8px, 1.2vw, 14px);
-      flex-wrap: wrap;
-    }
-    .top-controls { display: inline-flex; align-items: center; justify-content: flex-end; gap: 10px; }
-
-    @media (max-width: 720px) {
-      header.topbar { gap: 12px; }
-      .brand-block { flex: 1 1 auto; }
-      .top-actions { gap: 6px; }
-      .top-controls { flex-wrap: wrap; gap: 6px; justify-content: flex-end; }
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
-    /* // --- Small UI Tokens --- */
-    .chip { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--border); background: var(--card); color: var(--text); border-radius: 999px; padding: 8px 12px; box-shadow: var(--shadow); }
-    .chip .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
-    .btn { border: 1px solid var(--border); background: linear-gradient(180deg, var(--card), var(--card-soft)); color: var(--text); padding: 10px 12px; border-radius: 12px; cursor: pointer; font: inherit; display: inline-flex; align-items: center; gap: 8px; transition: transform .08s ease, background .2s ease, border-color .2s ease; }
-    .btn:hover { background: var(--card-hover); border-color: color-mix(in oklab, var(--border), var(--accent) 30%); }
-    .btn:active { transform: translateY(1px); }
+    .app { max-width: 1060px; margin: 0 auto; padding: 24px; min-height: 100vh; display: flex; flex-direction: column; gap: 20px; }
 
-    main.card { background: var(--card); border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow); padding: clamp(14px, 2.2vw, 22px); }
+    header.topbar { display: flex; align-items: center; gap: 16px; }
+    .logo { width: 80px; height: auto; }
+    .title { font-weight: 700; font-size: 1.6rem; color: var(--adexa-cream); letter-spacing: 0.5px; }
+    .subtitle { color: var(--muted); font-size: 1rem; margin-top: 2px; }
 
-    /* // --- Home Menu --- */
-    nav.menu { display: grid; gap: 14px; }
-    .item { --pad: clamp(12px, 2.2vw, 18px); display: grid; grid-template-columns: 40px 1fr auto; align-items: center; background: linear-gradient(180deg, var(--card), var(--card-soft)); border: 1px solid var(--border); border-radius: var(--radius); padding: var(--pad); cursor: pointer; transition: transform .12s ease, background-color .2s ease, border-color .2s ease; text-align: left; }
-    .item:hover { background: var(--card-hover); border-color: color-mix(in oklab, var(--border), var(--accent) 30%); transform: translateY(-1px); }
-    .item:active { transform: translateY(0); }
+    main.card { background: var(--card); border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow); padding: 24px; flex: 1; }
+
+    nav.menu { display: flex; flex-direction: column; gap: 14px; }
+    .item { display: grid; grid-template-columns: 40px 1fr auto; align-items: center; background: linear-gradient(180deg, var(--card), #012e2e); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; cursor: pointer; transition: all 0.2s ease; text-align: left; }
+    .item:hover { background: var(--card-hover); border-color: var(--accent); transform: translateY(-1px); }
     .ico svg, .chev svg { width: 24px; height: 24px; stroke: var(--muted); }
-    .label { font-weight: 700; font-size: 1.06rem; color: var(--text); letter-spacing: .2px; }
+    .label { font-weight: 600; font-size: 1.05rem; color: var(--adexa-cream); }
 
-    /* // --- Page visibility --- */
-    section.page { display: none; opacity: 0; transform: translateY(6px); transition: opacity .22s ease, transform .22s ease; }
+    section.page { display: none; opacity: 0; transform: translateY(5px); transition: opacity 0.25s ease, transform 0.25s ease; }
     section.page[aria-hidden="false"] { display: block; opacity: 1; transform: translateY(0); }
 
-    .page-head { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
-    .page-title { flex: 1; text-align: center; font-size: clamp(22px, 3vw, 32px); font-weight: 900; letter-spacing: .2px; color: var(--text); }
-    .lead { font-size: 1.06rem; line-height: 1.7; color: var(--muted); }
+    .page-head { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+    .back { display: inline-flex; align-items: center; gap: 6px; background: rgba(0, 32, 32, 0.6); border: 1px solid rgba(71, 200, 180, 0.4); border-radius: 12px; color: #76e5cd; font-weight: 600; padding: 8px 14px; cursor: pointer; transition: border-color 0.2s ease, transform 0.2s ease, color 0.2s ease; }
+    .back:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
+    .page-title { flex: 1; text-align: center; font-size: 1.8rem; color: var(--adexa-cream); font-weight: 700; letter-spacing: 0.5px; }
+    .lead { font-size: 1.1rem; line-height: 1.6; color: var(--muted); }
 
-    /* // --- Grid helpers --- */
+    body[data-branch="beta"] .market-hero-beta { display: block; }
+    body[data-branch="beta"] .market-intel-classic { display: none; }
+    .market-hero-beta { display: none; }
+    .market-intel-classic { margin-bottom: 26px; }
+
+    .market-hero {
+      position: relative;
+      padding: 28px;
+      border-radius: calc(var(--radius) + 4px);
+      border: 1px solid rgba(71, 200, 180, 0.35);
+      background: radial-gradient(135deg, rgba(0, 120, 96, 0.36) 0%, rgba(0, 65, 65, 0.82) 45%, rgba(0, 36, 36, 0.95) 100%);
+      box-shadow: var(--shadow);
+      margin-bottom: 26px;
+      overflow: hidden;
+    }
+    .market-hero::after {
+      content: '';
+      position: absolute;
+      width: 320px;
+      height: 320px;
+      background: radial-gradient(circle at center, rgba(232, 112, 36, 0.28), transparent 70%);
+      right: -120px;
+      bottom: -160px;
+      pointer-events: none;
+      filter: blur(0.5px);
+    }
+    .market-hero__top { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 22px; }
+    .market-hero__badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(12, 100, 90, 0.45);
+      border: 1px solid rgba(118, 229, 205, 0.5);
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-size: 0.82rem;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: #d4fff2;
+      font-weight: 700;
+    }
+    .market-hero__content { display: grid; gap: 32px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); align-items: stretch; }
+    .market-hero__text { position: relative; z-index: 1; }
+    .market-hero__kicker { display: block; font-size: 0.78rem; letter-spacing: 2px; text-transform: uppercase; color: #8ee8d1; font-weight: 700; margin-bottom: 12px; }
+    .market-hero__title { margin: 0 0 12px 0; font-size: 2rem; line-height: 1.2; color: var(--adexa-cream); }
+    .market-hero__lead { margin: 0 0 22px 0; font-size: 1.05rem; color: var(--muted); max-width: 540px; }
+    .market-hero__meta { display: flex; flex-wrap: wrap; gap: 12px; }
+    .market-hero__meta-item { background: rgba(0, 24, 24, 0.7); border: 1px solid rgba(118, 229, 205, 0.25); border-radius: 12px; padding: 12px 14px; min-width: 170px; }
+    .market-hero__meta-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 1px; color: #75d8c3; margin-bottom: 4px; }
+    .market-hero__meta-value { font-size: 1rem; font-weight: 600; color: var(--adexa-cream); }
+    .market-hero__feed {
+      position: relative;
+      z-index: 1;
+      background: rgba(0, 24, 24, 0.82);
+      border: 1px solid rgba(232, 112, 36, 0.45);
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.25);
+    }
+    .market-hero__feed::before {
+      content: '';
+      position: absolute;
+      inset: -30% -40% auto auto;
+      height: 140px;
+      background: radial-gradient(circle at center, rgba(232, 112, 36, 0.22), transparent 70%);
+      pointer-events: none;
+      opacity: 0.7;
+    }
+    .market-hero__feed-label { display: inline-flex; align-items: center; gap: 6px; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 1.4px; color: #ffc6a1; font-weight: 700; margin-bottom: 12px; }
+    .market-hero__feed-title { margin: 0 0 12px 0; font-size: 1.35rem; color: var(--adexa-cream); }
+    .market-hero__feed-summary { margin: 0 0 18px 0; color: var(--muted); line-height: 1.6; }
+    .market-hero__feed-meta { list-style: none; padding: 0; margin: 0 0 18px 0; display: grid; gap: 6px; font-size: 0.92rem; color: var(--muted); }
+    .market-hero__feed-meta strong { color: var(--adexa-cream); font-weight: 600; }
+    .market-hero__feed .button { padding-inline: 18px; }
+
+    .portal-hero {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      align-items: stretch;
+      background: linear-gradient(135deg, rgba(0, 90, 80, 0.6), rgba(0, 36, 36, 0.92));
+      border: 1px solid rgba(118, 229, 205, 0.35);
+      border-radius: calc(var(--radius) + 2px);
+      padding: 24px 26px;
+      margin-bottom: 26px;
+      box-shadow: var(--shadow);
+    }
+    .portal-hero__content { flex: 1 1 320px; }
+    .portal-hero__badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      background: rgba(232, 112, 36, 0.18);
+      color: #ffd2b1;
+      border: 1px solid rgba(232, 112, 36, 0.5);
+    }
+    .portal-hero__title { margin: 14px 0 10px; font-size: 1.6rem; color: var(--adexa-cream); }
+    .portal-hero__lead { margin: 0; font-size: 1.02rem; line-height: 1.7; color: var(--muted); }
+    .portal-hero__benefits {
+      flex: 1 1 240px;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 12px;
+      align-content: start;
+    }
+    .portal-hero__benefits li {
+      background: rgba(0, 32, 32, 0.75);
+      border: 1px solid rgba(118, 229, 205, 0.25);
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-size: 0.95rem;
+      color: var(--adexa-cream);
+    }
+
+    .portal-layout {
+      display: grid;
+      gap: 20px;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      align-items: stretch;
+    }
+    .portal-steps__list {
+      margin: 12px 0 0;
+      padding-left: 20px;
+      display: grid;
+      gap: 12px;
+      font-size: 0.98rem;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+    .portal-steps__list strong { color: var(--adexa-cream); }
+    .portal-progress { display: grid; gap: 16px; }
+
+    @media (max-width: 960px) {
+      .portal-layout { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .portal-hero { padding: 20px; }
+      .portal-hero__title { font-size: 1.4rem; }
+    }
+
+    /* --- Components --- */
     .grid { display: grid; gap: 16px; }
     .grid.cols-2 { grid-template-columns: repeat(2, minmax(0,1fr)); }
     .grid.cols-3 { grid-template-columns: repeat(3, minmax(0,1fr)); }
     .grid.cols-4 { grid-template-columns: repeat(4, minmax(0,1fr)); }
-    @media (max-width: 980px) { .grid.cols-4 { grid-template-columns: repeat(3, minmax(0,1fr)); } }
-    @media (max-width: 780px) { .grid.cols-3, .grid.cols-4 { grid-template-columns: repeat(2, minmax(0,1fr)); } }
-    @media (max-width: 560px) { .grid.cols-2, .grid.cols-3, .grid.cols-4 { grid-template-columns: 1fr; } .item { grid-template-columns: 32px 1fr 18px; gap: 12px; } .ico svg { width: 22px; height: 22px; } .chev svg { width: 18px; height: 18px; } }
+    @media (max-width: 900px) { .grid.cols-3, .grid.cols-4 { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+    @media (max-width: 600px) { .grid.cols-2, .grid.cols-3, .grid.cols-4 { grid-template-columns: 1fr; } }
 
-    /* // --- Cards, tables, lists --- */
-    .card { background: var(--card-soft); border: 1px solid var(--border); border-radius: 12px; padding: 16px; min-width: 0; overflow: hidden; }
-    .card h3 { margin: 0 0 8px 0; font-size: 1.05rem; color: var(--text); }
+    .card { background: var(--card-soft); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+    .card h3 { margin: 0 0 8px 0; font-size: 1.05rem; color: var(--adexa-cream); }
     .muted { color: var(--muted); }
-    .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
 
-    .table { width: 100%; border-collapse: collapse; table-layout: fixed; }
-    .table th, .table td { padding: 10px 8px; text-align: left; border-bottom: 1px solid var(--border); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .kpi { display: flex; align-items: baseline; gap: 8px; }
+    .kpi .value { font-size: 1.8rem; font-weight: 800; }
+    .kpi .unit { color: var(--muted); font-weight: 600; }
+
+    .pill { display: inline-flex; align-items: center; gap: 6px; background: #073b2f; color: #c7fff2; border: 1px solid #0b6b56; border-radius: 999px; padding: 4px 10px; font-size: 0.85rem; }
+    .pill.warn { background: #3a2d00; color: #ffe0a8; border-color: #6e5200; }
+    .pill.ok { background: #083d0a; color: #c8ffc9; border-color: #0b6e0e; }
+
+    .row { display: flex; gap: 10px; align-items: center; }
+
+    .table { width: 100%; border-collapse: collapse; }
+    .table th, .table td { padding: 10px 8px; text-align: left; border-bottom: 1px solid var(--border); }
     .table th { color: var(--muted); font-weight: 600; }
-    @media (max-width: 780px) { .table th, .table td { white-space: normal; word-break: break-word; } }
 
     .toolbar { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; }
     .input, .select, .button { background: #001e1e; color: var(--text); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; font: inherit; }
@@ -163,442 +245,164 @@
 
     details { border: 1px solid var(--border); border-radius: 10px; background: #002424; padding: 10px 12px; }
     details + details { margin-top: 10px; }
-    summary { cursor: pointer; font-weight: 600; color: var(--text); }
-    /* // --- Funding & Grants: chips + sliding indicator + tiles --- */
-      #grantFilters {
-        position: relative;
-        gap: 10px;
-      }
-      
-      #grantFilters .chip {
-        position: relative;
-        z-index: 1;
-        user-select: none;
-      }
-      
-      #grantFilters .chip .dot { background: #6e8b8b; }               /* inactive */
-      #grantFilters .chip.active .dot { background: var(--accent); }   /* active */
-      
-      #chipIndicator {
-        position: absolute;
-        z-index: 0;
-        height: 36px;
-        border-radius: 999px;
-        background: var(--accent);
-        opacity: 0.18;              /* soft glow look */
-        top: 50%;
-        transform: translateY(-50%);
-        transition: left .22s ease, width .22s ease, opacity .15s ease;
-        pointer-events: none;
-      }
+    summary { cursor: pointer; font-weight: 600; color: var(--adexa-cream); }
 
-      @media (max-width: 600px) {
-        #chipIndicator {
-          display: none;
-        }
-      }
+    .note { font-size: .92rem; color: var(--muted); }
 
-      
-      /* Grant tiles */
-      .grant-card {
-        display: grid;
-        gap: 6px;
-        background: var(--card-soft);
-        border: 1px solid var(--border);
-        border-radius: 14px;
-        padding: 14px;
-      }
-      
-      .grant-title {
-        font-weight: 800;
-        font-size: 1.05rem;
-        line-height: 1.35;
-      }
-      
-      .grant-value {
-        font-weight: 700;
-        color: var(--accent);
-      }
-      
-      .grant-desc {
-        color: var(--muted);
-        line-height: 1.55;
-      }
-
-      .grant-meta {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 12px;
-        flex-wrap: wrap;
-      }
-
-      .grant-tag {
-        background: rgba(0, 56, 48, .6);
-        border-radius: 999px;
-        padding: 6px 10px;
-        font-size: .82rem;
-        letter-spacing: .3px;
-      }
-
-      .grant-summary {
-        margin-top: 10px;
-        font-size: .92rem;
-        display: flex;
-        justify-content: flex-end;
-      }
-      
-      /* 2-cols on medium screens */
-      @media (min-width: 780px) {
-        #grantTiles.grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      }
-      /* 3-cols on wide */
-      @media (min-width: 1080px) {
-        #grantTiles.grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-      }
-
-    /* // --- Status pills --- */
-    .pill { display: inline-flex; align-items: center; gap: 6px; background: #073b2f; color: #c7fff2; border: 1px solid #0b6b56; border-radius: 999px; padding: 4px 10px; font-size: 0.85rem; }
-    .pill.warn { background: #3a2d00; color: #ffe0a8; border-color: #6e5200; }
-    .pill.ok { background: #083d0a; color: #c8ffc9; border-color: #0b6e0e; }
-
-    /* // --- FAQ Styling and Animations (accordion, single-open) --- */
-    .faq-list { grid-template-columns: 1fr; }
-    .faq-list {
-        margin-top: 24px; /* or 32px if you want more space */
-      }
-    
-    .faq-list details {
-      background: var(--card-soft);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 12px 14px;
-      transition: background .2s ease, border-color .2s ease;
-      overflow: hidden;
-    }
-    .faq-list details + details { margin-top: 12px; }
-    
-    .faq-list summary {
-      font-weight: 700;
-      cursor: pointer;
-      list-style: none;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      outline: none;
+    @media (max-width: 720px) {
+      .market-hero { padding: 22px; }
+      .market-hero__title { font-size: 1.7rem; }
     }
 
-    /* // --- Permits: Applications list (merged drafts + status) --- */
-    .apps-list { display: grid; gap: 10px; }
-    .app-row {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      align-items: center;
-      background: var(--card-soft);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 16px 18px;
-    }
-    .app-row + .app-row { border-top: none; }
-    .app-left h4 {
-      margin: 0 0 4px;
-      font-size: 1.05rem;
-      letter-spacing: .2px;
-      color: var(--text);
-    }
-    .app-id { color: var(--muted); font-size: .9rem; }
-    
-    /* pill styles reused but with status variants */
-    .app-status {
-      display: inline-flex; align-items: center;
-      padding: 6px 12px; border-radius: 999px; font-weight: 700;
-      border: 1px solid transparent; font-size: .86rem;
-    }
-    .app-status.ok      { background: #0c3f1a; color: #d8ffe5; border-color: #1f7a39; }
-    .app-status.pending { background: #3c2d00; color: #ffe6a3; border-color: #6f5600; }
-    .app-status.danger  { background: #4a1010; color: #ffd1d1; border-color: #8a1f1f; }
-    
-    /* call-to-action button centered */
-    .permits-cta { display: flex; justify-content: center; margin-top: 16px; }
-    .permits-cta .button {
-      background: linear-gradient(180deg, var(--accent), color-mix(in oklab, var(--accent), #000 15%));
-      border-color: color-mix(in oklab, var(--accent), #000 25%);
+    @media (max-width: 560px) {
+      .item { grid-template-columns: 32px 1fr 18px; gap: 12px; }
+      .ico svg { width: 22px; height: 22px; }
+      .chev svg { width: 18px; height: 18px; }
     }
 
-    /* remove native marker */
-    .faq-list summary::marker,
-    .faq-list summary::-webkit-details-marker { display: none; }
-    
-    /* plus / minus icon on the LEFT */
-    .faq-list summary::before {
-      content: "+";
-      flex: 0 0 1.2em;
-      text-align: center;
-      font-weight: 900;
-      color: var(--accent);
-      transition: transform .2s ease, color .2s ease;
-    }
-    .faq-list details[open] summary::before {
-      content: "–";
-      color: var(--accent);
-    }
-    
-    /* open state styles */
-    .faq-list details[open] {
-      background: var(--card-hover);
-      border-color: color-mix(in oklab, var(--border), var(--accent) 35%);
-    }
-    
-    .faq-list p {
-      margin: 8px 0 0;
-      color: var(--muted);
-      line-height: 1.55;
-      animation: faq-fade .18s ease;
-    }
-    
-    @keyframes faq-fade {
-      from { opacity: 0; transform: translateY(-2px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Progress bars */
-      .progress {
-        height: 10px;
-        border-radius: 999px;
-        background: color-mix(in oklab, var(--card), #000 10%);
-        border: 1px solid var(--border);
-        overflow: hidden;
-        position: relative;
-      }
-      .progress .bar {
-        height: 100%;
-        width: 0%;
-        border-radius: inherit;
-        background: linear-gradient(90deg, #21c16b, #39a96b);
-        transition: width .35s ease;
-      }
-      
-      /* Deadline list */
-      .deadline-card h3 { margin-bottom: 6px; }
-      .deadline-list {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-      }
-      .deadline-item {
-        display: grid;
-        grid-template-columns: 140px 1fr auto;
-        gap: 12px;
-        align-items: center;
-        padding: 10px 0;
-        border-top: 1px dashed var(--border);
-      }
-      .deadline-item:first-child { border-top: 0; }
-      .deadline-date { font-weight: 800; color: var(--text); white-space: nowrap; }
-      .deadline-desc { color: var(--muted); }
-      .deadline-tag {
-        padding: 4px 10px;
-        border-radius: 999px;
-        border: 1px solid var(--border);
-        background: var(--card-soft);
-        font-weight: 600;
-        font-size: .85rem;
-      }
-      
-      /* Status chips (green / amber / red) */
-      .chip-ok    { background: #0f3a1b; color: #caffda; border-color: #1f7a3b; }
-      .chip-warn  { background: #3a2d00; color: #ffe0a8; border-color: #6e5200; }
-      .chip-bad   { background: #3f0d0d; color: #ffd1d1; border-color: #7a1f1f; }
-      
-      @media (max-width: 720px) {
-        .deadline-item { grid-template-columns: 1fr; }
-        .deadline-tag { justify-self: start; }
-      }
-
-    /* // --- Progress Ring --- */
-    .ring { width: 140px; height: 140px; margin: 0 auto 10px auto; position: relative; }
-    .ring svg { display: block; width: 100%; height: 100%; }
-    .ring .value { position: absolute; inset: 0; display:flex; align-items:center; justify-content:center; font-weight: 800; font-size: 1.6rem; }
-
-    /* // --- Section headers (big) --- */
-    .section-title { font-size: clamp(22px, 2.6vw, 30px); font-weight: 900; margin: 22px 0 8px; }
-    .section-rule { height: 1px; background: var(--border); border: 0; margin: 8px 0 16px; }
-
-    .version-footnote {
-      margin: clamp(12px, 2vw, 20px) 0 0;
-      font-size: 0.72rem;
-      color: var(--muted);
-      text-align: right;
+    @media (max-width: 480px) {
+      .market-hero__top { flex-direction: column; align-items: flex-start; }
+      .market-hero__content { gap: 24px; }
     }
   </style>
 </head>
 <body>
   <div class="app">
-    <!-- // --- Topbar: Logo + Title + Theme Toggle + Crumb --- -->
     <header class="topbar">
-      <!-- Replace with your local file or Base64 if preferred -->
-      <img src="Adexa.svg" alt="ADEXA Logo" class="logo">
-      <div class="brand-block">
+<img src="Adexa.svg" alt="ADEXA Logo" class="logo">      <div>
         <div class="title">ADEXA</div>
-        <div class="subtitle" role="text">
-          <span>Australian Defence</span>
-          <span>Export Accelerator</span>
-        </div>
-      </div>
-      <div class="top-actions">
-        <div class="top-controls">
-          <button class="btn" id="themeToggle" aria-pressed="false" aria-label="Toggle theme">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 3a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V4a1 1 0 0 1 1-1Zm6.36 2.05a1 1 0 0 1 0 1.41l-1.41 1.41a1 1 0 1 1-1.41-1.41l1.41-1.41a1 1 0 0 1 1.41 0ZM21 13a1 1 0 1 1 0-2h2a1 1 0 1 1 0 2h-2ZM4 13a1 1 0 1 1 0-2H2a1 1 0 1 1 0 2h2Zm1.05-7.95a1 1 0 0 1 1.41 0l1.41 1.41A1 1 0 1 1 6.46 7.9L5.05 6.49a1 1 0 0 1 0-1.41ZM12 17a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1Zm7.95-1.05a1 1 0 0 1 0 1.41l-1.41 1.41a1 1 0 0 1-1.41-1.41l1.41-1.41a1 1 0 0 1 1.41 0ZM6.87 18.88a1 1 0 0 1-1.41 0l-1.41-1.41a1 1 0 1 1 1.41-1.41l1.41 1.41a1 1 0 0 1 0 1.41Z"/></svg>
-            <span id="themeLabel">Light</span>
-          </button>
-        </div>
+        <div class="subtitle">Australian Defence Export Accelerator</div>
       </div>
     </header>
 
-    <!-- // --- MAIN VIEW CONTAINER --- -->
-    <main id="views" class="card" role="region" aria-live="polite">
-
-      <!-- // === HOME ===================================================== -->
+    <main id="views" class="card">
+      <!-- HOME -->
       <section id="view-home" class="page" aria-hidden="false">
-        <nav class="menu" aria-label="Main menu">
-          <!-- Permits -->
+        <nav class="menu">
           <button class="item" data-target="permits">
             <span class="ico"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg></span>
-            <span class="label">Export Permits</span>
+            <span class="label">MADE Export Portal</span>
             <span class="chev"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></span>
           </button>
-          <!-- Monitoring -->
           <button class="item" data-target="monitoring">
             <span class="ico"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg></span>
-            <span class="label">Compliance Monitoring</span>
+            <span class="label">Monitoring</span>
             <span class="chev"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></span>
           </button>
-          <!-- Funding -->
           <button class="item" data-target="funding">
             <span class="ico"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>
-            <span class="label">Funding & Grants</span>
+            <span class="label">Funding</span>
             <span class="chev"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></span>
           </button>
-          <!-- Market Intel -->
           <button class="item" data-target="market-intel">
             <span class="ico"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>
-            <span class="label">Market Intelligence</span>
+            <span class="label">Market Intel</span>
             <span class="chev"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></span>
           </button>
-          <!-- IP & Tech Transfer -->
           <button class="item" data-target="ip-tech">
             <span class="ico"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/><path d="M2 12h3"/><path d="M19 12h3"/><path d="M12 2v3"/><path d="M12 19v3"/></svg></span>
             <span class="label">IP & Tech Transfer</span>
             <span class="chev"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></span>
           </button>
-          <!-- Made in Aus -->
           <button class="item" data-target="made-in-aus">
             <span class="ico"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></span>
-            <span class="label">Australia's National Brand</span>
+            <span class="label">MadeInAus Brand</span>
             <span class="chev"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></span>
           </button>
         </nav>
       </section>
 
-      <!-- // === PERMITS =================================================== -->
+      <!-- SUB‑PAGES (IDs must match routes below) -->
       <section id="view-permits" class="page" aria-hidden="true">
-        <div class="page-head"><button class="btn" data-back>← Back</button><h2 class="page-title">Export Permits</h2></div>
-        <p class="lead">A single digital ecosystem to manage applications, track status, and access pre-filled templates—simplifying compliance and reducing friction for exporters.</p>
-      
-        <!-- // My Applications -->
-        <h3 class="section-title">My Applications</h3>
-        <hr class="section-rule" />
-        <div id="appsList" class="apps-list">
-          <!-- rows injected by JS -->
-        </div>
-      
-        <!-- // CTA -->
-        <div class="permits-cta">
-          <button class="button" id="btnLodge">Lodge New Application</button>
-        </div>
-      
-        <!-- // --- Permits FAQ --- -->
-        <h3 class="section-title">Frequently Asked Questions</h3>
-        <hr class="section-rule" />
-        <div class="grid cols-1 faq-list">
-          <details>
-            <summary>What are the 2024 DTCA changes?</summary>
-            <p>The Defence Trade Controls Amendment Act 2024 enables licence-free trade for most defence items among AUKUS partners and creates new offences for unauthorised supply of DSGL technology and services. These provisions commence in March 2025.</p>
-          </details>
-          <details>
-            <summary>How does ITAR affect my exports?</summary>
-            <p>If your product includes U.S.-origin components or technology listed on the USML, ITAR applies. Re-export or third-country transfers require U.S. State Department approval, with strict record-keeping and compliance obligations.</p>
-          </details>
-          <details>
-            <summary>Who can help with complex export applications?</summary>
-            <p>Contact Defence Export Controls (DEC) or the Office of Defence Industry Support (ODIS) for tailored support, guidance, and pre-assessment of export applications.</p>
-          </details>
+        <div class="page-head"><button class="back" data-back>← Back</button><h2 class="page-title">MADE Export Portal</h2></div>
+
+        <section class="portal-hero">
+          <div class="portal-hero__content">
+            <span class="portal-hero__badge">My Australian Defence Exports</span>
+            <h3 class="portal-hero__title">A streamlined pathway from registration to authorised exports.</h3>
+            <p class="portal-hero__lead">The MADE portal mirrors Defence’s workflows so exporters can progress confidently—submit applications, collaborate with DEC, and keep stakeholders informed.</p>
+          </div>
+          <ul class="portal-hero__benefits">
+            <li><strong>Guided onboarding</strong> aligned with Defence guidance</li>
+            <li><strong>Smart validation</strong> for goods, end-use and licensing</li>
+            <li><strong>Live status</strong> sharing with partners and government</li>
+          </ul>
+        </section>
+
+        <div class="portal-layout">
+          <div class="portal-steps card">
+            <h3>How to use the MADE portal</h3>
+            <ol class="portal-steps__list">
+              <li><strong>Getting started:</strong> confirm business profile, digital identity and security contacts.</li>
+              <li><strong>Navigate the portal:</strong> personalise dashboards, invite collaborators and link Navigator support.</li>
+              <li><strong>Prepare your export:</strong> build applications with templated goods lists and contextual guidance.</li>
+              <li><strong>DEC liaison & tracking:</strong> share reference IDs, respond to queries and upload supporting artefacts.</li>
+              <li><strong>Authorised AUS/UK/US community:</strong> surface licence conditions, share compliance packs and mark fulfilment.</li>
+            </ol>
+          </div>
+
+          <div class="portal-progress">
+            <div class="card">
+              <h3>Application workspace</h3>
+              <div class="toolbar">
+                <select class="select" id="permitType">
+                  <option value="DTC">DTC Permit</option>
+                  <option value="ITAR">ITAR Exemption</option>
+                  <option value="Customs">Customs (S10/112)</option>
+                </select>
+                <input class="input" id="entity" placeholder="Consignee / End‑user" />
+                <button class="button" id="btnDraft">Create draft</button>
+              </div>
+              <p class="note">Structured drafting keeps your MADE submission aligned with Defence export controls.</p>
+            </div>
+
+            <div class="card">
+              <h3>My applications</h3>
+              <table class="table" id="tblDrafts">
+                <thead><tr><th>Ref</th><th>Type</th><th>Consignee</th><th>Updated</th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+
+            <div class="card">
+              <h3>Progress tracker</h3>
+              <div class="kpi"><span class="value" id="kOpen">0</span><span class="unit">in progress</span></div>
+              <div class="row"><span class="pill ok">Authorised <strong id="kApproved">0</strong></span><span class="pill warn">Actions <strong id="kActions">0</strong></span></div>
+              <details><summary>Latest events</summary>
+                <ul id="events" class="muted" style="padding-left:18px; margin:6px 0 0 0;"></ul>
+              </details>
+            </div>
+          </div>
         </div>
       </section>
 
-
-      <!-- // === COMPLIANCE MONITORING ===================================== -->
       <section id="view-monitoring" class="page" aria-hidden="true">
-        <div class="page-head">
-          <button class="btn" data-back>← Back</button>
-          <h2 class="page-title">Compliance Monitoring</h2>
+        <div class="page-head"><button class="back" data-back>← Back</button><h2 class="page-title">Monitoring</h2></div>
+        <p class="lead">Compliance monitoring and reporting with configurable checklists and alerts.</p>
+
+        <div class="grid cols-4">
+          <div class="card"><h3>KPI: Reporting on time</h3><div class="kpi"><span class="value" id="kOnTime">98</span><span class="unit">%</span></div><p class="muted">Past 90 days</p></div>
+          <div class="card"><h3>KPI: Violations</h3><div class="kpi"><span class="value" id="kViol">0</span><span class="unit">open</span></div><p class="muted">All severities</p></div>
+          <div class="card"><h3>KPI: Training</h3><div class="kpi"><span class="value" id="kCert">87</span><span class="unit">% certified</span></div><p class="muted">IP/T2 micro‑credentials</p></div>
+          <div class="card"><h3>KPI: Reviews due</h3><div class="kpi"><span class="value" id="kDue">3</span><span class="unit">this week</span></div></div>
         </div>
-        <p class="lead">
-          Track obligations and manage reporting through a unified dashboard. Automate workflows and receive sector-specific checklists to maintain compliance with Australian and international regulations.
-        </p>
-      
-        <!-- Deadlines up top -->
-        <div class="card deadline-card" style="margin-top:10px;">
-          <h3>Upcoming Deadlines</h3>
-          <ul class="deadline-list" id="deadlineList"></ul>
-        </div>
-      
-        <!-- KPI / status cards -->
-        <div class="grid cols-3" style="margin-top:16px;">
-          <div class="card">
-            <h3>Overall Compliance</h3>
-            <div class="progress" aria-label="Overall compliance progress">
-              <div class="bar" id="progOverall" style="width:0%"></div>
-            </div>
-            <p class="note"><strong id="txtOverall">0%</strong> Complete</p>
-          </div>
-      
-          <div class="card">
-            <h3>ITAR Reporting</h3>
-            <div class="progress" aria-label="ITAR reporting progress">
-              <div class="bar" id="progITAR" style="width:0%"></div>
-            </div>
-            <p class="note" id="txtITAR">Status</p>
-          </div>
-      
-          <div class="card">
-            <h3>DSGL Register</h3>
-            <div class="progress" aria-label="DSGL register completeness">
-              <div class="bar" id="progDSGL" style="width:0%"></div>
-            </div>
-            <p class="note" id="txtDSGL">Status</p>
-          </div>
-        </div>
-      
-        <!-- Checklist + Alerts -->
+
         <div class="grid cols-2" style="margin-top:16px;">
           <div class="card">
             <h3>Checklist: Shipment compliance</h3>
             <div class="toolbar">
               <label class="muted" for="selShipment">Shipment</label>
-              <select id="selShipment" class="select">
-                <option>#AUS-241101</option><option>#AUS-241223</option>
-              </select>
+              <select id="selShipment" class="select"><option>#AUS‑241101</option><option>#AUS‑241223</option></select>
               <button class="button secondary" id="btnExportPDF">Export PDF</button>
             </div>
-            <ul class="muted" id="listChecklist" style="line-height:1.9; padding-left:18px;">
+            <ul class="muted" id="listChecklist" style="line-height:1.9; padding-left: 18px;">
               <li><input type="checkbox" /> Permit valid for part numbers</li>
-              <li><input type="checkbox" /> End-use statement attached</li>
+              <li><input type="checkbox" /> End‑use statement attached</li>
               <li><input type="checkbox" /> Screening: Denied/Restricted parties</li>
               <li><input type="checkbox" /> Record retained (7 years)</li>
             </ul>
           </div>
-      
+
           <div class="card">
             <h3>Alerts</h3>
             <table class="table" id="tblAlerts">
@@ -607,138 +411,104 @@
             </table>
           </div>
         </div>
-      
-        <!-- FAQ -->
-        <h3 class="section-title">Frequently Asked Questions</h3>
-        <hr class="section-rule" />
-        <div class="grid cols-1 faq-list" data-faq-scope="monitoring">
-          <details>
-            <summary>What evidence should I retain?</summary>
-            <p>Keep permits, consignee/end-use statements, shipment docs, and communications for at least seven years or your contractual requirement.</p>
-          </details>
-          <details>
-            <summary>How are denied party screens logged?</summary>
-            <p>Screens are captured with timestamp, list version, and user ID; export a PDF from the checklist card for audit.</p>
-          </details>
-          <details>
-            <summary>What triggers an ‘Action Required’ alert?</summary>
-            <p>Approaching due dates, missing documents, or policy changes (e.g., DTCA updates) generate action flags until resolved.</p>
-          </details>
-        </div>
       </section>
 
-
-      <!-- // === FUNDING & GRANTS ======================================== -->
       <section id="view-funding" class="page" aria-hidden="true">
-        <div class="page-head"><button class="btn" data-back>← Back</button><h2 class="page-title">Funding & Grants</h2></div>
-        <p class="lead">The definitive single point of entry to discover and apply for relevant federal and state grants. The ADEXA Hub unifies grants, compliance, and support on one digital platform.</p>
+        <div class="page-head"><button class="back" data-back>← Back</button><h2 class="page-title">Funding</h2></div>
+        <p class="lead">Discover federal/state grants, EFA finance, and partner programs. Save and compare.</p>
 
-        <!-- // --- Filter chips (with sliding indicator) --- -->
-        <div class="row" id="grantFilters" style="margin:8px 0 14px;">
-          <button class="btn chip active" data-fil="All"><span class="dot"></span>All</button>
-          <button class="btn chip" data-fil="Export"><span class="dot"></span>Export</button>
-          <button class="btn chip" data-fil="Capability"><span class="dot"></span>Capability</button>
-          <button class="btn chip" data-fil="Skilling"><span class="dot"></span>Skilling</button>
-          <span id="chipIndicator" aria-hidden="true"></span>
-        </div>
-        
-        <!-- // --- Grant tiles (max 6 shown / 3 on mobile) --- -->
-        <div id="grantTiles" class="grid cols-1"></div>
-        <div id="grantSummary" class="grant-summary muted"></div>
-
-        <!-- // --- Funding FAQ --- -->
-        <h3 class="section-title">Frequently Asked Questions</h3>
-        <hr class="section-rule" />
-        <div class="grid cols-1 faq-list">
-          <details>
-            <summary>Which grants are best for new exporters?</summary>
-            <p>The Defence Industry Development Grant and Export Market Development Grant (EMDG) are ideal starting points for SMEs expanding into global defence markets.</p>
-          </details>
-          <details>
-            <summary>Can I apply for multiple grants at once?</summary>
-            <p>Yes, as long as there’s no overlap in funding for the same costs or deliverables. Defence SA or ODIS can help structure combined funding applications.</p>
-          </details>
-          <details>
-            <summary>What is the typical grant approval timeline?</summary>
-            <p>Grant approvals usually take 6–12 weeks after submission, depending on the complexity of the project and verification of eligibility documentation.</p>
-          </details>
+        <div class="card">
+          <div class="toolbar">
+            <input class="input" id="qGrant" placeholder="Search grants (e.g. export, R&D, defence)" />
+            <select class="select" id="juris"><option>All jurisdictions</option><option>Federal</option><option>SA</option><option>QLD</option><option>NSW</option><option>NT</option></select>
+            <select class="select" id="stage"><option>Any stage</option><option>Idea</option><option>Prototype</option><option>Export ready</option></select>
+            <button class="button" id="btnFind">Find</button>
+          </div>
+          <table class="table" id="tblGrants">
+            <thead><tr><th>Program</th><th>Jurisdiction</th><th>Closes</th><th>Support</th><th></th></tr></thead>
+            <tbody></tbody>
+          </table>
         </div>
       </section>
 
-      <!-- // === MARKET INTELLIGENCE ===================================== -->
       <section id="view-market-intel" class="page" aria-hidden="true">
-        <div class="page-head"><button class="btn" data-back>← Back</button><h2 class="page-title">Market Intelligence</h2></div>
-        <p class="lead">Access proactive, data-driven intelligence. Connect with expert ‘Navigators’ — human advisors who provide tailored, case-managed support for your export journey.</p>
-
-        <!-- // Latest Intel Feed -->
-        <h3 class="section-title">Latest Intel Feed</h3>
-        <hr class="section-rule" />
-        <div id="intelFeed" class="grid cols-1">
-          <!-- Cards injected by JS -->
+        <div class="market-hero market-hero-beta" aria-hidden="true">
+          <div class="market-hero__top">
+            <button class="back" data-back>← Back</button>
+            <span class="market-hero__badge">Navigator workspace</span>
+          </div>
+          <div class="market-hero__content">
+            <div class="market-hero__text">
+              <span class="market-hero__kicker">Market Intelligence</span>
+              <h2 class="market-hero__title">Access proactive, data-driven intelligence.</h2>
+              <p class="market-hero__lead">Connect with expert Navigators who provide tailored, case-managed support for your export journey.</p>
+              <div class="market-hero__meta">
+                <div class="market-hero__meta-item">
+                  <span class="market-hero__meta-label">Navigators active</span>
+                  <span class="market-hero__meta-value">3 this week</span>
+                </div>
+                <div class="market-hero__meta-item">
+                  <span class="market-hero__meta-label">Priority markets</span>
+                  <span class="market-hero__meta-value">12 monitored</span>
+                </div>
+                <div class="market-hero__meta-item">
+                  <span class="market-hero__meta-label">Next refresh</span>
+                  <span class="market-hero__meta-value">12 Oct 2025</span>
+                </div>
+              </div>
+            </div>
+            <div class="market-hero__feed">
+              <span class="market-hero__feed-label">Latest intel feed</span>
+              <h3 class="market-hero__feed-title">UK MoD seeks next-gen drone swarm tech</h3>
+              <p class="market-hero__feed-summary">The UK Ministry of Defence has released a tender for autonomous systems, creating opportunities for Australian firms with proven AI and sensor capabilities.</p>
+              <ul class="market-hero__feed-meta">
+                <li><strong>Region:</strong> UK | <strong>Sector:</strong> Autonomous Systems</li>
+                <li><strong>Deadline:</strong> 12 Oct 2025</li>
+              </ul>
+              <button class="button secondary">View brief</button>
+            </div>
+          </div>
         </div>
 
-        <div class="grid cols-3" style="margin-top:16px;">
-          <!-- // Targets scanner -->
+        <div class="market-intel-classic" aria-hidden="false">
+          <div class="page-head"><button class="back" data-back>← Back</button><h2 class="page-title">Market Intel</h2></div>
+          <p class="lead">Signals, demand and Navigators. Target the right market with the right product.</p>
+        </div>
+
+        <div class="grid cols-3">
           <div class="card">
             <h3>Target markets</h3>
             <div class="toolbar">
-              <select class="select" id="region"><option>Asia-Pacific</option><option>North America</option><option>Europe</option><option>Middle East</option></select>
+              <select class="select" id="region"><option>Asia‑Pacific</option><option>North America</option><option>Europe</option><option>Middle East</option></select>
               <input class="input" id="hs" placeholder="HS code / keyword" />
               <button class="button" id="btnScan">Scan</button>
             </div>
             <ul id="intelList" class="muted" style="padding-left:18px; line-height:1.8;"></ul>
           </div>
 
-          <!-- // Navigator CTA -->
           <div class="card">
             <h3>Navigator support</h3>
-            <p class="muted">Our expert Navigators provide one-on-one guidance to help you identify opportunities, navigate compliance, and develop your export strategy.</p>
+            <p class="muted">Book time with a sector Navigator for case‑managed advice.</p>
             <button class="button" id="btnBook">Request session</button>
             <p class="note" style="margin-top:8px;">Typical response: &lt; 2 business days.</p>
           </div>
 
-          <!-- // Export readiness KPI -->
           <div class="card">
             <h3>Export readiness</h3>
-            <div class="ring" aria-hidden="true">
-              <svg viewBox="0 0 120 120">
-                <circle cx="60" cy="60" r="52" stroke="currentColor" opacity="0.15" stroke-width="12" fill="none"/>
-                <circle id="ringProg" cx="60" cy="60" r="52" stroke="var(--accent)" stroke-width="12" fill="none" stroke-linecap="round" transform="rotate(-90 60 60)" stroke-dasharray="327" stroke-dashoffset="91"/>
-              </svg>
-              <div class="value"><span id="score">72</span><span style="opacity:.7;font-size:.9rem;">/100</span></div>
-            </div>
+            <div class="kpi"><span class="value" id="score">72</span><span class="unit">/100</span></div>
             <p class="muted">Based on checklist completion and certifications.</p>
             <button class="button secondary" id="btnImprove">View next actions</button>
           </div>
         </div>
-
-        <!-- // --- Market Intel FAQ --- -->
-        <h3 class="section-title">Frequently Asked Questions</h3>
-        <hr class="section-rule" />
-        <div class="grid cols-1 faq-list">
-          <details>
-            <summary>How often is the Intel Feed updated?</summary>
-            <p>Market Intelligence is refreshed weekly to include updates from Defence Connect, ASPI, and AUKUS-related tenders. High-priority opportunities are highlighted via ADEXA notifications.</p>
-          </details>
-          <details>
-            <summary>Can I filter intel by domain (air, sea, land)?</summary>
-            <p>Yes. Use the in-page filters to view intelligence aligned to your capability area—Autonomous Systems, Maritime Sustainment, ISR, or Cyber.</p>
-          </details>
-          <details>
-            <summary>How do I engage a Navigator advisor?</summary>
-            <p>Registered ADEXA users can book a virtual session with a Navigator for tailored export-readiness assessments or partner introductions.</p>
-          </details>
-        </div>
       </section>
 
-      <!-- // === IP & TECH TRANSFER ====================================== -->
       <section id="view-ip-tech" class="page" aria-hidden="true">
-        <div class="page-head"><button class="btn" data-back>← Back</button><h2 class="page-title">IP &amp; Tech Transfer</h2></div>
-        <p class="lead">Embed T2 & IP Management Training. Mandatory micro-credentials on the platform ensure you can securely manage sovereign IP and navigate Technology Transfer (T2) protocols with allied partners.</p>
+        <div class="page-head"><button class="back" data-back>← Back</button><h2 class="page-title">IP &amp; Tech Transfer</h2></div>
+        <p class="lead">Micro‑credentials, NDA generator and T2 controls to protect sovereign IP.</p>
 
         <div class="grid cols-2">
           <div class="card">
-            <h3>Micro-credentials</h3>
+            <h3>Micro‑credentials</h3>
             <details open>
               <summary>IP Fundamentals (AU)</summary>
               <p class="muted">Basics of IP, confidentiality, licensing and export intersections.</p>
@@ -760,57 +530,19 @@
             <h3>NDA &amp; agreement generator</h3>
             <div class="toolbar">
               <input class="input" id="ndaParty" placeholder="Counterparty name" />
-              <select class="select" id="ndaType"><option>Mutual NDA</option><option>One-way NDA</option></select>
+              <select class="select" id="ndaType"><option>Mutual NDA</option><option>One‑way NDA</option></select>
               <button class="button" id="btnNDA">Generate</button>
             </div>
-            <p class="note">Outputs a pre-filled draft with your company details and retention rules.</p>
+            <p class="note">Outputs a pre‑filled draft with your company details and retention rules.</p>
           </div>
         </div>
-
-        <!-- // --- IP/T2 FAQ --- -->
-      <h3 class="section-title">Frequently Asked Questions</h3>
-      <hr class="section-rule" />
-      <div class="grid cols-1 faq-list">
-        <details>
-          <summary>When is a TAA required?</summary>
-          <p class="muted">Technical Assistance Agreements (TAAs) are required for furnishing defence technical data/assistance to foreign persons under ITAR.</p>
-        </details>
-        <details>
-          <summary>How are document markings handled?</summary>
-          <p class="muted">Markings follow ISM/IRAP-aligned templates with propagation checks on exportable PDFs.</p>
-        </details>
-      </div>
       </section>
 
-      <!-- // === MADE IN AUS BRAND ======================================= -->
       <section id="view-made-in-aus" class="page" aria-hidden="true">
-        <div class="page-head"><button class="btn" data-back>← Back</button><h2 class="page-title">Australian Defence Branding</h2></div>
-        <p class="lead">Leverage the 'Brand Ausralia' Resources & 'Made in Australia' logo for defence exports. Access resources to connect with Team Defence Australia events and secure inclusion in the Australian Defence Export Catalogue.</p>
+        <div class="page-head"><button class="back" data-back>← Back</button><h2 class="page-title">MadeInAus Brand</h2></div>
+        <p class="lead">Use the mark with confidence. Get the checklist, assets and event pathway.</p>
 
-                <!-- // TDA Events -->
-        <h3 class="section-title">Upcoming TDA Events</h3>
-        <hr class="section-rule" />
-        <div id="tdaEvents" class="grid cols-1">
-          <!-- event cards injected by JS -->
-        </div>
-        
-        <!-- // Brand Resources -->
-        <h3 class="section-title">Resources</h3>
-        <hr class="section-rule" />
-        <div class="grid cols-1">
-          <a class="card" href="https://www.defence.gov.au/sites/default/files/2025-04/Australian-Defence-Export-Catalogue-2025-web.pdf" target="_blank" rel="noopener">
-            <h3>Download Australian Defence Export Catalogue 2025 (PDF, 11.21 MB)</h3>
-          </a>
-          <a class="card" href="https://assets.australiabrand.com.au/" target="_blank" rel="noopener">
-            <h3>Brand Australia Guidelines</h3>
-          </a>
-          <a class="card" href="https://australianmade.com.au/licensees/register/" target="_blank" rel="noopener">
-            <h3>Register for Australian Made Logo</h3>
-          </a>
-        </div>
-
-        <!-- // Eligibility Checklist -->
-        <div class="grid cols-2" style="margin-top:16px;">
+        <div class="grid cols-2">
           <div class="card">
             <h3>Eligibility checklist</h3>
             <ul class="muted" style="line-height:1.9; padding-left:18px;">
@@ -822,108 +554,36 @@
             <button class="button secondary">Validate eligibility</button>
           </div>
 
-          <!-- // Downloads / Links -->
           <div class="card">
-            <h3>Assets &amp; quick links</h3>
-            <div class="row">
-              <a class="button" href="https://assets.australiabrand.com.au/" target="_blank" rel="noopener">Download logo pack</a>
-              <a class="button secondary" href="https://www.brandaustralia.com/en/using-the-brand" target="_blank" rel="noopener">Brand guidelines</a>
-              <a class="button secondary" href="#/made-in-aus" onclick="return false;">Upcoming events</a>
+            <h3>Assets &amp; events</h3>
+            <p class="muted">Download logos, guidelines and view Team Defence Australia events.</p>
+            <div class="row" style="gap:8px; flex-wrap:wrap;">
+              <button class="button">Download logo pack</button>
+              <button class="button secondary">Brand guidelines</button>
+              <button class="button secondary">Upcoming events</button>
             </div>
           </div>
         </div>
-
-        <!-- // --- MadeInAus FAQ --- -->
-        <h3 class="section-title">Frequently Asked Questions</h3>
-        <hr class="section-rule" />
-        <div class="grid cols-1 faq-list">
-          <details>
-            <summary>How do I qualify to use the ‘Made in Australia’ mark?</summary>
-            <p>Companies must demonstrate Australian content of at least 50% and hold relevant export control compliance clearances. Validation is managed through Team Defence Australia.</p>
-          </details>
-          <details>
-            <summary>Can I feature in the Australian Defence Export Catalogue?</summary>
-            <p>Yes. Once approved for brand use, your company will be automatically reviewed for inclusion in the next edition of the Australian Defence Export Catalogue.</p>
-          </details>
-          <details>
-            <summary>Where can I find Team Defence Australia events?</summary>
-            <p>Upcoming TDA events are published through ADEXA and include DSEI Japan, Sea-Air-Space (USA), and Indo-Pacific (Australia). Links and registration portals are updated regularly.</p>
-          </details>
-        </div>
-      </section>
-
-      <!-- // === EXPORT READINESS CHECKLIST =============================== -->
-      <section id="view-readiness" class="page" aria-hidden="true">
-        <div class="page-head"><button class="btn" data-back>← Back</button><h2 class="page-title">Export Readiness Checklist</h2></div>
-        <p class="lead">A structured self-assessment aligned with Defence SA / Austrade readiness themes. Tick off actions to lift your readiness score.</p>
-
-        <div class="grid cols-2" style="margin-top:20px;">
-          <!-- Business Foundations -->
-          <div class="card">
-            <h3>Business Foundations</h3>
-            <ul class="muted" style="line-height:1.9; padding-left:18px;">
-              <li><input type="checkbox" class="chk"> Strategic plan includes export growth targets</li>
-              <li><input type="checkbox" class="chk"> Export policy reviewed and approved by leadership</li>
-              <li><input type="checkbox" class="chk"> Financial systems manage foreign currency transactions</li>
-              <li><input type="checkbox" class="chk"> Insurance covers international trade and logistics</li>
-            </ul>
-          </div>
-
-          <!-- Compliance & Licensing -->
-          <div class="card">
-            <h3>Compliance & Licensing</h3>
-            <ul class="muted" style="line-height:1.9; padding-left:18px;">
-              <li><input type="checkbox" class="chk"> DEC registration complete</li>
-              <li><input type="checkbox" class="chk"> DTC/ITAR processes embedded in business systems</li>
-              <li><input type="checkbox" class="chk"> Permits and authorisations tracked centrally</li>
-              <li><input type="checkbox" class="chk"> Staff trained in export control awareness</li>
-            </ul>
-          </div>
-
-          <!-- Supply Chain & Capability -->
-          <div class="card">
-            <h3>Supply Chain & Capability</h3>
-            <ul class="muted" style="line-height:1.9; padding-left:18px;">
-              <li><input type="checkbox" class="chk"> Capability statement reviewed in last 12 months</li>
-              <li><input type="checkbox" class="chk"> Supplier quality certifications (ISO9001, AS9100)</li>
-              <li><input type="checkbox" class="chk"> Production meets traceability/security requirements</li>
-              <li><input type="checkbox" class="chk"> Participation in SME/Prime collaboration programs</li>
-            </ul>
-          </div>
-
-          <!-- Market Access & Promotion -->
-          <div class="card">
-            <h3>Market Access & Promotion</h3>
-            <ul class="muted" style="line-height:1.9; padding-left:18px;">
-              <li><input type="checkbox" class="chk"> Target markets identified and prioritised</li>
-              <li><input type="checkbox" class="chk"> ‘Made in Australia’ brand assets integrated</li>
-              <li><input type="checkbox" class="chk"> Attended Team Defence Australia / trade events</li>
-              <li><input type="checkbox" class="chk"> Listed in the Defence Export Catalogue</li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- // Score Ring -->
-        <div style="margin-top:20px; text-align:center;">
-          <div class="ring" aria-hidden="true">
-            <svg viewBox="0 0 120 120">
-              <circle cx="60" cy="60" r="52" stroke="currentColor" opacity="0.15" stroke-width="12" fill="none"/>
-              <circle id="ringProg2" cx="60" cy="60" r="52" stroke="var(--accent)" stroke-width="12" fill="none" stroke-linecap="round" transform="rotate(-90 60 60)" stroke-dasharray="327" stroke-dashoffset="91"/>
-            </svg>
-            <div class="value"><span id="score2">72</span><span style="opacity:.7;font-size:.9rem;">/100</span></div>
-          </div>
-          <button class="button" id="btnCalcScore">Recalculate Score</button>
-          <p class="note" id="scoreNote">All changes are local (demo only).</p>
-        </div>
       </section>
     </main>
-    <p class="version-footnote" id="appVersion" aria-live="polite"></p>
   </div>
 
-  <!-- // === SCRIPTS ====================================================== -->
   <script>
+    // Router with guards + smoke tests + simple demo data
     (function () {
-      // // --- Router Config ---
+      const branch = (() => {
+        const search = new URLSearchParams(window.location.search);
+        const qBranch = (search.get('branch') || search.get('channel') || '').toLowerCase();
+        if (qBranch === 'beta') return 'beta';
+        const hash = window.location.hash.toLowerCase();
+        if (hash.includes('branch=beta') || hash.includes('channel=beta')) return 'beta';
+        const host = window.location.hostname.toLowerCase();
+        if (host.startsWith('beta.')) return 'beta';
+        if (window.location.pathname.toLowerCase().includes('/beta')) return 'beta';
+        return 'main';
+      })();
+      if (document.body) document.body.dataset.branch = branch;
+
       const routes = {
         home: 'view-home',
         permits: 'view-permits',
@@ -931,407 +591,75 @@
         funding: 'view-funding',
         'market-intel': 'view-market-intel',
         'ip-tech': 'view-ip-tech',
-        'made-in-aus': 'view-made-in-aus',
-        readiness: 'view-readiness'
+        'made-in-aus': 'view-made-in-aus'
       };
-      const labels = {
-        home: 'Home',
-        permits: 'Permits',
-        monitoring: 'Compliance Monitoring',
-        funding: 'Funding & Grants',
-        'market-intel': 'Market Intelligence',
-        'ip-tech': 'IP & Tech Transfer',
-        'made-in-aus': 'MadeInAus Brand',
-        readiness: 'Export Readiness'
-      };
-      function getEl(id){ const el = document.getElementById(id); if(!el) console.warn('[ADEXA] Missing #'+id); return el; }
-      function hideAll(){ Object.values(routes).forEach(id => { const el = getEl(id); if(el) el.setAttribute('aria-hidden','true'); }); }
-      function show(routeKey, pushHash=false){
-        const id = routes[routeKey] || routes.home; const el = getEl(id); if(!el) return;
-        hideAll(); el.setAttribute('aria-hidden','false');
-        if (pushHash) { const h = routeKey==='home'?'#/':`#/${routeKey}`; history.pushState({r:routeKey},'',h); }
-      }
 
-      // // --- Theme Toggle (dark default) ---
-      const themeBtn = document.getElementById('themeToggle');
-      const themeLabel = document.getElementById('themeLabel');
-      const saved = localStorage.getItem('adexa-theme');
-      if (saved === 'light') document.documentElement.setAttribute('data-theme', 'light');
-      function currentTheme(){ return document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark'; }
-      function refreshThemeLabel(){ const cur=currentTheme(); themeLabel.textContent = cur==='light'?'Dark':'Light'; themeBtn.setAttribute('aria-pressed', String(cur==='dark')); }
-      refreshThemeLabel();
-      themeBtn.addEventListener('click', () => {
-        const isLight = currentTheme()==='light';
-        if (isLight) { document.documentElement.removeAttribute('data-theme'); localStorage.removeItem('adexa-theme'); }
-        else { document.documentElement.setAttribute('data-theme','light'); localStorage.setItem('adexa-theme','light'); }
-        refreshThemeLabel();
-      });
+      function getEl(id) { const el = document.getElementById(id); if(!el) console.warn('[ADEXA] Missing #'+id); return el; }
+      function hideAll() { Object.values(routes).forEach(id => { const el = getEl(id); if (el) el.setAttribute('aria-hidden','true'); }); }
+      function show(routeKey, pushHash=false) { const id = routes[routeKey] || routes.home; const el = getEl(id); if(!el) return; hideAll(); el.setAttribute('aria-hidden','false'); if(pushHash){ const h = routeKey==='home'?'#/':`#/${routeKey}`; history.pushState({r:routeKey},'',h);} }
 
-      // // --- Panel Easter Egg (?panel=hartas|law|opie|satchell) ---
-      const qs = new URLSearchParams(location.search);
-      const panelKey = (qs.get('panel')||'').toLowerCase();
-      if (panelKey) {
-        const subtitleEl = document.querySelector('.subtitle');
-        const nameMap = { hartas:'Mr Mike Hartas', law:'Dr Margaret Law', opie:'Mr Matt Opie', satchell:'Mr Jeremy Satchell' };
-        const label = nameMap[panelKey] || 'Review Panel';
-        if (subtitleEl) subtitleEl.textContent = `Welcome, ${label}`;
-        const chip = document.createElement('span');
-        chip.className = 'chip';
-        chip.innerHTML = '<span class="dot"></span><span>Panel mode</span>';
-        const actions = document.querySelector('.top-actions');
-        actions && actions.prepend(chip);
-      }
+      document.addEventListener('DOMContentLoaded', () => {
+        const betaHero = document.querySelector('.market-hero-beta');
+        const classicHero = document.querySelector('.market-intel-classic');
+        const isBeta = document.body.dataset.branch === 'beta';
+        if (betaHero) betaHero.setAttribute('aria-hidden', isBeta ? 'false' : 'true');
+        if (classicHero) classicHero.setAttribute('aria-hidden', isBeta ? 'true' : 'false');
 
-      // // --- Version indicator ---
-      const APP_VERSION = '1.0.0';
-      const branch = (document.documentElement.getAttribute('data-branch') || '').toLowerCase() || (location.pathname.includes('/beta') ? 'beta' : 'main');
-      const versionEl = document.getElementById('appVersion');
-      if (versionEl) {
-        const branchLabel = branch || 'main';
-        versionEl.textContent = `v${APP_VERSION} · ${branchLabel}`;
-        if (branch) versionEl.setAttribute('data-branch', branch);
-      }
+        document.querySelectorAll('[data-target]').forEach(b => b.addEventListener('click', () => show(b.dataset.target, true)));
+        document.querySelectorAll('[data-back]').forEach(b => b.addEventListener('click', () => show('home', true)));
+        window.addEventListener('popstate', e => { const r=(e.state&&e.state.r)||location.hash.replace('#/','')||'home'; show(r,false); });
+        show(location.hash.replace('#/','')||'home', false);
 
-      /* =========================
-         FUNDING & GRANTS: data + filters + tile renderer
-         ========================= */
-      
-      const grantsData = [
-        // ------- Export -------
-        {
-          title: "Export Market Development Grant (EMDG)",
-          value: "Up to $770k (tiered across 8 years)",
-          desc: "Supports eligible marketing and expansion activities to grow exports, including defence-related services.",
-          tag: "Export", url: "https://www.austrade.gov.au"
-        },
-        {
-          title: "Defence Global Competitiveness Grant",
-          value: "Up to $150,000 (co-funded)",
-          desc: "For SMEs investing in projects that enhance competitiveness in international defence markets.",
-          tag: "Export", url: "https://www.business.gov.au"
-        },
-        {
-          title: "Landing Pads – North America",
-          value: "Access & advisory",
-          desc: "Short-term market entry support to establish partnerships and channels in the US & Canada defence ecosystem.",
-          tag: "Export", url: "https://www.austrade.gov.au"
-        },
-      
-        // ------- Capability -------
-        {
-          title: "Sovereign Industrial Capability Priority Grant",
-          value: "$50k–$1M (co-funded)",
-          desc: "Build capabilities aligned with Defence's strategic priorities; equipment, tooling and certification eligible.",
-          tag: "Capability", url: "https://www.business.gov.au"
-        },
-        {
-          title: "Defence Trailblazer – Tech Acceleration",
-          value: "Cohort / milestone based",
-          desc: "Scale deep-tech with university partners to lift TRLs and speed to mission.",
-          tag: "Capability", url: "https://www.defencetrailblazer.org"
-        },
-        {
-          title: "Defence SA – Supplier Readiness (Pilot)",
-          value: "EOI: Q4",
-          desc: "SME uplift program: quality, audits and pre-qualification into major defence primes.",
-          tag: "Capability", url: "https://defencesa.com"
-        },
-      
-        // ------- Skilling -------
-        {
-          title: "Skilling Australia’s Defence Industry Grant",
-          value: "Program based",
-          desc: "Subsidises technical and trade training for defence industry SMEs to strengthen workforce capability.",
-          tag: "Skilling", url: "https://www.business.gov.au"
-        },
-        {
-          title: "Defence Industry Internship Program",
-          value: "Wage support",
-          desc: "Place final-year engineering students into defence SMEs; co-funded stipends and recruitment support.",
-          tag: "Skilling", url: "https://www.dst.defence.gov.au"
-        },
-        {
-          title: "Cyber Uplift for SMEs (ACSC)",
-          value: "Advisory + tooling",
-          desc: "Targeted uplift to Essential Eight maturity—often a prerequisite for defence contracts.",
-          tag: "Skilling", url: "https://www.cyber.gov.au"
+        // --- Demo data population ---
+        // Permits
+        const drafts = [
+          {ref:'ADEXA-0012', type:'DTC', ent:'Flight One Academy', upd:'12 Oct'},
+          {ref:'ADEXA-0045', type:'Customs', ent:'RAAF STT', upd:'05 Oct'}
+        ];
+        const tb = document.querySelector('#tblDrafts tbody');
+        if (tb) tb.innerHTML = drafts.map(d=>`<tr><td>${d.ref}</td><td>${d.type}</td><td>${d.ent}</td><td>${d.upd}</td></tr>`).join('');
+        const events = ['DTC ADEXA-0012 submitted','Customs ADEXA-0045 awaiting docs'];
+        const ev = document.getElementById('events');
+        if (ev) ev.innerHTML = events.map(e=>`<li>${e}</li>`).join('');
+        const kOpen = document.getElementById('kOpen'); if(kOpen) kOpen.textContent = String(drafts.length);
+        const kApproved = document.getElementById('kApproved'); if(kApproved) kApproved.textContent = '3';
+        const kActions = document.getElementById('kActions'); if(kActions) kActions.textContent = '1';
+        const btnDraft = document.getElementById('btnDraft');
+        if (btnDraft) btnDraft.addEventListener('click', () => alert('Draft created (demo).'));
+
+        // Monitoring
+        const al = document.querySelector('#tblAlerts tbody');
+        if (al) al.innerHTML = [
+          {when:'Today', sev:'Medium', msg:'Checklist incomplete on #AUS‑241223'},
+          {when:'Yesterday', sev:'Low', msg:'Upcoming training expiry: 2 users'},
+        ].map(a=>`<tr><td>${a.when}</td><td>${a.sev}</td><td>${a.msg}</td></tr>`).join('');
+
+        // Funding
+        const gbody = document.querySelector('#tblGrants tbody');
+        function loadGrants(){
+          const data = [
+            {p:'Export Market Dev. Grants (EMDG)', j:'Federal', c:'Rolling', s:'Matched funding'},
+            {p:'Defence Industry Grant – Capability', j:'Federal', c:'Q2', s:'$250k cap'},
+            {p:'SA Export Accelerator (SAEA)', j:'SA', c:'Q1', s:'Tiered support'}
+          ];
+          if (gbody) gbody.innerHTML = data.map(x=>`<tr><td>${x.p}</td><td>${x.j}</td><td>${x.c}</td><td>${x.s}</td><td><button class="button secondary">Save</button></td></tr>`).join('');
         }
-      ];
-      
-      // DOM
-      const tilesWrap = document.getElementById('grantTiles');
-      const chipRow   = document.getElementById('grantFilters');
-      const chipIndicator = document.getElementById('chipIndicator');
-      const grantSummary = document.getElementById('grantSummary');
-      const grantLimitMq = window.matchMedia('(max-width: 600px)');
-      
-      // slide the highlight behind the active chip
-      function moveChipIndicator(btn){
-        if (!btn || !chipIndicator) return;
-        const rowRect = chipRow.getBoundingClientRect();
-        const bRect   = btn.getBoundingClientRect();
-        chipIndicator.style.left  = `${bRect.left - rowRect.left}px`;
-        chipIndicator.style.width = `${bRect.width}px`;
-      }
-      
-      function grantLimit(){
-        return grantLimitMq.matches ? 3 : 6;
-      }
+        loadGrants();
+        const btnFind = document.getElementById('btnFind'); if(btnFind) btnFind.addEventListener('click', loadGrants);
 
-      // render tiles (responsive limit)
-      let grantFilter = 'All';
-      function renderGrantTiles() {
-        if (!tilesWrap) return;
-        const filtered = grantsData.filter(g => grantFilter === 'All' || g.tag === grantFilter);
-        const limit = grantLimit();
-        const visible = filtered.slice(0, limit);
+        // Intel
+        const intelList = document.getElementById('intelList');
+        const btnScan = document.getElementById('btnScan');
+        function loadIntel(){ if(intelList) intelList.innerHTML = ['Rising demand for training simulators','Offset opportunities with OEM partner','Lower barrier for MRO services in APAC'].map(x=>`<li>${x}</li>`).join(''); }
+        loadIntel(); if(btnScan) btnScan.addEventListener('click', loadIntel);
 
-        if (!visible.length) {
-          tilesWrap.innerHTML = '<p class="muted">No grants match this filter.</p>';
-        } else {
-          tilesWrap.innerHTML = visible.map(g => `
-            <div class="grant-card">
-              <div class="grant-title">${g.title}</div>
-              <div class="grant-value">${g.value}</div>
-              <div class="grant-desc">${g.desc}</div>
-              <div class="grant-meta">
-                <span class="grant-tag">${g.tag}</span>
-                <a class="button secondary" href="${g.url}" target="_blank" rel="noopener">View &amp; Apply</a>
-              </div>
-            </div>
-          `).join('');
-        }
+        const btnNDA = document.getElementById('btnNDA'); if(btnNDA) btnNDA.addEventListener('click',()=>alert('NDA generated (demo).'));
 
-        if (grantSummary) {
-          if (!filtered.length) {
-            grantSummary.textContent = 'No grants match this filter.';
-          } else {
-            const showing = Math.min(limit, filtered.length);
-            grantSummary.textContent = `Showing ${showing} of ${filtered.length} grants`;
-          }
-        }
-      }
-      
-      // chip wiring
-      if (chipRow) {
-        const chips = Array.from(chipRow.querySelectorAll('.chip'));
-        chips.forEach(ch => ch.addEventListener('click', () => {
-          chips.forEach(c => c.classList.remove('active'));
-          ch.classList.add('active');
-          grantFilter = ch.dataset.fil || 'All';
-          moveChipIndicator(ch);
-          renderGrantTiles();
-        }));
-      
-        // initial state
-        const active = chipRow.querySelector('.chip.active') || chips[0];
-        requestAnimationFrame(() => moveChipIndicator(active));
-      }
-      
-      // first paint
-      renderGrantTiles();
-      
-      // keep indicator aligned on resize
-      window.addEventListener('resize', () => {
-        const active = chipRow?.querySelector('.chip.active');
-        if (active) moveChipIndicator(active);
-        renderGrantTiles();
+        // --- Smoke tests (ensure content exists) ---
+        console.assert(document.getElementById('tblDrafts'), '[Test] Permits table present');
+        console.assert(document.getElementById('tblGrants'), '[Test] Funding table present');
+        console.assert(document.getElementById('intelList'), '[Test] Intel list present');
       });
-
-      if (typeof grantLimitMq.addEventListener === 'function') {
-        grantLimitMq.addEventListener('change', renderGrantTiles);
-      } else if (typeof grantLimitMq.addListener === 'function') {
-        grantLimitMq.addListener(renderGrantTiles);
-      }
-
-      // // --- Wiring: Menu + Back + History ---
-      document.querySelectorAll('[data-target]').forEach(b => b.addEventListener('click', () => show(b.dataset.target, true)));
-      document.querySelectorAll('[data-back]').forEach(b => b.addEventListener('click', () => show('home', true)));
-      window.addEventListener('popstate', e => { const r=(e.state&&e.state.r)||location.hash.replace('#/','')||'home'; show(r,false); });
-      show(location.hash.replace('#/','')||'home', false);
-
-      // // --- Permits: Applications list (merged) ---
-      const applications = [
-        { title: 'DSP-5 Application: RWS to UK',           id: 'AUS-2025-8817', status: 'Approved' },
-        { title: 'Tech Data Licence: AUKUS Pillar II',      id: 'AUS-2025-8821', status: 'Pending Review' },
-        { title: 'DSGL Assessment: New Sensor Array',       id: 'AUS-2025-8819', status: 'Action Required' },
-        // carry over previous drafts if you want them visible:
-        { title: 'DTC: PMB Defence – Submarine Battery Systems', id: 'ADEXA-0251', status: 'Approved' },
-        { title: 'Customs: BAE Systems – VetNet Program',        id: 'ADEXA-0253', status: 'Pending Review' }
-      ];
-      
-      const appsList = document.getElementById('appsList');
-      function statusClass(s){
-        if (/^approved/i.test(s)) return 'ok';
-        if (/pending/i.test(s))   return 'pending';
-        return 'danger'; // action required / rejected / etc.
-      }
-      function renderApps(){
-        if (!appsList) return;
-        appsList.innerHTML = applications.map(a => `
-          <div class="app-row">
-            <div class="app-left">
-              <h4>${a.title}</h4>
-              <div class="app-id">ID: ${a.id}</div>
-            </div>
-            <span class="app-status ${statusClass(a.status)}">${a.status}</span>
-          </div>
-        `).join('');
-      }
-      renderApps();
-      
-      // CTA
-      document.getElementById('btnLodge')?.addEventListener('click', () => {
-        alert('Start new application (demo).');
-      });
-
-
-     /* ====COMPLIANCE MONITORING: data + render========================= */
-
-    // Deadlines (top card)
-    const deadlines = [
-      { date:'Oct 31, 2025', tag:'ITAR',   desc:'Submit annual ITAR compliance report.' },
-      { date:'Nov 15, 2025', tag:'Access', desc:'Renew controlled-tech access credentials for staff.' },
-      { date:'Dec 1, 2025',  tag:'DTCA',   desc:'Complete mandatory DTCA 2024 update training.' }
-    ];
-    const dlList = document.getElementById('deadlineList');
-    if (dlList) {
-      dlList.innerHTML = deadlines.map(d => `
-        <li class="deadline-item">
-          <div class="deadline-date">${d.date}</div>
-          <div class="deadline-desc">${d.desc}</div>
-          <span class="deadline-tag">${d.tag}</span>
-        </li>
-      `).join('');
-    }
-    
-    // KPI progress helpers
-    function setProgress(idPct, idText, pct, text){
-      const bar = document.getElementById(idPct);
-      const t   = document.getElementById(idText);
-      if (bar) bar.style.width = `${Math.max(0, Math.min(100, pct))}%`;
-      if (t && text) t.textContent = text;
-    }
-    
-    // Set KPI values (adjust any numbers/labels you want)
-    setProgress('progOverall','txtOverall', 95, '95% Complete');
-    setProgress('progITAR',  'txtITAR',     72, 'Q3 Report Due');
-    setProgress('progDSGL',  'txtDSGL',    100, 'Up to date');
-    
-    // Alerts table (kept simple—extend as needed)
-    const al = document.querySelector('#tblAlerts tbody');
-    if (al) al.innerHTML = [
-      {when:'Today',      sev:'Medium', msg:'Supplier uplift review with BAE (VetNet) scheduled'},
-      {when:'Yesterday',  sev:'Low',    msg:'Trailblazer cohort brief uploaded by Dr M. Law'},
-      {when:'This week',  sev:'Info',   msg:'Defence SA pathways update from M. Opie'},
-    ].map(a=>`<tr><td>${a.when}</td><td>${a.sev}</td><td>${a.msg}</td></tr>`).join('');
-    
-    /* ===== end Compliance Monitoring block ===== */
-
-      // // --- Market Intel: Feed + Targets ---
-      const intelFeedData = [
-        {title:'UK MoD seeks next-gen drone swarm tech', blurb:'The UK Ministry of Defence has released a tender for autonomous systems, creating opportunities for Australian firms with proven AI and sensor capabilities.', meta:'Region: UK | Sector: Autonomous Systems | Date: 12 Oct 2025'},
-        {title:'AUKUS update: streamlined tech transfer protocols', blurb:'New regulations reduce admin burdens for sharing sensitive tech between AU, UK, US under AUKUS Pillar II.', meta:'Region: AUKUS | Sector: Policy | Date: 10 Oct 2025'},
-        {title:'Japan increases defence budget, focuses on cyber', blurb:'Growing demand for cyber defence tooling and services; scope for AU SMEs in secure comms & training.', meta:'Region: APAC | Sector: Cyber | Date: 08 Oct 2025'}
-      ];
-      const intelFeed = document.getElementById('intelFeed');
-      if (intelFeed) {
-        intelFeed.innerHTML = intelFeedData.map(i=>`
-          <div class="card">
-            <h3 style="color:var(--accent); font-size:1.2rem;">${i.title}</h3>
-            <p class="muted">${i.blurb}</p>
-            <p class="note">${i.meta}</p>
-          </div>
-        `).join('');
-      }
-
-      // Targets (list)
-      const intelList = document.getElementById('intelList');
-      const btnScan = document.getElementById('btnScan');
-      function loadIntel(){
-        if (intelList) {
-          intelList.innerHTML = [
-            'AUKUS: submarine component manufacture (precision machining, additive metals)',
-            'Autonomous undersea vehicles (large UUV integration & sustainment)',
-            'Counter-drone / C-UAS: RF sensing, jamming, EW payloads; sustainment services',
-            'LRASM / long-range strike: harnesses, composite structures, test support',
-            'ISR payloads: EO/IR, maritime radar modules; repair & MRO export',
-            'Secure comms & links: datalinks, cryptographic modules, assured PNT'
-          ].map(x => `<li>${x}</li>`).join('');
-        }
-      }
-      loadIntel();
-      btnScan?.addEventListener('click', loadIntel);
-      document.getElementById('btnBook')?.addEventListener('click', ()=>alert('Navigator request sent (demo).'));
-
-      // // --- Export Readiness nav from Intel KPI ---
-      document.getElementById('btnImprove')?.addEventListener('click', ()=>show('readiness', true));
-
-      // // --- Progress Rings & Scoring ---
-      const CIRCUM = 2 * Math.PI * 52;
-      function setRing(el, pct){ const clamp = Math.max(0, Math.min(100, pct)); const offset = CIRCUM * (1 - clamp/100); if (el) el.style.strokeDashoffset = String(offset); }
-      const initScore = 72;
-      setRing(document.getElementById('ringProg'), initScore);
-      setRing(document.getElementById('ringProg2'), initScore);
-      const score2Init = document.getElementById('score2'); if (score2Init) score2Init.textContent = String(initScore);
-
-      document.getElementById('btnCalcScore')?.addEventListener('click', ()=>{
-        const checks = document.querySelectorAll('#view-readiness input[type=checkbox].chk');
-        const total = checks.length;
-        const done = Array.from(checks).filter(c => c.checked).length;
-        const percent = Math.round((done / total) * 100);
-        const score = document.getElementById('score');
-        const ring1 = document.getElementById('ringProg');
-        const score2 = document.getElementById('score2');
-        const ring2 = document.getElementById('ringProg2');
-        const note = document.getElementById('scoreNote');
-        if (score)  score.textContent = String(percent);
-        if (score2) score2.textContent = String(percent);
-        setRing(ring1, percent); setRing(ring2, percent);
-        if (note) note.textContent = `${done} of ${total} actions complete (${percent}%)`;
-      });
-
-      // // --- MadeInAus: TDA Events (links) ---
-      const tdaEvents = [
-        {name:'DSEI Japan', dates:'15–17 March 2026', location:'Chiba, Japan', url:'https://www.dsei-japan.com'},
-        {name:'Sea-Air-Space', dates:'19-22 April 2026', location:'National Harbor, MD, USA', url:'https://seaairspace.org'},
-        {name:'Farnborough International Airshow', dates:'20–24 July 2026', location:'Farnborough, UK', url:'https://www.farnboroughairshow.com'},
-        {name:'Euronaval', dates:'03-06 November 2026', location:'Paris-Le Bourget, France', url:'https://www.euronaval.com/'}
-      ];
-      const tdaWrap = document.getElementById('tdaEvents');
-      if (tdaWrap) {
-        tdaWrap.innerHTML = tdaEvents.map(e=>`
-          <a class="card" href="${e.url}" target="_blank" rel="noopener">
-            <h3><strong>${e.name}</strong>: ${e.dates}, ${e.location}</h3>
-            <p class="note">Tap to visit event website</p>
-          </a>
-        `).join('');
-      }
-
-            /* // --- FAQ: single-open accordion (plus/minus, all start closed) --- */
-      document.querySelectorAll('.faq-list').forEach(list => {
-        const items = Array.from(list.querySelectorAll('details'));
-      
-        // Ensure all closed on load (prevents default-open on first item)
-        items.forEach(d => { d.open = false; });
-      
-        // Close siblings when one opens
-        items.forEach(d => {
-          d.addEventListener('toggle', function () {
-            if (!this.open) return;
-            items.forEach(other => { if (other !== this) other.open = false; });
-          });
-        });
-      });
-
-      // // --- NDA Demo ---
-      document.getElementById('btnNDA')?.addEventListener('click',()=>alert('NDA generated (demo).'));
-
-      // // --- Smoke tests ---
-      console.assert(document.getElementById('appsList'),  '[Test] Permits apps list present');
-      console.assert(document.getElementById('grantTiles'),'[Test] Grant tiles present');
-      console.assert(document.getElementById('intelList'), '[Test] Intel list present');
-
     })();
   </script>
 </body>
